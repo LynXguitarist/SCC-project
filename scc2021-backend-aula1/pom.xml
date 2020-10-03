@@ -12,21 +12,21 @@
       <artifactId>javax.ws.rs-api</artifactId>  
       <version>2.1.1</version> 
     </dependency>  
-<dependency>
-    <groupId>org.jboss.resteasy</groupId>
-    <artifactId>resteasy-core</artifactId>
-    <version>4.5.8.Final</version>
-</dependency>
-<dependency>
-    <groupId>org.jboss.resteasy</groupId>
-    <artifactId>resteasy-jaxb-provider</artifactId>
-    <version>4.5.8.Final</version>
-</dependency>
-<dependency>
-    <groupId>org.jboss.resteasy</groupId>
-    <artifactId>resteasy-servlet-initializer</artifactId>
-    <version>4.5.8.Final</version>
-</dependency>
+    <dependency> 
+      <groupId>org.jboss.resteasy</groupId>  
+      <artifactId>resteasy-core</artifactId>  
+      <version>4.5.8.Final</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.jboss.resteasy</groupId>  
+      <artifactId>resteasy-jaxb-provider</artifactId>  
+      <version>4.5.8.Final</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.jboss.resteasy</groupId>  
+      <artifactId>resteasy-servlet-initializer</artifactId>  
+      <version>4.5.8.Final</version> 
+    </dependency>  
     <dependency> 
       <groupId>com.microsoft.azure</groupId>  
       <artifactId>azure-storage</artifactId>  
@@ -45,13 +45,40 @@
         </configuration> 
       </plugin>  
       <plugin> 
+        <groupId>com.microsoft.azure</groupId>  
+        <artifactId>azure-webapp-maven-plugin</artifactId>  
+        <version>1.11.0</version>  
+        <configuration> 
+          <schemaVersion>V2</schemaVersion>  
+          <subscriptionId>95fbb6ef-9d77-4b92-86f3-024b1dd4ae32</subscriptionId>  
+          <resourceGroup>sccProjectGroup</resourceGroup>  
+          <appName>sccProject</appName>  
+          <pricingTier>P1v2</pricingTier>  
+          <region>westeurope</region>  
+          <runtime> 
+            <os>windows</os>  
+            <javaVersion>11</javaVersion>  
+            <webContainer>tomcat 9.0</webContainer> 
+          </runtime>  
+          <deployment> 
+            <resources> 
+              <resource> 
+                <directory>${project.basedir}/target</directory>  
+                <includes> 
+                  <include>*.war</include> 
+                </includes> 
+              </resource> 
+            </resources> 
+          </deployment> 
+        </configuration> 
+      </plugin>  
+      <plugin> 
         <artifactId>maven-war-plugin</artifactId>  
         <version>3.2.1</version>  
         <configuration> 
           <warSourceDirectory>WebContent</warSourceDirectory> 
         </configuration> 
-      </plugin>
-        
+      </plugin>  
       <plugin> 
         <groupId>com.microsoft.azure</groupId>  
         <artifactId>azure-webapp-maven-plugin</artifactId>  
@@ -75,8 +102,8 @@
               </resource> 
             </resources> 
           </deployment>  
-          <resourceGroup>scc-backend-rg-REPLACE_ME</resourceGroup>  
-          <appName>scc-backend-REPLACE_ME</appName> 
+          <resourceGroup>scc-group</resourceGroup>  
+          <appName>scc-project</appName> 
         </configuration> 
       </plugin> 
     </plugins> 
