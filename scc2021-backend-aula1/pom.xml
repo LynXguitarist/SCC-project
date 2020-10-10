@@ -26,7 +26,12 @@
       <groupId>org.jboss.resteasy</groupId>  
       <artifactId>resteasy-servlet-initializer</artifactId>  
       <version>4.5.8.Final</version> 
-    </dependency>  
+    </dependency>
+    <dependency>
+	  <groupId>com.microsoft.azure</groupId>
+	  <artifactId>azure-storage</artifactId>
+	  <version>8.6.5</version>
+	</dependency>  
     <dependency> 
       <groupId>com.microsoft.azure</groupId>  
       <artifactId>azure-storage</artifactId>  

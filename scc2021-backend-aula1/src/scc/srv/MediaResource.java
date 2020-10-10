@@ -43,14 +43,6 @@ public class MediaResource {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public byte[] download(@PathParam("id") String id) {
 		File file = new File(id);
-		try {
-			
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return "Some text".getBytes();
 	}
 
