@@ -1,0 +1,39 @@
+config:
+  target: 'https://scc-project.azurewebsites.net'
+  plugins:
+    metrics-by-endpoint: {}
+  processor: "./test-utils.js"
+  variables:
+     metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
+  phases:
+  - name: "Warm up"    # WARM UP PHASE: duration: 10s, starting with 1 new client/sec up to 5 new clients/sec
+    duration: 10
+    arrivalRate: 1
+    rampTo: 5
+  - name: "Main test"    # MAIN TESTS: duration: 20s, with 5 new clients/sec
+    duration: 20         # NOTE: number of clients per second will depend on the complexity of your scenarios
+    arrivalRate: 5       # you need to try a number that can be handled by the client
+ 
+
+scenarios:
+# Normal user that reads post and sometimes replies to posts
+  - name: 'Upload image'
+    weight: 1
+    flow:
+      - post:
+          url: "/media"
+          headers:
+            Content-Type: application/octet-stream
+            Accept: application/json
+          beforeRequest: "uploadImageBody"
+          afterResponse: "processUploadReply"            
+ 
+  - name: 'Download image'
+    weight: 5
+    flow:
+      - function: "selectImageToDownload"
+      - get:
+          url: "/media/{{ imageId }}"
+          headers:
+            Accept: application/octet-stream
+          ifTrue: "imageId"

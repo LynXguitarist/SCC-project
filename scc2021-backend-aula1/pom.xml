@@ -26,16 +26,21 @@
       <groupId>org.jboss.resteasy</groupId>  
       <artifactId>resteasy-servlet-initializer</artifactId>  
       <version>4.5.8.Final</version> 
-    </dependency>
-    <dependency>
-	  <groupId>com.microsoft.azure</groupId>
-	  <artifactId>azure-storage</artifactId>
-	  <version>8.6.5</version>
-	</dependency>  
+    </dependency>  
     <dependency> 
       <groupId>com.microsoft.azure</groupId>  
       <artifactId>azure-storage</artifactId>  
       <version>8.6.5</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>com.microsoft.azure</groupId>  
+      <artifactId>azure-storage</artifactId>  
+      <version>8.6.5</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>com.azure</groupId>  
+      <artifactId>azure-storage-blob</artifactId>  
+      <version>12.6.0</version> 
     </dependency> 
   </dependencies>  
   <build> 
@@ -55,15 +60,16 @@
         <version>1.11.0</version>  
         <configuration> 
           <schemaVersion>V2</schemaVersion>  
+          <authType>azure_cli</authType>
           <subscriptionId>95fbb6ef-9d77-4b92-86f3-024b1dd4ae32</subscriptionId>  
           <resourceGroup>sccProjectGroup</resourceGroup>  
           <appName>sccProject</appName>  
           <pricingTier>P1v2</pricingTier>  
           <region>westeurope</region>  
           <runtime> 
-            <os>windows</os>  
-            <javaVersion>11</javaVersion>  
-            <webContainer>tomcat 9.0</webContainer> 
+            <os>windows</os>
+            <javaVersion>11</javaVersion>
+            <webContainer>tomcat 9.0</webContainer>
           </runtime>  
           <deployment> 
             <resources> 
