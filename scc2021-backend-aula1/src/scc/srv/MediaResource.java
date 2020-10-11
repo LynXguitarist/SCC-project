@@ -2,9 +2,6 @@ package scc.srv;
 
 import scc.utils.Hash;
 
-import java.io.File;
-import com.azure.storage.blob.*;
-import com.azure.storage.blob.models.*;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
@@ -12,12 +9,10 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 
 import java.io.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -26,11 +21,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Path("/media")
 public class MediaResource {
 
+	private static Logger Log = Logger.getLogger(MediaResource.class.getName());
+	
 	private static final String CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net";
 
 	private static CloudBlobContainer container;
@@ -41,7 +37,8 @@ public class MediaResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String upload(byte[] contents) {
 		String id = Hash.of(contents);
-		System.out.println("Id: " + id);
+		connections();
+		Log.info("id: " + id);
 		try {
 			// Get reference to blob
 			CloudBlob blob = container.getBlockBlobReference(id);
@@ -64,6 +61,7 @@ public class MediaResource {
 		// Get reference to blob
 		CloudBlob blob;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		connections();
 		try {
 			blob = container.getBlobReferenceFromServer(id);
 			blob.download(out);
@@ -81,12 +79,7 @@ public class MediaResource {
 
 	// ---------------------------Connections-----------------------------//
 
-	public static void main(String[] args) {
-		// Handles connections to blob storage
-		connections();
-	}
-
-	private static void connections() {
+	private void connections() {
 		// Get connection string in the storage access keys page
 		String storageConnectionString = CONNECTION_STRING;
 		CloudStorageAccount storageAccount;
