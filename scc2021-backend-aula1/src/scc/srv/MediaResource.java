@@ -12,7 +12,6 @@ import java.io.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
-import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -25,8 +24,6 @@ import javax.ws.rs.core.MediaType;
 @Path("/media")
 public class MediaResource {
 
-	private static Logger Log = Logger.getLogger(MediaResource.class.getName());
-	
 	private static final String CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net";
 
 	private static CloudBlobContainer container;
@@ -37,8 +34,9 @@ public class MediaResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String upload(byte[] contents) {
 		String id = Hash.of(contents);
-		connections();
-		Log.info("id: " + id);
+		
+		if (container == null)
+			connections();
 		try {
 			// Get reference to blob
 			CloudBlob blob = container.getBlockBlobReference(id);
@@ -61,7 +59,9 @@ public class MediaResource {
 		// Get reference to blob
 		CloudBlob blob;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		connections();
+		
+		if (container == null)
+			connections();
 		try {
 			blob = container.getBlobReferenceFromServer(id);
 			blob.download(out);
@@ -79,7 +79,7 @@ public class MediaResource {
 
 	// ---------------------------Connections-----------------------------//
 
-	private void connections() {
+	private synchronized void connections() {
 		// Get connection string in the storage access keys page
 		String storageConnectionString = CONNECTION_STRING;
 		CloudStorageAccount storageAccount;
