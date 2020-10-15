@@ -1,5 +1,7 @@
 package data;
 
+import java.util.Locale;
+
 import com.azure.cosmos.ConsistencyLevel;
 import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosClientBuilder;
@@ -26,6 +28,7 @@ public class CosmosDBLayer {
 	}
 
 	public static synchronized CosmosDBLayer getInstance() {
+		Locale.setDefault(Locale.US);
 		if (instance != null)
 			return instance;
 
