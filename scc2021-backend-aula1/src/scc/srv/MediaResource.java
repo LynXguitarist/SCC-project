@@ -24,8 +24,8 @@ import javax.ws.rs.core.MediaType;
 @Path("/media")
 public class MediaResource {
 
+	// BLOB CONNECTION
 	private static final String CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net";
-
 	private static CloudBlobContainer container;
 
 	@POST
@@ -34,7 +34,7 @@ public class MediaResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String upload(byte[] contents) {
 		String id = Hash.of(contents);
-		
+
 		if (container == null)
 			connections();
 		try {
@@ -59,7 +59,7 @@ public class MediaResource {
 		// Get reference to blob
 		CloudBlob blob;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
+
 		if (container == null)
 			connections();
 		try {
@@ -95,5 +95,26 @@ public class MediaResource {
 			e.printStackTrace();
 		}
 	}
+
+	// -------------------------------Cosmo_Client------------------------------//
+
+
+	/*
+	private Entity writeItem(Entity entity) {
+		CosmosItemResponse<Entity> res = entities.createItem(entity);
+		if (res.getStatusCode() < 300)
+			return res.getItem();
+		else
+			throw new NotFoundException();
+	}
+
+	private void readItems(String id) {
+		CosmosPagedIterable<Entity> res = entities.queryItems("SELECT * FROM entities WHERE entities.id=\"" + id + "\"",
+				new CosmosQueryRequestOptions(), Entity.class);
+		for (Entity e : res) {
+			System.out.println(e);
+		}
+	}
+	*/
 
 }
