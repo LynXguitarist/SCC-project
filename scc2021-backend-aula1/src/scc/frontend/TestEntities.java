@@ -1,4 +1,4 @@
-package scc_frontend;
+package scc.frontend;
 
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;

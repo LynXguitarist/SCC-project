@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import scc.rest.MediaResource;
+
 public class MainApplication extends Application {
 
 	private Set<Object> singletons = new HashSet<Object>();

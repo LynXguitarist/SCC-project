@@ -1,4 +1,4 @@
-package scc.srv;
+package scc.rest;
 
 import scc.utils.Hash;
 
