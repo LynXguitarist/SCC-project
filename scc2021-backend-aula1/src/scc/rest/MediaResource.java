@@ -40,8 +40,9 @@ public class MediaResource {
 		try {
 			// Get reference to blob
 			CloudBlob blob = container.getBlockBlobReference(id);
-			// Upload contents from byte array (check documentation for other alternatives)
-			blob.uploadFromByteArray(contents, 0, contents.length);
+			// Upload contents from byte array only if it doesn't exist already
+			if (!blob.exists())
+				blob.uploadFromByteArray(contents, 0, contents.length);
 		} catch (StorageException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,26 +96,5 @@ public class MediaResource {
 			e.printStackTrace();
 		}
 	}
-
-	// -------------------------------Cosmo_Client------------------------------//
-
-
-	/*
-	private Entity writeItem(Entity entity) {
-		CosmosItemResponse<Entity> res = entities.createItem(entity);
-		if (res.getStatusCode() < 300)
-			return res.getItem();
-		else
-			throw new NotFoundException();
-	}
-
-	private void readItems(String id) {
-		CosmosPagedIterable<Entity> res = entities.queryItems("SELECT * FROM entities WHERE entities.id=\"" + id + "\"",
-				new CosmosQueryRequestOptions(), Entity.class);
-		for (Entity e : res) {
-			System.out.println(e);
-		}
-	}
-	*/
 
 }

@@ -45,7 +45,6 @@ public class CosmosDBLayer {
 			return;
 		db = client.getDatabase(DB_NAME);
 		entities = db.getContainer("entities");
-
 	}
 
 	public CosmosItemResponse<Object> delEntity(Entity entity) {

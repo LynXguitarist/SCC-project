@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import scc.rest.CalendarResource;
+import scc.rest.ForumResource;
 import scc.rest.MediaResource;
 
 public class MainApplication extends Application {
@@ -15,8 +17,9 @@ public class MainApplication extends Application {
 	public MainApplication() {
 		resources.add(ControlResource.class);
 		resources.add(MediaResource.class);
+		resources.add(ForumResource.class);
+		resources.add(CalendarResource.class);
 	}
-	
 
 	@Override
 	public Set<Class<?>> getClasses() {
