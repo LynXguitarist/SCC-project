@@ -1,6 +1,7 @@
 package data;
 
 import java.util.Arrays;
+import java.util.Date;
 
 public class Entity {
 	private String _rid;
@@ -11,6 +12,7 @@ public class Entity {
 	private String[] calendarIds;
 	private int number_of_likes;
 	private String forum_id;
+	private Date last_update;
 	private boolean listed;
 
 	public String get_rid() {
