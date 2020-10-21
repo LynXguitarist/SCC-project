@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Entity {
 	private String _rid;
+	private Date _ts;
 	private String id;
 	private String name;
 	private String description;
@@ -95,7 +96,7 @@ public class Entity {
 	public void setLastUpdate(Date last_update) {
 		this.last_update = last_update;
 	}
-	
+
 	public boolean isLiked() {
 		return liked;
 	}
@@ -104,12 +105,19 @@ public class Entity {
 		this.liked = liked;
 	}
 
+	public Date getTs() {
+		return _ts;
+	}
+
+	public void setTs(Date _ts) {
+		this._ts = _ts;
+	}
+
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
 				+ Arrays.toString(mediaIds) + ", calendarId=" + Arrays.toString(calendarIds) + ", listed=" + listed
 				+ "]";
 	}
-
 
 }

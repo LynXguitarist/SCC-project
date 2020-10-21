@@ -7,9 +7,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 
 import com.azure.core.annotation.PathParam;
+import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
 import cosmos.EntityDBLayer;
@@ -22,14 +25,20 @@ public class EntityResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createEntity(Entity entity) {
-		EntityDBLayer.getInstance().createEntity(entity);
+		CosmosItemResponse<Entity> cosmos_response = EntityDBLayer.getInstance().createEntity(entity);
+		int response = cosmos_response.getStatusCode();
+		if (response != 200)
+			throw new WebApplicationException(response);
 	}
 
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void updateEntity(Entity entity) {
-		EntityDBLayer.getInstance().putEntity(entity);
+		CosmosItemResponse<Entity> cosmos_response = EntityDBLayer.getInstance().putEntity(entity);
+		int response = cosmos_response.getStatusCode();
+		if (response != 200)
+			throw new WebApplicationException(response);
 	}
 
 	@GET
@@ -39,9 +48,11 @@ public class EntityResource {
 	public Entity getEntity(@PathParam("id") String id) {
 		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(id);
 		Entity entity = null;
-		for( Entity item: items) {
+		for (Entity item : items) {
 			entity = item;
 		}
+		if (entity == null)
+			throw new WebApplicationException(Status.NOT_FOUND);
 		return entity;
 	}
 
@@ -49,7 +60,10 @@ public class EntityResource {
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteEntity(@PathParam("id") String id) {
-		EntityDBLayer.getInstance().delEntity(id);
+		CosmosItemResponse<Object> cosmos_response = EntityDBLayer.getInstance().delEntity(id);
+		int response = cosmos_response.getStatusCode();
+		if (response != 200)
+			throw new WebApplicationException(response);
 	}
 
 	@PUT
@@ -58,11 +72,13 @@ public class EntityResource {
 	public void likeOrdislike(@PathParam("id") String id, @PathParam("liked") boolean liked) {
 		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(id);
 		Entity entity = null;
-		for( Entity item: items) {
+		for (Entity item : items) {
 			entity = item;
 		}
+		if (entity == null)
+			throw new WebApplicationException(Status.NOT_FOUND);
 		entity.setLiked(liked);
 		EntityDBLayer.getInstance().putEntity(entity);
 	}
-	
+
 }
