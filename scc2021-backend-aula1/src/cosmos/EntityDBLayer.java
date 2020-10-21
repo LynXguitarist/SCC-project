@@ -1,4 +1,4 @@
-package data;
+package cosmos;
 
 import java.util.Locale;
 
@@ -10,24 +10,28 @@ import com.azure.cosmos.CosmosDatabase;
 import com.azure.cosmos.models.CosmosItemRequestOptions;
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
+import com.azure.cosmos.models.PartitionKey;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
-public class CosmosDBLayer {
+import data.Entity;
+
+public class EntityDBLayer {
 	// DATABASE
 	private static final String CONNECTION_URL = "https://sc42764.documents.azure.com:443/";
 	private static final String DB_KEY = "wclICjcLUCsL36XN1cTVxcvEunzLfkjLfjmSGGI0J086HByJf1YNBJnReax8iiFrCFEGm0zLmRj5yX1WI3bc3g==";
 	private static final String DB_NAME = "sc42764";
+	private static final String DB_CONTAINER = "entities";
 
-	private static CosmosDBLayer instance;
+	private static EntityDBLayer instance;
 	private CosmosClient client;
 	private CosmosDatabase db;
 	private CosmosContainer entities;
 
-	public CosmosDBLayer(CosmosClient client) {
+	public EntityDBLayer(CosmosClient client) {
 		this.client = client;
 	}
 
-	public static synchronized CosmosDBLayer getInstance() {
+	public static synchronized EntityDBLayer getInstance() {
 		Locale.setDefault(Locale.US);
 		if (instance != null)
 			return instance;
@@ -35,7 +39,7 @@ public class CosmosDBLayer {
 		CosmosClient client = new CosmosClientBuilder().endpoint(CONNECTION_URL).key(DB_KEY).directMode()
 				.consistencyLevel(ConsistencyLevel.SESSION).connectionSharingAcrossClientsEnabled(true)
 				.contentResponseOnWriteEnabled(true).buildClient();
-		instance = new CosmosDBLayer(client);
+		instance = new EntityDBLayer(client);
 		return instance;
 
 	}
@@ -44,17 +48,22 @@ public class CosmosDBLayer {
 		if (db != null)
 			return;
 		db = client.getDatabase(DB_NAME);
-		entities = db.getContainer("entities");
+		entities = db.getContainer(DB_CONTAINER);
 	}
 
-	public CosmosItemResponse<Object> delEntity(Entity entity) {
+	public CosmosItemResponse<Object> delEntity(String id) {
 		init();
-		return entities.deleteItem(entity, new CosmosItemRequestOptions());
+		return entities.deleteItem(id, new CosmosItemRequestOptions());
 	}
 
-	public CosmosItemResponse<Entity> putEntity(Entity entity) {
+	public CosmosItemResponse<Entity> createEntity(Entity entity) {
 		init();
 		return entities.createItem(entity);
+	}
+	
+	public CosmosItemResponse<Entity> putEntity(Entity entity) {
+		init();
+		return entities.replaceItem(entity, entity.get_rid(), new PartitionKey(DB_KEY), new CosmosItemRequestOptions());
 	}
 
 	public CosmosPagedIterable<Entity> getEntityById(String id) {

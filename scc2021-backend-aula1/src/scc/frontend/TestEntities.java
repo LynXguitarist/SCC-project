@@ -3,7 +3,7 @@ package scc.frontend;
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
-import data.CosmosDBLayer;
+import cosmos.EntityDBLayer;
 import data.Entity;
 
 
@@ -12,7 +12,7 @@ public class TestEntities
 	public static void main(String[] args) {
 
 		try {
-			CosmosDBLayer db = CosmosDBLayer.getInstance();
+			EntityDBLayer db = EntityDBLayer.getInstance();
 			String id = "0" + System.currentTimeMillis();
 			CosmosItemResponse<Entity> res = null;
 			Entity ent = new Entity();

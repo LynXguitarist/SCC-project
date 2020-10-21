@@ -17,21 +17,21 @@ public class CalendarResource {
 
 	@POST
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void setAvailablePeriod() {
 
 	}
 
 	@POST
 	@Path("/reservation")
-	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void addReservation() {
 
 	}
 
 	@DELETE
 	@Path("/reservation/{id}")
-	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void cancelReservation(@PathParam("id") String id) {
 
 	}

@@ -15,14 +15,14 @@ public class ForumResource {
 	
 	@POST
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void addMessage() {
 
 	}
 	
 	@PUT
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void addReply() {
 		
 	}

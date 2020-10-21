@@ -14,6 +14,7 @@ public class Entity {
 	private String forum_id;
 	private Date last_update;
 	private boolean listed;
+	private boolean liked;
 
 	public String get_rid() {
 		return _rid;
@@ -79,11 +80,36 @@ public class Entity {
 		this.number_of_likes = number_of_likes;
 	}
 
+	public String getForumId() {
+		return forum_id;
+	}
+
+	public void setForumId(String forum_id) {
+		this.forum_id = forum_id;
+	}
+
+	public Date getLastUpdate() {
+		return last_update;
+	}
+
+	public void setLastUpdate(Date last_update) {
+		this.last_update = last_update;
+	}
+	
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
+	}
+
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
 				+ Arrays.toString(mediaIds) + ", calendarId=" + Arrays.toString(calendarIds) + ", listed=" + listed
 				+ "]";
 	}
+
 
 }
