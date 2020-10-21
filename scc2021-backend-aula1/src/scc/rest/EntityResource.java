@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.azure.core.annotation.PathParam;
-import com.azure.cosmos.CosmosClient;
+import com.azure.cosmos.util.CosmosPagedIterable;
 
 import cosmos.EntityDBLayer;
 import data.Entity;
@@ -37,7 +37,11 @@ public class EntityResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Entity getEntity(@PathParam("id") String id) {
-		Entity entity = EntityDBLayer.getInstance().getEntityById(id);
+		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(id);
+		Entity entity = null;
+		for( Entity item: items) {
+			entity = item;
+		}
 		return entity;
 	}
 
@@ -49,10 +53,14 @@ public class EntityResource {
 	}
 
 	@PUT
-	@Path("/")
+	@Path("/likes/{likes}/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void likeOrdislike(@PathParam("id") String id, @PathParam("liked") boolean liked) {
-		Entity entity = EntityDBLayer.getInstance().getEntityById(id);
+		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(id);
+		Entity entity = null;
+		for( Entity item: items) {
+			entity = item;
+		}
 		entity.setLiked(liked);
 		EntityDBLayer.getInstance().putEntity(entity);
 	}
