@@ -1,0 +1,5 @@
+COMO CORRER TESTES EM AZURE:
+az login
+mvn build
+mvn deploy
+use Test<ClassName> for tests

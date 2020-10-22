@@ -20,10 +20,14 @@ public class TestEntities
 			ent.setName("SCC " + id);
 			ent.setDescription("The best hairdresser");
 			ent.setListed(true);
+			ent.setLiked(true);
+			ent.setForumId(id);
+			ent.setNumberOfLikes(0);
 			ent.setMediaIds(new String[] {"456"});
 			ent.setCalendarIds(new String[] {"456"});
-
-			res = db.putEntity(ent);
+			
+			res = db.createEntity(ent);
+			//res = db.putEntity(ent);
 			System.out.println( "Put result");
 			System.out.println( res.getStatusCode());
 			System.out.println( res.getItem());

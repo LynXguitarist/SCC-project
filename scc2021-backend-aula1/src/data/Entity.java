@@ -1,11 +1,9 @@
 package data;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class Entity {
 	private String _rid;
-	private Date _ts;
 	private String id;
 	private String name;
 	private String description;
@@ -13,7 +11,6 @@ public class Entity {
 	private String[] calendarIds;
 	private int number_of_likes;
 	private String forum_id;
-	private Date last_update;
 	private boolean listed;
 	private boolean liked;
 
@@ -89,28 +86,12 @@ public class Entity {
 		this.forum_id = forum_id;
 	}
 
-	public Date getLastUpdate() {
-		return last_update;
-	}
-
-	public void setLastUpdate(Date last_update) {
-		this.last_update = last_update;
-	}
-
 	public boolean isLiked() {
 		return liked;
 	}
 
 	public void setLiked(boolean liked) {
 		this.liked = liked;
-	}
-
-	public Date getTs() {
-		return _ts;
-	}
-
-	public void setTs(Date _ts) {
-		this._ts = _ts;
 	}
 
 	@Override
