@@ -16,7 +16,7 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 import data.Entity;
 
 public class EntityDBLayer {
-	
+
 	// DATABASE
 	private static final String CONNECTION_URL = "https://sc42764.documents.azure.com:443/";
 	private static final String DB_KEY = "wclICjcLUCsL36XN1cTVxcvEunzLfkjLfjmSGGI0J086HByJf1YNBJnReax8iiFrCFEGm0zLmRj5yX1WI3bc3g==";
@@ -61,12 +61,13 @@ public class EntityDBLayer {
 		init();
 		return entities.createItem(entity);
 	}
-	
+
 	public CosmosItemResponse<Entity> putEntity(Entity entity) {
 		init();
-		return entities.replaceItem(entity, entity.get_rid(), new PartitionKey(entity.getId()), new CosmosItemRequestOptions());
+		return entities.replaceItem(entity, entity.get_rid(), new PartitionKey(entity.getId()),
+				new CosmosItemRequestOptions());
 	}
-	
+
 	public CosmosPagedIterable<Entity> getEntityById(String id) {
 		init();
 		return entities.queryItems("SELECT * FROM entities WHERE entities.id=\"" + id + "\"",

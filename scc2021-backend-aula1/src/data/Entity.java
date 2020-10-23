@@ -9,8 +9,8 @@ public class Entity {
 	private String description;
 	private String[] mediaIds; // photo
 	private String[] calendarIds;
-	private int number_of_likes;
-	private String forum_id;
+	private int numberOfLikes;
+	private String forumId;
 	private boolean listed;
 	private boolean liked;
 
@@ -71,19 +71,19 @@ public class Entity {
 	}
 
 	public int getNumberOfLikes() {
-		return number_of_likes;
+		return numberOfLikes;
 	}
 
-	public void setNumberOfLikes(int number_of_likes) {
-		this.number_of_likes = number_of_likes;
+	public void setNumberOfLikes(int numberOfLikes) {
+		this.numberOfLikes = numberOfLikes;
 	}
 
 	public String getForumId() {
-		return forum_id;
+		return forumId;
 	}
 
-	public void setForumId(String forum_id) {
-		this.forum_id = forum_id;
+	public void setForumId(String forumId) {
+		this.forumId = forumId;
 	}
 
 	public boolean isLiked() {

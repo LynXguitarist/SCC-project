@@ -1,5 +1,10 @@
 COMO CORRER TESTES EM AZURE:
-az login
-mvn build
-mvn deploy
-use Test<ClassName> for tests
+
+	az login
+	mvn build
+	mvn deploy
+	usar Test<ClassName> para testar do CosmosDB
+
+Para testar a API, usar testes artillery:
+	Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+	artillery run test-images.yml
