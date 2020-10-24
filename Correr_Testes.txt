@@ -8,3 +8,5 @@ COMO CORRER TESTES EM AZURE:
 Para testar a API, usar testes artillery:
 	Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 	artillery run test-images.yml
+
+Para testar com o Postman corra o server(scc.server.server) e o resto já sabe,

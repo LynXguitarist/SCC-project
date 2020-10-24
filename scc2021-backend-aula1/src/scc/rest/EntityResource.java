@@ -25,6 +25,14 @@ public class EntityResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createEntity(Entity entity) {
+		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(entity.getId());
+		Entity ent = null;
+		for (Entity item : items) {
+			ent = item;
+		}
+		if (ent != null)
+			throw new WebApplicationException(Status.CONFLICT);
+
 		CosmosItemResponse<Entity> cosmos_response = EntityDBLayer.getInstance().createEntity(entity);
 		int response = cosmos_response.getStatusCode();
 		if (response != 200)
@@ -32,18 +40,20 @@ public class EntityResource {
 	}
 
 	@PUT
-	@Path("/")
+	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void updateEntity(Entity entity) {
-		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(entity.getId());
+	@Produces(MediaType.APPLICATION_JSON)
+	public void updateEntity(@PathParam("id") String id, Entity entity) {
+		EntityDBLayer dbLayer = EntityDBLayer.getInstance();
+		CosmosPagedIterable<Entity> items = dbLayer.getEntityById(id);
 		Entity ent = null;
 		for (Entity item : items) {
 			ent = item;
 		}
 		if (ent == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
-		
-		CosmosItemResponse<Entity> cosmos_response = EntityDBLayer.getInstance().putEntity(entity);
+
+		CosmosItemResponse<Entity> cosmos_response = dbLayer.putEntity(ent);
 		int response = cosmos_response.getStatusCode();
 		if (response != 200)
 			throw new WebApplicationException(response);
@@ -68,7 +78,16 @@ public class EntityResource {
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteEntity(@PathParam("id") String id) {
-		CosmosItemResponse<Object> cosmos_response = EntityDBLayer.getInstance().delEntity(id);
+		EntityDBLayer dbLayer = EntityDBLayer.getInstance();
+		CosmosPagedIterable<Entity> items = dbLayer.getEntityById(id);
+		Entity ent = null;
+		for (Entity item : items) {
+			ent = item;
+		}
+		if (ent == null)
+			throw new WebApplicationException(Status.NOT_FOUND);
+
+		CosmosItemResponse<Object> cosmos_response = dbLayer.delEntity(id);
 		int response = cosmos_response.getStatusCode();
 		if (response != 200)
 			throw new WebApplicationException(response);
@@ -77,7 +96,8 @@ public class EntityResource {
 	@PUT
 	@Path("/likes/{liked}/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void likeOrdislike(@PathParam("liked") String liked, @PathParam("id") String id) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public void likeOrdislike(@PathParam("liked") boolean liked, @PathParam("id") String id) {
 		CosmosPagedIterable<Entity> items = EntityDBLayer.getInstance().getEntityById(id);
 		Entity entity = null;
 		for (Entity item : items) {
@@ -85,8 +105,9 @@ public class EntityResource {
 		}
 		if (entity == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
-		entity.setLiked(liked.equals("true"));
+		
+		entity.setLiked(liked);
 		EntityDBLayer.getInstance().putEntity(entity);
 	}
-	
+
 }

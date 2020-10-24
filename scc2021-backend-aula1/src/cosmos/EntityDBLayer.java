@@ -52,11 +52,6 @@ public class EntityDBLayer {
 		entities = db.getContainer(DB_CONTAINER);
 	}
 
-	public CosmosItemResponse<Object> delEntity(String id) {
-		init();
-		return entities.deleteItem(id, new CosmosItemRequestOptions());
-	}
-
 	public CosmosItemResponse<Entity> createEntity(Entity entity) {
 		init();
 		return entities.createItem(entity);
@@ -64,7 +59,7 @@ public class EntityDBLayer {
 
 	public CosmosItemResponse<Entity> putEntity(Entity entity) {
 		init();
-		return entities.replaceItem(entity, entity.get_rid(), new PartitionKey(entity.getId()),
+		return entities.replaceItem(entity, entity.getId(), new PartitionKey(entity.getId()),
 				new CosmosItemRequestOptions());
 	}
 
@@ -77,6 +72,11 @@ public class EntityDBLayer {
 	public CosmosPagedIterable<Entity> getEntities() {
 		init();
 		return entities.queryItems("SELECT * FROM entities ", new CosmosQueryRequestOptions(), Entity.class);
+	}
+	
+	public CosmosItemResponse<Object> delEntity(String id) {
+		init();
+		return entities.deleteItem(id, new PartitionKey(id), new CosmosItemRequestOptions());
 	}
 
 	public void close() {

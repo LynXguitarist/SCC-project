@@ -2,7 +2,6 @@ config:
   target: 'https://scc-project.azurewebsites.net'
   plugins:
     metrics-by-endpoint: {}
-  processor: "./test-utils.js"
   variables:
      metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
   phases:
