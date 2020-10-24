@@ -3,9 +3,7 @@ package scc.srv;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -13,7 +11,9 @@ import javax.net.ssl.SSLContext;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import scc.rest.CalendarResource;
 import scc.rest.EntityResource;
+import scc.rest.ForumResource;
 import scc.utils.InsecureHostnameVerifier;
 
 
@@ -40,7 +40,8 @@ public class Server {
 		
 		ResourceConfig config = new ResourceConfig();
 		config.register(new EntityResource());
-
+		config.register(new CalendarResource());
+		config.register(new ForumResource());
 
 		try {
 			JdkHttpServerFactory.createHttpServer( serverURI, config, SSLContext.getDefault());
