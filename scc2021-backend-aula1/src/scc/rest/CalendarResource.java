@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response.Status;
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
-import cosmos.EntityDBLayer;
 import cosmos.ForumDBLayer;
 import cosmos.ReservationDBLayer;
 import data.Calendar;

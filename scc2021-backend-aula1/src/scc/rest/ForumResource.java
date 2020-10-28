@@ -2,7 +2,6 @@ package scc.rest;
 
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
-import cosmos.EntityDBLayer;
 import cosmos.ForumDBLayer;
 import data.Entity;
 import data.Forum;

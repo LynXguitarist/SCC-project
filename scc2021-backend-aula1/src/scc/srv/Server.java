@@ -16,11 +16,7 @@ import scc.rest.EntityResource;
 import scc.rest.ForumResource;
 import scc.utils.InsecureHostnameVerifier;
 
-
-
-
 public class Server {
-
 
 	static {
 		System.setProperty("java.net.preferIPv4Stack", "true");
@@ -34,17 +30,16 @@ public class Server {
 		String ip = localHost.getHostAddress();
 
 		URI serverURI = URI.create(String.format("http://%s:%s/rest", ip, PORT));
-		
+
 		HttpsURLConnection.setDefaultHostnameVerifier(new InsecureHostnameVerifier());
-				
-		
+
 		ResourceConfig config = new ResourceConfig();
 		config.register(new EntityResource());
-		//config.register(new CalendarResource());
-		//config.register(new ForumResource());
+		config.register(new CalendarResource());
+		config.register(new ForumResource());
 
 		try {
-			JdkHttpServerFactory.createHttpServer( serverURI, config, SSLContext.getDefault());
+			JdkHttpServerFactory.createHttpServer(serverURI, config, SSLContext.getDefault());
 			System.out.println(serverURI);
 		} catch (NoSuchAlgorithmException e) {
 			System.err.println("Invalid SSLL/TLS configuration.");
