@@ -6,7 +6,6 @@ import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
 import com.azure.cosmos.util.CosmosPagedIterable;
-import data.Entity;
 import data.Forum;
 
 import java.util.Locale;
@@ -19,7 +18,7 @@ public class ForumDBLayer {
 	private static final String DB_NAME = "sc42764DB";
 	private static final String DB_CONTAINER = "forums";
 
-	private static EntityDBLayer instance;
+	private static ForumDBLayer instance;
 	private CosmosClient client;
 	private CosmosDatabase db;
 	private CosmosContainer forums;
@@ -28,7 +27,7 @@ public class ForumDBLayer {
 		this.client = client;
 	}
 
-	public static synchronized EntityDBLayer getInstance() {
+	public static synchronized ForumDBLayer getInstance() {
 		Locale.setDefault(Locale.US);
 		if (instance != null)
 			return instance;
@@ -36,7 +35,7 @@ public class ForumDBLayer {
 		CosmosClient client = new CosmosClientBuilder().endpoint(CONNECTION_URL).key(DB_KEY).directMode()
 				.consistencyLevel(ConsistencyLevel.SESSION).connectionSharingAcrossClientsEnabled(true)
 				.contentResponseOnWriteEnabled(true).buildClient();
-		instance = new EntityDBLayer(client);
+		instance = new ForumDBLayer(client);
 		return instance;
 
 	}

@@ -2,7 +2,7 @@ package data;
 
 import java.util.Arrays;
 
-public class ForumMessage {
+public class  ForumMessage {
 
     private String _rid;
     private String id;
