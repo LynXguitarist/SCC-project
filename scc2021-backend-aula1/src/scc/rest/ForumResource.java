@@ -1,11 +1,11 @@
 package scc.rest;
 
-import com.azure.cosmos.models.CosmosItemResponse;
+import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.util.CosmosPagedIterable;
-import cosmos.ForumDBLayer;
-import data.Entity;
+import cosmos.CosmosDBLayer;
 import data.Forum;
 import data.ForumMessage;
+import data.TableName;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -21,18 +21,13 @@ public class ForumResource {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createForum(Forum forum) {
-        CosmosPagedIterable<Forum> items = ForumDBLayer.getInstance().getForumById(forum.getId());
-        Forum ent = null;
-        for (Forum item : items) {
-            ent = item;
-        }
-        if (ent != null)
-            throw new WebApplicationException(Response.Status.CONFLICT);
+        CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
 
-        CosmosItemResponse<Forum> cosmos_response = ForumDBLayer.getInstance().createForum(forum);
-        int response = cosmos_response.getStatusCode();
-        if (response != 200)
-            throw new WebApplicationException(response);
+        try {
+            dbLayer.createItem(forum, TableName.FORUM.getName());
+        } catch (CosmosException e) {
+            throw new WebApplicationException(Response.Status.CONFLICT);
+        }
     }
 
     @PUT
@@ -40,19 +35,13 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void updateForum(@PathParam("id") String id, Forum forum) {
-        ForumDBLayer dbLayer = ForumDBLayer.getInstance();
-        CosmosPagedIterable<Forum> items = dbLayer.getForumById(id);
-        Forum ent = null;
-        for (Forum item : items) {
-            ent = item;
-        }
-        if (ent == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
 
-        CosmosItemResponse<Forum> cosmos_response = dbLayer.putForum(ent);
-        int response = cosmos_response.getStatusCode();
-        if (response != 200)
-            throw new WebApplicationException(response);
+        try {
+            dbLayer.putItem(id, forum, TableName.FORUM.getName());
+        } catch (CosmosException e) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
     }
 
     @GET
@@ -60,30 +49,32 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Forum getForum(@PathParam("id") String id) {
-        CosmosPagedIterable<Forum> items = ForumDBLayer.getInstance().getForumById(id);
-        Forum entity = null;
-        for (Forum item : items) {
-            entity = item;
+        CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
+        CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());
+        Forum forum = null;
+        for (Object item : items) {
+            forum = (Forum) item;
         }
-        if (entity == null)
+        if (forum == null)
             throw new WebApplicationException(Response.Status.NOT_FOUND);
-        return entity;
+        return forum;
     }
 
     @POST
     @Path("/message/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addMessage(@PathParam("id") String id, ForumMessage message) {
-        CosmosPagedIterable<Forum> items = ForumDBLayer.getInstance().getForumById(id);
-        Forum entity = null;
-        for (Forum item : items) {
-            entity = item;
+        CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
+        CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());
+        Forum forum = null;
+        for (Object item : items) {
+            forum = (Forum) item;
         }
-        if (entity == null)
+        if (forum == null)
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         else {
 
-            ForumMessage[] arr = entity.getMessages();
+            ForumMessage[] arr = forum.getMessages();
 
             List<ForumMessage> arrlist
                     = new ArrayList<ForumMessage>(
@@ -92,7 +83,13 @@ public class ForumResource {
 
             arr = arrlist.toArray(arr);
 
-            entity.setMessages(arr);
+            forum.setMessages(arr);
+
+            try {
+                dbLayer.putItem(id, forum, TableName.FORUM.getName());
+            } catch (CosmosException e) {
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
+            }
         }
     }
 
@@ -100,16 +97,17 @@ public class ForumResource {
     @Path("/message/{id}/{idMessage}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, String reply) {
-        CosmosPagedIterable<Forum> items = ForumDBLayer.getInstance().getForumById(id);
-        Forum entity = null;
-        for (Forum item : items) {
-            entity = item;
+        CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
+        CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());
+        Forum forum = null;
+        for (Object item : items) {
+            forum = (Forum) item;
         }
-        if (entity == null)
+        if (forum == null)
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         else {
 
-            ForumMessage[] arr = entity.getMessages();
+            ForumMessage[] arr = forum.getMessages();
 
             List<ForumMessage> arrlist
                     = new ArrayList<ForumMessage>(
@@ -120,6 +118,12 @@ public class ForumResource {
                 if(message.getId().equals(idMessage)){
                     message.setReply(reply);
                 }
+            }
+
+            try {
+                dbLayer.putItem(id, forum, TableName.FORUM.getName());
+            } catch (CosmosException e) {
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
         }
     }
