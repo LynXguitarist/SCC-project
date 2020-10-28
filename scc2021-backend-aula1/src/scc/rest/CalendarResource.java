@@ -86,7 +86,7 @@ public class CalendarResource {
 	}
 	
 	@POST
-	@Path("/{id}")
+	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void setAvailablePeriod(@PathParam("id") String id, Period period) {
 		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(id);
@@ -103,7 +103,7 @@ public class CalendarResource {
 	}
 
 	@POST
-	@Path("/reservation{id}/")
+	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addReservation(@PathParam("id") String id, Reservation reservation) {
 		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(id);

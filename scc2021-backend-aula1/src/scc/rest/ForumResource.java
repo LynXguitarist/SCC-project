@@ -71,7 +71,7 @@ public class ForumResource {
     }
 
     @POST
-    @Path("/{id}")
+    @Path("/message/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addMessage(@PathParam("id") String id, ForumMessage message) {
         CosmosPagedIterable<Forum> items = ForumDBLayer.getInstance().getForumById(id);
@@ -97,7 +97,7 @@ public class ForumResource {
     }
 
     @PUT
-    @Path("/{id}/{idMessage}")
+    @Path("/message/{id}/{idMessage}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, String reply) {
         CosmosPagedIterable<Forum> items = ForumDBLayer.getInstance().getForumById(id);
