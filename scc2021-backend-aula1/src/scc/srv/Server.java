@@ -40,8 +40,8 @@ public class Server {
 		
 		ResourceConfig config = new ResourceConfig();
 		config.register(new EntityResource());
-		config.register(new CalendarResource());
-		config.register(new ForumResource());
+		//config.register(new CalendarResource());
+		//config.register(new ForumResource());
 
 		try {
 			JdkHttpServerFactory.createHttpServer( serverURI, config, SSLContext.getDefault());
