@@ -17,17 +17,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
-import cosmos.ForumDBLayer;
-import cosmos.ReservationDBLayer;
+import cosmos.CosmosDBLayer;
 import data.Calendar;
 import data.Entity;
 import data.Forum;
 import data.ForumMessage;
 import data.Period;
 import data.Reservation;
+import data.TableName;
 
 @Path("/calendar")
 public class CalendarResource {
@@ -35,19 +36,13 @@ public class CalendarResource {
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void createCalendar(Calendar calendar) {
-		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(calendar.getId());
-		Calendar ent = null;
-		for (Calendar item : items) {
-			ent = item;
-		}
-		if (ent != null)
+	public void createCalendar(Calendar calendar) {		
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+		try {
+			dbLayer.createItem(calendar, TableName.CALENDAR.getName());
+		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.CONFLICT);
-
-		CosmosItemResponse<Calendar> cosmos_response = ReservationDBLayer.getInstance().createCalendar(calendar);
-		int response = cosmos_response.getStatusCode();
-		if (response != 200)
-			throw new WebApplicationException(response);
+		}
 	}
 	
 	@PUT
@@ -55,19 +50,12 @@ public class CalendarResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void updateCalendar(@PathParam("id") String id, Calendar calendar) {
-		ReservationDBLayer dbLayer = ReservationDBLayer.getInstance();
-		CosmosPagedIterable<Calendar> items = dbLayer.getCalendarById(id);
-		Calendar ent = null;
-		for (Calendar item : items) {
-			ent = item;
-		}
-		if (ent == null)
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+		try {
+			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
+		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);
-
-		CosmosItemResponse<Calendar> cosmos_response = dbLayer.putCalendar(ent);
-		int response = cosmos_response.getStatusCode();
-		if (response != 200)
-			throw new WebApplicationException(response);
+		}
 	}
 
 	@GET
@@ -75,10 +63,11 @@ public class CalendarResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Calendar getCalendar(@PathParam("id") String id) {
-		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(id);
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
 		Calendar entity = null;
-		for (Calendar item : items) {
-			entity = item;
+		for (Object item : items) {
+			entity = (Calendar) item;
 		}
 		if (entity == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
@@ -89,33 +78,35 @@ public class CalendarResource {
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void setAvailablePeriod(@PathParam("id") String id, Period period) {
-		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(id);
-        Calendar entity = null;
-        for (Calendar item : items) {
-            entity = item;
-        }
-        if (entity == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        else {
-            entity.addPeriod(period);
-            ReservationDBLayer.getInstance().putCalendar(entity);
-        }
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
+		Calendar calendar = null;
+		for (Object item : items) {
+			calendar = (Calendar) item;
+		}
+		if (calendar == null) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		} else {
+			calendar.addPeriod(period);
+            dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
+		}
 	}
 
 	@POST
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addReservation(@PathParam("id") String id, Reservation reservation) {
-		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(id);
-        Calendar entity = null;
-        for (Calendar item : items) {
-            entity = item;
-        }
-        if (entity == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        else {
-            entity.addReservation(reservation);
-            ReservationDBLayer.getInstance().putCalendar(entity);
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
+		Calendar calendar = null;
+		for (Object item : items) {
+			calendar = (Calendar) item;
+		}
+		if (calendar == null) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		} else {
+            calendar.addReservation(reservation);
+            dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
         }
 	}
 
@@ -123,16 +114,17 @@ public class CalendarResource {
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void cancelReservation(@PathParam("id") String id, Reservation reservation) {
-		CosmosPagedIterable<Calendar> items = ReservationDBLayer.getInstance().getCalendarById(id);
-        Calendar entity = null;
-        for (Calendar item : items) {
-            entity = item;
-        }
-        if (entity == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        else {
-            entity.cancelReservation(reservation);
-            ReservationDBLayer.getInstance().putCalendar(entity);
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
+		Calendar calendar = null;
+		for (Object item : items) {
+			calendar = (Calendar) item;
+		}
+		if (calendar == null) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}else {
+            calendar.cancelReservation(reservation);
+            dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
         }
 	}
 }

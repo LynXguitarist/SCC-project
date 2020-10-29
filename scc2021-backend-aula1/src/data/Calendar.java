@@ -1,6 +1,5 @@
 package data;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Calendar {
@@ -64,8 +63,8 @@ public class Calendar {
 	
 	@Override
 	public String toString() {
-		return "Calendar [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", availablePeriods"
-				+ availablePeriods.toString() + ", reservations" + reservations.toString() + "]";
+		return "Calendar [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", availablePeriods="
+				+ availablePeriods.toString() + ", reservations=" + reservations.toString() + "]";
 	}
 	
 }
