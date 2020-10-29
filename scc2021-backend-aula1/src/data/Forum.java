@@ -1,12 +1,11 @@
 package data;
 
-import java.util.Arrays;
 
 public class Forum {
 
 	private String _rid;
 	private String id;
-	private String owner_id;
+	private String ownerId;
 	private ForumMessage[] messages;
 
 	public String get_rid() {
@@ -25,12 +24,12 @@ public class Forum {
 		this.id = id;
 	}
 
-	public String getOwner_id() {
-		return owner_id;
+	public String getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner_id(String owner_id) {
-		this.owner_id = owner_id;
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public ForumMessage[] getMessages() {
@@ -50,6 +49,6 @@ public class Forum {
 				forumMessages.append(",");
 			}
 		}
-		return "Forum [_rid=" + _rid + ", id=" + id + ", owner_id=" + owner_id + ", messages=" + "[" + forumMessages.toString() + "]"+ "]";
+		return "Forum [_rid=" + _rid + ", id=" + id + ", owner_id=" + ownerId + ", messages=" + "[" + forumMessages.toString() + "]"+ "]";
 	}
 }

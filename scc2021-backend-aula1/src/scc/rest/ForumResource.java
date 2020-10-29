@@ -25,6 +25,7 @@ public class ForumResource {
 		try {
 			dbLayer.createItem(forum, TableName.FORUM.getName());
 		} catch (CosmosException e) {
+			// tambem tem de ver se o owner existe(Entity)
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
@@ -38,6 +39,7 @@ public class ForumResource {
 		try {
 			dbLayer.putItem(id, forum, TableName.FORUM.getName());
 		} catch (CosmosException e) {
+			// tambem tem de ver se o owner existe(Entity)
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 	}
@@ -57,6 +59,8 @@ public class ForumResource {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		return forum;
 	}
+
+	// ------------------------------------FORUM_MESSAGE---------------------//
 
 	@POST
 	@Path("/message/{id}")

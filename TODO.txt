@@ -1,1 +1,3 @@
-- Perguntar se não é melhor ter tabelas em vez de listas
+- Criar tabelas reservation, avalaiblePeriods e forumMessage.
+- Tudo o que for lista de objectos, passa a ser lista de ids.
+- No cancel reservation, em vez de apagar na lista, a tabela ter uma coluna com estado ATIVO ou inativo se cancelled.

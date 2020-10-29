@@ -64,7 +64,7 @@ public class CosmosDBLayer<T> {
 
 	public CosmosPagedIterable<T> getItemById(String id, String tableName) {
 		init(tableName);
-		return container.queryItems("SELECT * FROM " + tableName + " WHERE entities.id=\"" + id + "\"",
+		return container.queryItems("SELECT * FROM " + tableName + " WHERE " + tableName + ".id=\"" + id + "\"",
 				new CosmosQueryRequestOptions(), t);
 	}
 
