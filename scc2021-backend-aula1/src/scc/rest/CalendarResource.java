@@ -36,7 +36,7 @@ public class CalendarResource {
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void createCalendar(Calendar calendar) {		
+	public void createCalendar(Calendar calendar) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
 		try {
 			dbLayer.createItem(calendar, TableName.CALENDAR.getName());
@@ -44,7 +44,7 @@ public class CalendarResource {
 			throw new WebApplicationException(Status.CONFLICT);
 		}
 	}
-	
+
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ public class CalendarResource {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		return entity;
 	}
-	
+
 	@POST
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ public class CalendarResource {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		} else {
 			calendar.addPeriod(period);
-            dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
+			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
 		}
 	}
 
@@ -105,9 +105,9 @@ public class CalendarResource {
 		if (calendar == null) {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		} else {
-            calendar.addReservation(reservation);
-            dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
-        }
+			calendar.addReservation(reservation);
+			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
+		}
 	}
 
 	@DELETE
@@ -122,9 +122,9 @@ public class CalendarResource {
 		}
 		if (calendar == null) {
 			throw new WebApplicationException(Status.NOT_FOUND);
-		}else {
-            calendar.cancelReservation(reservation);
-            dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
-        }
+		} else {
+			calendar.cancelReservation(reservation);
+			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
+		}
 	}
 }
