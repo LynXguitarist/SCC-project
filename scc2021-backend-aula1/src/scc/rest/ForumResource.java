@@ -62,7 +62,7 @@ public class ForumResource {
 
 	// ------------------------------------FORUM_MESSAGE---------------------//
 
-	@POST
+	@PUT
 	@Path("/message/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addMessage(@PathParam("id") String id, ForumMessage message) {
@@ -96,6 +96,7 @@ public class ForumResource {
 	@PUT
 	@Path("/message/{id}/{idMessage}")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, String reply) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
 		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());

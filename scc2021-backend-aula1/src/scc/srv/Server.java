@@ -34,8 +34,8 @@ public class Server {
 		HttpsURLConnection.setDefaultHostnameVerifier(new InsecureHostnameVerifier());
 
 		ResourceConfig config = new ResourceConfig();
-		//config.register(new EntityResource());
-		//config.register(new CalendarResource());
+		config.register(new EntityResource());
+		config.register(new CalendarResource());
 		config.register(new ForumResource());
 
 		try {
