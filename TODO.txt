@@ -1,3 +1,7 @@
 - Criar tabelas reservation, avalaiblePeriods e forumMessage.
+- Gerar ids auto generate(ver como fazer, lab5)
 - Tudo o que for lista de objectos, passa a ser lista de ids.
 - No cancel reservation, em vez de apagar na lista, a tabela ter uma coluna com estado ATIVO ou inativo se cancelled.
+- Concorrência, paralelismo
+- Calendar - AvalaiblePeriod -> dia da smena inicio, dia da semana fim, horário.(Fazer uma classe que transforma int no dia da semana, 0-Mon... 6-Sunday)
+- Calendar pode definir uma pessoa.
