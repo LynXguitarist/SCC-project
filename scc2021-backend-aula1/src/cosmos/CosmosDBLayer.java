@@ -13,12 +13,9 @@ import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.PartitionKey;
 import com.azure.cosmos.util.CosmosPagedIterable;
 
-public class CosmosDBLayer<T> {
+import scc.utils.AzureProperties;
 
-	// DATABASE CONNECTIONS, KEYS, CLIENTS AND CONTAINER
-	private static final String CONNECTION_URL = "https://sc42764.documents.azure.com:443/";
-	private static final String DB_KEY = "wclICjcLUCsL36XN1cTVxcvEunzLfkjLfjmSGGI0J086HByJf1YNBJnReax8iiFrCFEGm0zLmRj5yX1WI3bc3g==";
-	private static final String DB_NAME = "sc42764DB";
+public class CosmosDBLayer<T> {
 
 	private static CosmosDBLayer<?> instance;
 	private CosmosClient client;
@@ -38,7 +35,9 @@ public class CosmosDBLayer<T> {
 		if (instance != null)
 			return instance;
 
-		CosmosClient client = new CosmosClientBuilder().endpoint(CONNECTION_URL).key(DB_KEY).directMode()
+		CosmosClient client = new CosmosClientBuilder()
+				.endpoint(AzureProperties.getProperty(AzureProperties.COSMOSDB_URL))
+				.key(AzureProperties.getProperty(AzureProperties.COSMOSDB_KEY)).directMode()
 				.consistencyLevel(ConsistencyLevel.SESSION).connectionSharingAcrossClientsEnabled(true)
 				.contentResponseOnWriteEnabled(true).buildClient();
 		instance = new CosmosDBLayer<T>(client, t);
@@ -48,7 +47,7 @@ public class CosmosDBLayer<T> {
 	private synchronized void init(String tableName) {
 		if (db != null)
 			return;
-		db = client.getDatabase(DB_NAME);
+		db = client.getDatabase(AzureProperties.getProperty(AzureProperties.COSMOSDB_DATABASE));
 		container = db.getContainer(tableName);
 	}
 

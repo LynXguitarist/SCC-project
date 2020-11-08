@@ -9,10 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import scc.utils.AzureProperties;
 
 public class RedisCache<T> {
-	private static final String RedisHostname = "scc-group-cache.redis.cache.windows.net";
-	private static final String RedisKey = "Nl31CTkaOIK3SsXUnbQzcWJwUM3jihjHvYwRZ2jYv2Y=";
 
 	private static JedisPool instance;
 
@@ -34,7 +33,8 @@ public class RedisCache<T> {
 		poolConfig.setTimeBetweenEvictionRunsMillis(Duration.ofSeconds(30).toMillis());
 		poolConfig.setNumTestsPerEvictionRun(3);
 		poolConfig.setBlockWhenExhausted(true);
-		instance = new JedisPool(poolConfig, RedisHostname, 6380, 1000, RedisKey, true);
+		instance = new JedisPool(poolConfig, AzureProperties.getProperty(AzureProperties.REDIS_URL), 6380, 1000,
+				AzureProperties.getProperty(AzureProperties.REDIS_KEY), true);
 		return instance;
 	}
 

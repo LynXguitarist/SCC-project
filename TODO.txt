@@ -4,4 +4,4 @@
 - No cancel reservation, em vez de apagar na lista, a tabela ter uma coluna com estado ATIVO ou inativo se cancelled.
 - Concorrência, paralelismo
 - Calendar - AvalaiblePeriod -> dia da smena inicio, dia da semana fim, horário.(Fazer uma classe que transforma int no dia da semana, 0-Mon... 6-Sunday)
-- Calendar pode definir uma pessoa.
+- Calendar pode definir trabalho/horario de uma pessoa.

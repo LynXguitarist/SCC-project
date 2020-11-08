@@ -1,5 +1,6 @@
 package scc.rest;
 
+import scc.utils.AzureProperties;
 import scc.utils.Hash;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -25,7 +26,6 @@ import javax.ws.rs.core.MediaType;
 public class MediaResource {
 
 	// BLOB CONNECTION
-	private static final String CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net";
 	private static CloudBlobContainer container;
 
 	@POST
@@ -82,7 +82,7 @@ public class MediaResource {
 
 	private synchronized void connections() {
 		// Get connection string in the storage access keys page
-		String storageConnectionString = CONNECTION_STRING;
+		String storageConnectionString = AzureProperties.getProperty(AzureProperties.BLOB_KEY);
 		CloudStorageAccount storageAccount;
 		try {
 			storageAccount = CloudStorageAccount.parse(storageConnectionString);
