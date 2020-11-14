@@ -17,7 +17,7 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 
 import cosmos.CosmosDBLayer;
 import data.Entity;
-import data.TableName;
+import scc.utils.TableName;
 
 @Path("/entity")
 public class EntityResource {

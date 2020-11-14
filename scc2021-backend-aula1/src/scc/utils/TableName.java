@@ -1,4 +1,4 @@
-package data;
+package scc.utils;
 
 public enum TableName {
 	ENTITY("entities"), FORUM("forums"), CALENDAR("calendars");

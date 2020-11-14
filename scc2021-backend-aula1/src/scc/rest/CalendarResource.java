@@ -18,7 +18,7 @@ import cosmos.CosmosDBLayer;
 import data.Calendar;
 import data.Period;
 import data.Reservation;
-import data.TableName;
+import scc.utils.TableName;
 
 @Path("/calendar")
 public class CalendarResource {

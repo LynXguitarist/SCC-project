@@ -5,7 +5,7 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 import cosmos.CosmosDBLayer;
 import data.Forum;
 import data.ForumMessage;
-import data.TableName;
+import scc.utils.TableName;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
