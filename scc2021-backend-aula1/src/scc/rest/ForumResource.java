@@ -94,10 +94,10 @@ public class ForumResource {
 	}
 
 	@PUT
-	@Path("/message/{id}/{idMessage}")
+	@Path("/message/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, String reply) {
+	public void addReply(@PathParam("id") String id, ForumMessage message) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
 		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());
 		Forum forum = null;
@@ -110,12 +110,11 @@ public class ForumResource {
 			ForumMessage[] arr = forum.getMessages();
 
 			List<ForumMessage> arrlist = new ArrayList<ForumMessage>(Arrays.asList(arr));
+			arrlist.add(message);
 
-			for (ForumMessage message : arrlist) {
-				if (message.getId().equals(idMessage)) {
-					message.setReply(reply);
-				}
-			}
+			arr = arrlist.toArray(arr);
+
+			forum.setMessages(arr);
 
 			try {
 				dbLayer.putItem(id, forum, TableName.FORUM.getName());
