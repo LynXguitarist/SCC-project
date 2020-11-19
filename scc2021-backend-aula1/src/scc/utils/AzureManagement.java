@@ -305,9 +305,9 @@ public class AzureManagement {
 			final boolean CREATE_REDIS = false;
 		
 			// TODO: change your suffix and other names if you want
-			final String MY_SUFFIX = "4204"; // Add your suffix here
-			final String AZURE_COSMOSDB_NAME = "sccdbacc" + MY_SUFFIX;	// Cosmos DB account name
-			final String AZURE_COSMOSDB_DATABASE = "sccdb" + MY_SUFFIX;	// Cosmos DB database name
+			final String MY_SUFFIX = "41812-42764-50092"; // Add your suffix here
+			final String AZURE_COSMOSDB_NAME = "scc-groupBD" + MY_SUFFIX;	// Cosmos DB account name
+			final String AZURE_COSMOSDB_DATABASE = "sccBD" + MY_SUFFIX;	// Cosmos DB database name
 			final String[] BLOB_CONTAINERS = { "images" };	// Contaienrs to add to the blob storage
 
 			final Region[] REGIONS = new Region[] { Region.EUROPE_WEST }; // Define the regions to deploy resources here
@@ -403,6 +403,8 @@ public class AzureManagement {
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Entities", "/id",
 									new String[] { "/id2" });
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Forum", "/id",
+									null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Calendar", "/id",
 									null);
 
 						} catch (Exception e) {

@@ -1,0 +1,41 @@
+# Unit test using artillery
+# Test: post message to entity; get message
+config:
+#  target: 'http://localhost:8080/scc2021-backend-solved'
+  target: 'https://sccappwesteurope4204.azurewebsites.net'
+  plugins:
+    metrics-by-endpoint: {}
+    expect: {}
+  processor: "../test-utils.js"
+  variables:
+     metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
+  phases:
+  - duration: 1
+    arrivalCount: 1 
+ 
+
+scenarios:
+  - flow:
+      - function: "genNewMessage"
+      - post:
+          url: "/forum"
+          headers:
+            Accept: application/json
+          json:
+            entityId: "{{ entityId }}"
+            fromWho: "{{ fromWho }}"
+            msg: "{{ msg }}"
+          capture: 
+            - json: '$.id'
+              as: "msgId"
+          expect:
+            - statusCode: 200
+          ifTrue: "entityId"
+      - get:
+          url: "/forum/msg/{{ msgId }}"
+          headers:
+            Accept: application/json
+          expect:
+            - statusCode: 200
+          ifTrue: "entityId"
+ 

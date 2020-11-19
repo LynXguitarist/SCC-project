@@ -94,7 +94,7 @@ public class ForumResource {
 	}
 
 	@PUT
-	@Path("/message/{id}")
+	@Path("/message/reply/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void addReply(@PathParam("id") String id, ForumMessage message) {

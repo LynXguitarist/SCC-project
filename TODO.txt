@@ -1,7 +1,10 @@
-- Criar tabelas reservation, avalaiblePeriods e forumMessage.
-- Gerar ids auto generate(ver como fazer, lab5)
-- Tudo o que for lista de objectos, passa a ser lista de ids.
+- Criar tabelas reservation, avalaiblePeriods e forumMessage no AZURE MANAGEMENT(Main).
+- Criar prop file que dá para definir se usamos cache ou nao, etc
+
 - No cancel reservation, em vez de apagar na lista, a tabela ter uma coluna com estado ATIVO ou inativo se cancelled.
-- Concorrência, paralelismo
-- Calendar - AvalaiblePeriod -> dia da smena inicio, dia da semana fim, horário.(Fazer uma classe que transforma int no dia da semana, 0-Mon... 6-Sunday)
-- Calendar pode definir trabalho/horario de uma pessoa.
+
+-> Ver Lab 5 -> Definir os resources para usar e quantas regioes vamos fazer, perceber bem o codigo AZURE MANAGEMENT
+// Auth file location
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+// TODO: This file should be created by running in the console:
+// az ad sp create-for-rbac --sdk-auth > azure.auth

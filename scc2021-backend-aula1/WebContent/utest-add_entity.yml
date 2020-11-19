@@ -1,0 +1,44 @@
+# Unit test using artillery
+# Test: post entity; get entity
+config:
+#  target: 'http://localhost:8080/scc2021-backend-solved'
+  target: 'https://sccappwesteurope4204.azurewebsites.net'
+  plugins:
+    metrics-by-endpoint: {}
+    expect: {}
+  processor: "../test-utils.js"
+  variables:
+     metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
+  phases:
+  - duration: 1
+    arrivalCount: 1 
+ 
+
+scenarios:
+  - name: 'Upload entity'
+    weight: 1
+    flow:
+      - function: "genNewEntity"
+      - post:
+          url: "/media"
+          headers:
+            Content-Type: application/octet-stream
+            Accept: application/json
+          beforeRequest: "reqPostMedia"
+          capture: 
+            - regexp: '.*'
+              as: "imageId"
+          expect:
+            - statusCode: 200
+      - post:
+          url: "/entity"
+          headers:
+            Accept: application/json
+          json:
+            name: "{{ name }}"
+            description: "{{ description }}"
+            businessType: "{{ businessType }}"
+            listed: "{{ listed }}"
+            mediaId: ["{{ imageId }}"]
+          afterResponse: "replyPostEntity"            
+ 

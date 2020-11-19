@@ -1,7 +1,7 @@
 # Date : 11/3/20, 11:56 AM
-BlobStoreConnection=DDefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net
-COSMOSDB_KEY=wclICjcLUCsL36XN1cTVxcvEunzLfkjLfjmSGGI0J086HByJf1YNBJnReax8iiFrCFEGm0zLmRj5yX1WI3bc3g==
-COSMOSDB_URL=https://sc42764.documents.azure.com:443/
-COSMOSDB_DATABASE=sc42764DB
-REDIS_KEY=Nl31CTkaOIK3SsXUnbQzcWJwUM3jihjHvYwRZ2jYv2Y=
-REDIS_URL=scc-group-cache.redis.cache.windows.net
+BlobStoreConnection=DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net
+COSMOSDB_KEY=7Vp8kAIdWCueWcMkRNuBUcMoNu93VXj3HMEbdo0aT1TwXnstcUiOdYvunokuZ1P3cMJpxKQ4zAYmYbcd4NdKHw==
+COSMOSDB_URL=https://scc-group-db.documents.azure.com:443/
+COSMOSDB_DATABASE=sc42764Db
+REDIS_KEY=xCDoKalk+B5WChnMCUhmnVSJONzV9ZPc17l5ZNmTEcA=
+REDIS_URL=Nl31CTkaOIK3SsXUnbQzcWJwUM3jihjHvYwRZ2jYv2Y=

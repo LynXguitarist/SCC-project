@@ -1,0 +1,36 @@
+# Unit test using artillery
+# Test: upload image; download image; check correct
+config:
+  target: 'http://localhost:8080/scc2021-backend-solved'
+#  target: 'https://sccappwesteurope4204.azurewebsites.net'
+  plugins:
+    metrics-by-endpoint: {}
+    expect: {}
+  processor: "../test-utils.js"
+  variables:
+     metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
+  phases:
+  - duration: 1
+    arrivalCount: 1 
+
+scenarios:
+  - name: 'Upload image'
+    weight: 1
+    flow:
+      - post:
+          url: "/media"
+          headers:
+            Content-Type: application/octet-stream
+            Accept: application/json
+          beforeRequest: "reqPostMedia"
+          capture: 
+            - regexp: '.*'
+              as: "imageId"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/media/{{ imageId }}"
+          headers:
+            Accept: application/octet-stream
+          expect:
+            - statusCode: 200
