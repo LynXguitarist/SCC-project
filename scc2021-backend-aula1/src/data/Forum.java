@@ -6,7 +6,7 @@ public class Forum {
 	private String _rid;
 	private String id;
 	private String ownerId;
-	private ForumMessage[] messages;
+	private String[] messageIds;
 
 	public String get_rid() {
 		return _rid;
@@ -32,20 +32,20 @@ public class Forum {
 		this.ownerId = ownerId;
 	}
 
-	public ForumMessage[] getMessages() {
-		return messages;
+	public String[] getMessageIds() {
+		return messageIds;
 	}
 
-	public void setMessages(ForumMessage[] messages) {
-		this.messages = messages;
+	public void setMessages(String[] messages) {
+		this.messageIds = messageIds;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder forumMessages = new StringBuilder();
-		for(int i = 0; i< messages.length; i++){
-			forumMessages.append(messages[i].toString());
-			if (i < messages.length -1){
+		for(int i = 0; i< messageIds.length; i++){
+			forumMessages.append("messageId="+ messageIds[i]);
+			if (i < messageIds.length -1){
 				forumMessages.append(",");
 			}
 		}

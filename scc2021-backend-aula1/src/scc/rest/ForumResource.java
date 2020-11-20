@@ -1,6 +1,7 @@
 package scc.rest;
 
 import com.azure.cosmos.CosmosException;
+import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
 import cosmos.CosmosDBLayer;
 import data.Forum;
@@ -25,7 +26,7 @@ public class ForumResource {
 		try {
 			dbLayer.createItem(forum, TableName.FORUM.getName());
 		} catch (CosmosException e) {
-			// tambem tem de ver se o owner existe(Entity)
+			// TODO tambem tem de ver se o owner existe(Entity)
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
@@ -39,7 +40,7 @@ public class ForumResource {
 		try {
 			dbLayer.putItem(id, forum, TableName.FORUM.getName());
 		} catch (CosmosException e) {
-			// tambem tem de ver se o owner existe(Entity)
+			// TODO tambem tem de ver se o owner existe(Entity)
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 	}
@@ -66,8 +67,9 @@ public class ForumResource {
 	@Path("/message/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addMessage(@PathParam("id") String id, ForumMessage message) {
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
-		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());
+		CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
+		CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
+		CosmosPagedIterable<?> items = dbLayerForum.getItemById(id, TableName.FORUM.getName());
 		Forum forum = null;
 		for (Object item : items) {
 			forum = (Forum) item;
@@ -75,18 +77,25 @@ public class ForumResource {
 		if (forum == null)
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		else {
+			CosmosItemResponse<ForumMessage> response = null;
+			try {
+				response = dbLayerMessages.createItem(message, TableName.FORUMMESSAGES.getName());
+			} catch (CosmosException e) {
+				// TODO tambem tem de ver se o owner existe(Entity)
+				throw new WebApplicationException(Response.Status.CONFLICT);
+			}
 
-			ForumMessage[] arr = forum.getMessages();
+			String[] arr = forum.getMessageIds();
 
-			List<ForumMessage> arrlist = new ArrayList<ForumMessage>(Arrays.asList(arr));
-			arrlist.add(message);
+			List<String> arrlist = new ArrayList<String>(Arrays.asList(arr));
+			arrlist.add(response.getItem().getId());
 
 			arr = arrlist.toArray(arr);
 
 			forum.setMessages(arr);
 
 			try {
-				dbLayer.putItem(id, forum, TableName.FORUM.getName());
+				dbLayerForum.putItem(id, forum, TableName.FORUM.getName());
 			} catch (CosmosException e) {
 				throw new WebApplicationException(Response.Status.NOT_FOUND);
 			}
@@ -94,10 +103,10 @@ public class ForumResource {
 	}
 
 	@PUT
-	@Path("/message/reply/{id}")
+	@Path("/message/{id}/{idMessage}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void addReply(@PathParam("id") String id, ForumMessage message) {
+	public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, ForumMessage message) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Forum.class);
 		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.FORUM.getName());
 		Forum forum = null;
@@ -107,11 +116,11 @@ public class ForumResource {
 		if (forum == null)
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		else {
-			ForumMessage[] arr = forum.getMessages();
+			String[] arr = forum.getMessageIds();
 
-			List<ForumMessage> arrlist = new ArrayList<ForumMessage>(Arrays.asList(arr));
-			arrlist.add(message);
-
+			List<String> arrlist = new ArrayList<String>(Arrays.asList(arr));
+			arrlist.add(idMessage);
+			//TODO create new forummessage entry anch check if original exists
 			arr = arrlist.toArray(arr);
 
 			forum.setMessages(arr);

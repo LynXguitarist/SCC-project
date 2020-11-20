@@ -1,7 +1,7 @@
 package scc.utils;
 
 public enum TableName {
-	ENTITY("entities"), FORUM("forums"), CALENDAR("calendars");
+	ENTITY("entities"), FORUM("forums"), FORUMMESSAGES("forummessages"), CALENDAR("calendars");
 
 	private String name;
 
