@@ -1,0 +1,16 @@
+Suggestions:
+	- Use timer functions for periodically computing the initial page.
+	- Use blob function to geo-replicate images across regions.
+
+Timers:
+	- 
+
+
+Http:
+	-
+
+CosmosDB:
+	-
+
+Blob:
+	- 

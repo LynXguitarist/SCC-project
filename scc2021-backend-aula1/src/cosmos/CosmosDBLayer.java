@@ -43,6 +43,10 @@ public class CosmosDBLayer<T> {
 		instance = new CosmosDBLayer<T>(client, t);
 		return instance;
 	}
+	
+	public CosmosClient getCosmosClient() {
+		return client;
+	}
 
 	private synchronized void init(String tableName) {
 		if (db != null)
