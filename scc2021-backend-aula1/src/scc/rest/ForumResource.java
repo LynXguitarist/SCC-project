@@ -76,9 +76,8 @@ public class ForumResource {
     @Path("/message/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addMessage(@PathParam("id") String id, ForumMessage message) {
-
         if (ownerExists(message.getEntityId())) {
-            if (forumExists(id)) {
+            if (getForum(id) != null) {
                 CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
                 String messageId = UUID.randomUUID().toString();
                 CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
@@ -119,14 +118,31 @@ public class ForumResource {
         }
     }
 
+    @GET
+    @Path("/message/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ForumMessage getForumMessage(@PathParam("id") String id) {
+        CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
+        CosmosPagedIterable<?> items = dbLayerMessage.getItemById(id, TableName.FORUMMESSAGE.getName());
+        ForumMessage message = null;
+        for (Object item : items) {
+            message = (ForumMessage) item;
+        }
+        if (message == null)
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        return message;
+    }
+
     @PUT
     @Path("/message/{id}/{idMessage}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, ForumMessage message) {
         if (ownerExists(message.getEntityId())) {
-            if (forumExists(id)) {
+            if (getForum(id) != null) {
                 if (forumMessageExists(idMessage)) {
+                    //Só existe uma resposta e será do owner
                     if (!forumMessageReplyFromOwnerExists(idMessage, message.getEntityId())) {
                         CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
                         String messageId = UUID.randomUUID().toString();
@@ -151,6 +167,22 @@ public class ForumResource {
         }
     }
 
+    @GET
+    @Path("/message/{id}/reply")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ForumMessage getForumMessageReply(@PathParam("id") String id) {
+        CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
+        CosmosPagedIterable<?> items = dbLayerMessage.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " WHERE " + TableName.FORUMMESSAGE.getName() + ".replyToId=\"" + id + "\"", TableName.FORUMMESSAGE.getName());
+        ForumMessage message = null;
+        for (Object item : items) {
+            message = (ForumMessage) item;
+        }
+        if (message == null)
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        return message;
+    }
+
     private boolean ownerExists(String id) {
         CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
         CosmosPagedIterable<?> items = dbLayerEntity.getItemById(id, TableName.ENTITY.getName());
@@ -165,23 +197,9 @@ public class ForumResource {
         }
     }
 
-    private boolean forumExists(String id) {
-        CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Forum.class);
-        CosmosPagedIterable<?> items = dbLayerEntity.getItemById(id, TableName.FORUM.getName());
-        Forum forum = null;
-        for (Object item : items) {
-            forum = (Forum) item;
-        }
-        if (forum == null)
-            return false;
-        else {
-            return true;
-        }
-    }
-
     private boolean forumMessageExists(String id) {
-        CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(ForumMessage.class);
-        CosmosPagedIterable<?> items = dbLayerEntity.getItemById(id, TableName.FORUMMESSAGE.getName());
+        CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
+        CosmosPagedIterable<?> items = dbLayerMessage.getItemById(id, TableName.FORUMMESSAGE.getName());
         ForumMessage forumMessage = null;
         for (Object item : items) {
             forumMessage = (ForumMessage) item;
@@ -194,8 +212,8 @@ public class ForumResource {
     }
 
     private boolean forumMessageReplyFromOwnerExists(String id, String ownerId) {
-        CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(ForumMessage.class);
-        CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " WHERE " + TableName.FORUMMESSAGE.getName() + ".replyToId=\"" + id + "\"", TableName.FORUMMESSAGE.getName());
+        CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
+        CosmosPagedIterable<?> items = dbLayerMessage.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " WHERE " + TableName.FORUMMESSAGE.getName() + ".replyToId=\"" + id + "\"", TableName.FORUMMESSAGE.getName());
         ForumMessage forumMessage = null;
         for (Object item : items) {
             forumMessage = (ForumMessage) item;
