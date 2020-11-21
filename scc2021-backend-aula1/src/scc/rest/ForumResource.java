@@ -127,25 +127,29 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, ForumMessage message) {
-        if(ownerExists(message.getEntityId())){
-            if(forumExists(id)){
-                if(forumMessageExists(idMessage)){
-                    CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
-                    String messageId = UUID.randomUUID().toString();
+        if (ownerExists(message.getEntityId())) {
+            if (forumExists(id)) {
+                if (forumMessageExists(idMessage)) {
+                    if (!forumMessageReplyFromOwnerExists(idMessage, message.getEntityId())) {
+                        CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
+                        String messageId = UUID.randomUUID().toString();
 
-                    try {
-                        message.setId(messageId);
-                        dbLayerMessages.createItem(message, TableName.FORUMMESSAGE.getName());
-                    } catch (CosmosException e) {
+                        try {
+                            message.setId(messageId);
+                            dbLayerMessages.createItem(message, TableName.FORUMMESSAGE.getName());
+                        } catch (CosmosException e) {
+                            throw new WebApplicationException(Response.Status.CONFLICT);
+                        }
+                    } else {
                         throw new WebApplicationException(Response.Status.CONFLICT);
                     }
-                }else{
+                } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND);
                 }
-            } else{
+            } else {
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-        } else{
+        } else {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
     }
@@ -189,6 +193,24 @@ public class ForumResource {
             return false;
         else {
             return true;
+        }
+    }
+
+    private boolean forumMessageReplyFromOwnerExists(String id, String ownerId) {
+        CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(ForumMessage.class);
+        CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " WHERE " + TableName.FORUMMESSAGE.getName() + ".replyToId=\"" + id + "\"", TableName.FORUMMESSAGE.getName());
+        ForumMessage forumMessage = null;
+        for (Object item : items) {
+            forumMessage = (ForumMessage) item;
+        }
+        if (forumMessage == null)
+            return false;
+        else {
+            if (forumMessage.getEntityId().equals(ownerId)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

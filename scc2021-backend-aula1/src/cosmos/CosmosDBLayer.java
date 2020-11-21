@@ -83,7 +83,7 @@ public class CosmosDBLayer<T> {
 
 	// -----------------------------SPECIAL_METHODS---------------------------------//
 
-	public CosmosPagedIterable<T> getItemsBySpeacialQuery(String query, String tableName) {
+	public CosmosPagedIterable<T> getItemsBySpecialQuery(String query, String tableName) {
 		init(tableName);
 		return container.queryItems(query, new CosmosQueryRequestOptions(), t);
 	}
