@@ -1,7 +1,6 @@
 package scc.rest;
 
 import com.azure.cosmos.CosmosException;
-import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.util.CosmosPagedIterable;
 import cosmos.CosmosDBLayer;
 import data.Entity;
@@ -24,7 +23,6 @@ public class ForumResource {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createForum(Forum forum) {
-
         if (!ownerExists(forum.getOwnerId())) {
             CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
             try {
@@ -78,7 +76,6 @@ public class ForumResource {
     @Path("/message/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addMessage(@PathParam("id") String id, ForumMessage message) {
-
 
         if (ownerExists(message.getEntityId())) {
             if (forumExists(id)) {

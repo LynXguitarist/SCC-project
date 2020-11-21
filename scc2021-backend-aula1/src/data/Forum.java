@@ -36,8 +36,8 @@ public class Forum {
 		return messageIds;
 	}
 
-	public void setMessages(String[] messages) {
-		this.messageIds = messageIds;
+	public void setMessages(String[] messagesIds) {
+		this.messageIds = messagesIds;
 	}
 
 	@Override
