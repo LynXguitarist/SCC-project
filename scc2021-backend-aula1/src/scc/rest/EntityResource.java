@@ -1,5 +1,7 @@
 package scc.rest;
 
+import java.util.UUID;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,6 +30,7 @@ public class EntityResource {
 	public void createEntity(Entity entity) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
+			entity.setId(UUID.randomUUID().toString());
 			dbLayer.createItem(entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.CONFLICT);

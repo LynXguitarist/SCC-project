@@ -3,7 +3,7 @@ Suggestions:
 	- Use blob function to geo-replicate images across regions.
 
 Timers:
-	- 
+	- Apagar Calendars que estão inativas à mais de x tempo
 
 
 Http:

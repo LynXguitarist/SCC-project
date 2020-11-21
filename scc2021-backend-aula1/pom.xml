@@ -212,7 +212,7 @@
       -->               
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
-                        <os>linux</os>
+                        <os>windows</os>
                         <javaVersion>11</javaVersion>
                         <!-- for docker function, please set the following parameters -->
                         <!-- <image>[hub-user/]repo-name[:tag]</image> -->

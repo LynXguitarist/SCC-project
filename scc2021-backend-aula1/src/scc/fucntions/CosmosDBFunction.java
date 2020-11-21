@@ -4,6 +4,7 @@ import com.microsoft.azure.functions.annotation.*;
 
 import redis.clients.jedis.Jedis;
 import scc.redis.RedisCache;
+import scc.utils.AzureProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,7 @@ public class CosmosDBFunction {
 
 	@FunctionName("cosmosDBtest")
 	public void cosmosDbProcessor(
-			@CosmosDBTrigger(name = "messages", databaseName = "sccdb4204", collectionName = "Forum", 
+			@CosmosDBTrigger(name = "messages", databaseName = AzureProperties.COSMOSDB_DATABASE, collectionName = "Forum", 
 			createLeaseCollectionIfNotExists = true, connectionStringSetting = "AzureCosmosDBConnection") String[] msgs,
 			final ExecutionContext context) {
 		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
