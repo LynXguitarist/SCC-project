@@ -1,5 +1,7 @@
 package scc.rest;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -19,6 +21,8 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 
 import cosmos.CosmosDBLayer;
 import data.Entity;
+import scc.redis.CacheKeyNames;
+import scc.redis.RedisCache;
 import scc.utils.TableName;
 
 @Path("/entity")
@@ -63,7 +67,28 @@ public class EntityResource {
 		}
 		if (entity == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
+		
 		return entity;
+	}
+	
+	@GET
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Entity> getEntities() {
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
+		CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
+		List<Entity> entities = new LinkedList<>();
+		for (Object item : items) {
+			Entity entity = (Entity) item;
+			entities.add(entity);
+		}
+		if (entities.isEmpty())
+			throw new WebApplicationException(Status.NOT_FOUND);
+		
+		String key = CacheKeyNames.MR_ENTITY.getName();
+		RedisCache.getCache().addEntitiesToCache(key, entities);
+		return entities;
 	}
 
 	@DELETE

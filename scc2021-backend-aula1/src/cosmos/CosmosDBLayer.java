@@ -43,7 +43,7 @@ public class CosmosDBLayer<T> {
 		instance = new CosmosDBLayer<T>(client, t);
 		return instance;
 	}
-	
+
 	public CosmosClient getCosmosClient() {
 		return client;
 	}
@@ -55,11 +55,28 @@ public class CosmosDBLayer<T> {
 		container = db.getContainer(tableName);
 	}
 
+	/**
+	 * Creates a record in the table
+	 * 
+	 * @param <T>
+	 * @param item
+	 * @param tableName
+	 * @return response
+	 */
 	public <T> CosmosItemResponse<T> createItem(T item, String tableName) {
 		init(tableName);
 		return container.createItem(item);
 	}
 
+	/**
+	 * Updates a record in the table
+	 * 
+	 * @param <T>
+	 * @param id
+	 * @param item
+	 * @param tableName
+	 * @return response
+	 */
 	public <T> CosmosItemResponse<T> putItem(String id, T item, String tableName) {
 		init(tableName);
 		return container.replaceItem(item, id, new PartitionKey(id), new CosmosItemRequestOptions());
@@ -71,11 +88,24 @@ public class CosmosDBLayer<T> {
 				new CosmosQueryRequestOptions(), t);
 	}
 
+	/**
+	 * Returns all the records in a Table
+	 * 
+	 * @param tableName
+	 * @return items
+	 */
 	public CosmosPagedIterable<T> getItems(String tableName) {
 		init(tableName);
 		return container.queryItems("SELECT * FROM " + tableName, new CosmosQueryRequestOptions(), t);
 	}
 
+	/**
+	 * Deletes a record from the table
+	 * 
+	 * @param id
+	 * @param tableName
+	 * @return response
+	 */
 	public CosmosItemResponse<?> delItem(String id, String tableName) {
 		init(tableName);
 		return container.deleteItem(id, new PartitionKey(id), new CosmosItemRequestOptions());

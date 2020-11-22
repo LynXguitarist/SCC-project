@@ -6,22 +6,29 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import data.Entity;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import scc.utils.AzureProperties;
 
-public class RedisCache<T> {
-
-	private static JedisPool instance;
+public class RedisCache {
 
 	// Generic type
-	private Class<T> t;
 
-	public synchronized static JedisPool getCachePool() {
-		if (instance != null)
-			return instance;
+	static RedisCache cache;
+	private JedisPool jedisPool;
 
+	public static RedisCache getCache() {
+		if (cache == null) {
+			cache = new RedisCache();
+		}
+		return cache;
+	}
+
+	RedisCache() {
+		String RedisHostname = AzureProperties.getProperties().getProperty(AzureProperties.REDIS_URL);
+		String cacheKey = AzureProperties.getProperties().getProperty(AzureProperties.REDIS_KEY);
 		final JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxTotal(128);
 		poolConfig.setMaxIdle(128);
@@ -33,24 +40,24 @@ public class RedisCache<T> {
 		poolConfig.setTimeBetweenEvictionRunsMillis(Duration.ofSeconds(30).toMillis());
 		poolConfig.setNumTestsPerEvictionRun(3);
 		poolConfig.setBlockWhenExhausted(true);
-		instance = new JedisPool(poolConfig, AzureProperties.getProperty(AzureProperties.REDIS_URL), 6380, 1000,
-				AzureProperties.getProperty(AzureProperties.REDIS_KEY), true);
-		return instance;
+		jedisPool = new JedisPool(poolConfig, RedisHostname, 6380, 1000, cacheKey, true);
+	}
+
+	public JedisPool getJedisPool() {
+		return jedisPool;
 	}
 
 	/**
-	 * Adds an object item(Entity,Calendar,Forum...) to cache with the key 'key'
+	 * Adds a element or more to a list(Entities)
 	 * 
 	 * @param key
-	 * @param item
+	 * @param listOfItems
 	 */
-	public void addObjectItemToCache(String key, T item) {
+	public void addEntitiesToCache(String key, List<Entity> listOfItems) {
 		ObjectMapper mapper = new ObjectMapper();
 
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
-			Long cnt = jedis.lpush(key, mapper.writeValueAsString(item));
-			if (cnt > 5)
-				jedis.ltrim(key, 0, 4);
+		try (Jedis jedis = getJedisPool().getResource()) {
+			jedis.lpush(key, mapper.writeValueAsString(listOfItems));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,7 +72,7 @@ public class RedisCache<T> {
 	public void addItemToCache(String key, String item) {
 		ObjectMapper mapper = new ObjectMapper();
 
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = getJedisPool().getResource()) {
 			jedis.set(key, mapper.writeValueAsString(item));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +88,7 @@ public class RedisCache<T> {
 	public String getItemFromCache(String key) {
 		String item = "";
 
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = getJedisPool().getResource()) {
 			item = jedis.get(key);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,7 +106,7 @@ public class RedisCache<T> {
 		// list to be filled from cache and returned
 		List<String> items = new ArrayList<>();
 		try {
-			try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+			try (Jedis jedis = getJedisPool().getResource()) {
 				items = jedis.lrange(key, 0, -1);
 				return items;
 			}
