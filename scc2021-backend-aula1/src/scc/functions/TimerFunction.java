@@ -1,4 +1,4 @@
-package scc.fucntions;
+package scc.functions;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

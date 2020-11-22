@@ -400,17 +400,17 @@ public class AzureManagement {
 							CosmosClient cosmosClient = getCosmosClient(accountCosmosDB);
 							createCosmosDatabase(cosmosClient, AZURE_COSMOSDB_DATABASE);
 							//TODO: create the collections you have in your application
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Entity", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.ENTITY.getName(), "/id",
 									new String[] { "/id2" });
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Forum", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.FORUM.getName(), "/id",
 									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Calendar", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.CALENDAR.getName(), "/id",
 									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "ForumMessage", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.FORUMMESSAGE.getName(), "/id",
 									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Period", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.PERIOD.getName(), "/id",
 									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Reservation", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.RESERVATION.getName(), "/id",
 									null);
 
 						} catch (Exception e) {

@@ -1,4 +1,4 @@
-package scc.fucntions;
+package scc.functions;
 
 import com.microsoft.azure.functions.annotation.*;
 

@@ -1,4 +1,4 @@
-package scc.fucntions;
+package scc.functions;
 
 import java.io.File;
 import java.util.*;
