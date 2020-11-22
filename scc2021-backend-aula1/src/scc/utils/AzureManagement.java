@@ -400,11 +400,17 @@ public class AzureManagement {
 							CosmosClient cosmosClient = getCosmosClient(accountCosmosDB);
 							createCosmosDatabase(cosmosClient, AZURE_COSMOSDB_DATABASE);
 							//TODO: create the collections you have in your application
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Entities", "/id",
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Entity", "/id",
 									new String[] { "/id2" });
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Forum", "/id",
 									null);
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Calendar", "/id",
+									null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "ForumMessage", "/id",
+									null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Period", "/id",
+									null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, "Reservation", "/id",
 									null);
 
 						} catch (Exception e) {
