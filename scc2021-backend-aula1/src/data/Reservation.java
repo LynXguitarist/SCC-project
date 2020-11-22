@@ -9,7 +9,7 @@ public class Reservation {
 	private String client_name;
 	private Date start_date;
 	private Date end_date;
-	private String calendarId; //worth it?
+	private String periodId;
 	
 	public String get_rid() {
         return _rid;
@@ -49,17 +49,17 @@ public class Reservation {
 		this.end_date = endDate;
 	}
 	
-	public void setCalendarId(String calendarId) {
-		this.calendarId = id;
+	public void setPeriodId(String periodId) {
+		this.periodId = id;
 	}
 	
-	public String getCalendarId() {
-		return this.calendarId;
+	public String getPeriodId() {
+		return this.periodId;
 	}
 	
 	@Override
 	public String toString() {
 		return "Reservation [_rid=" + _rid + ", id=" + id + ", client_name=" + client_name + ", start_date=" + start_date
-				+ ", end_date=" + end_date + ", calendar_id=" + calendarId + "]";
+				+ ", end_date=" + end_date + ", period_id=" + periodId + "]";
 	}
 }

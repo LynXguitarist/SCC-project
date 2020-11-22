@@ -18,6 +18,7 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 
 import cosmos.CosmosDBLayer;
 import data.Calendar;
+import data.ForumMessage;
 import data.Period;
 import data.Reservation;
 import scc.utils.TableName;
@@ -110,15 +111,23 @@ public class CalendarResource {
 		if (calendar == null) {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		} else {
-			//TODO verificar se pode adicionar reserva
-			String reservationId = UUID.randomUUID().toString();
-			reservation.setId(reservationId);
-			//update calendar
-			calendar.addReservation(reservationId);
-			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
-			//add new reservation
-			CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-			dbLayerReservation.putItem(reservationId, reservation, TableName.RESERVATION.getName());
+			Period availablePeriod = getAvailablePeriod(reservation);
+			if(availablePeriod == null) {
+				throw new WebApplicationException(Status.CONFLICT);
+			} else {
+				String reservationId = UUID.randomUUID().toString();
+				reservation.setId(reservationId);
+				//update calendar
+				calendar.addReservation(reservationId);
+				dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
+				//update period
+				availablePeriod.updateAvailablePeriod(reservation.getStartDate(), reservation.getEndDate());
+				CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+				dbLayerPeriod.putItem(availablePeriod.getId(), availablePeriod, TableName.PERIOD.getName());
+				//add new reservation
+				CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+				dbLayerReservation.putItem(reservationId, reservation, TableName.RESERVATION.getName());
+			}
 		}
 	}
 
@@ -139,11 +148,36 @@ public class CalendarResource {
 			//update calendar
 			calendar.cancelReservation(reservation.getId());
 			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
-			//TODO update period?
-			//
-			//update reservation
+			//update period
+			Period reservationPeriod = getReservationPeriod(reservation);
+			reservationPeriod.cancelReservation(reservation.getStartDate(), reservation.getEndDate());
+			CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+			dbLayerPeriod.putItem(reservationPeriod.getId(), reservationPeriod, TableName.PERIOD.getName());
+			//delete reservation
 			CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
 			dbLayerReservation.delItem(reservation.getId(), TableName.RESERVATION.getName());
 		}
+	}
+	
+	private Period getAvailablePeriod(Reservation reservation) {
+		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery("SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + 
+													TableName.PERIOD.getName() + ".availableStartDate<=\"" + reservation.getStartDate() +
+													" AND " + TableName.PERIOD.getName() + ".availableEndDate>=\"" + reservation.getEndDate() + "\"", TableName.PERIOD.getName());
+		Period period = null;
+        for (Object item : items) {
+            period = (Period) item;
+        }
+        return period;
+	}
+	
+	private Period getReservationPeriod(Reservation reservation) {
+		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+        CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery("SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName() + ".periodId=\"" + reservation.getPeriodId() + "\"", TableName.PERIOD.getName());
+        Period period = null;
+        for (Object item : items) {
+            period = (Period) item;
+        }
+        return period;
 	}
 }

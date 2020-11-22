@@ -8,7 +8,8 @@ public class Period {
     private String id;
 	private Date startDate;
 	private Date endDate;
-	private String calendarId; //worth it?
+	private Date availableStartDate;
+	private Date availableEndDate;
 
 	public String get_rid() {
         return _rid;
@@ -40,17 +41,41 @@ public class Period {
 		this.endDate = endDate;
 	}
 
-	public void setCalendarId(String calendarId) {
-		this.calendarId = id;
+	public void setAvStartDate(Date avStartDate) {
+		this.availableStartDate = avStartDate;
 	}
 	
-	public String getCalendarId() {
-		return this.calendarId;
+	public Date getAvStartDate() {
+		return this.availableStartDate;
+	}
+	
+	public void setAvEndDate(Date avEndDate) {
+		this.availableEndDate = avEndDate;
+	}
+	
+	public Date getAvEndDate() {
+		return this.availableEndDate;
+	}
+	
+	public void updateAvailablePeriod(Date resStartDate, Date resEndDate) { //doesn't allow reservations in the "middle"
+		if(resEndDate.before(this.availableEndDate)) {                      //reserv need to start exactly at the availableStartDate 
+			this.availableStartDate = resEndDate;                           //OR  end exactly at the availableEndDate
+		} else if(resStartDate.after(this.availableStartDate)) {
+			this.availableEndDate = resStartDate;
+		}
+	}
+	
+	public void cancelReservation(Date resStartDate, Date resEndDate) { //to be changed, prob doesn't work
+		if(resStartDate.before(this.availableStartDate)) {
+			this.availableStartDate = resStartDate;
+		} else if(resEndDate.after(this.availableEndDate)) {
+			this.availableEndDate = resEndDate;
+		}
 	}
 	
 	@Override
 	public String toString() {
-		return "Period [_rid=" + _rid + ", id=" + id + ", start_date=" + startDate + ", end_date=" + endDate + ", calendar_id=" + calendarId +"]";
+		return "Period [_rid=" + _rid + ", id=" + id + ", start_date=" + startDate + ", end_date=" + endDate +"]";
 	}
 
 }
