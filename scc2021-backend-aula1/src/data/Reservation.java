@@ -4,10 +4,27 @@ import java.util.Date;
 
 public class Reservation {
 
+	private String _rid;
+    private String id;
 	private String client_name;
 	private Date start_date;
 	private Date end_date;
+	private String calendarId; //worth it?
 	
+	public String get_rid() {
+        return _rid;
+    }
+    public void set_rid(String _rid) {
+        this._rid = _rid;
+    }
+    
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    
 	public String getClientName() {
 		return this.client_name;
 	}
@@ -32,8 +49,17 @@ public class Reservation {
 		this.end_date = endDate;
 	}
 	
+	public void setCalendarId(String calendarId) {
+		this.calendarId = id;
+	}
+	
+	public String getCalendarId() {
+		return this.calendarId;
+	}
+	
 	@Override
 	public String toString() {
-		return "Reservation [client_name=" + client_name + ", start_date=" + start_date + ", end_date=" + end_date + "]";
+		return "Reservation [_rid=" + _rid + ", id=" + id + ", client_name=" + client_name + ", start_date=" + start_date
+				+ ", end_date=" + end_date + ", calendar_id=" + calendarId + "]";
 	}
 }

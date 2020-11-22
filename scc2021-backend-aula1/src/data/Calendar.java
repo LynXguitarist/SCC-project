@@ -8,8 +8,8 @@ public class Calendar {
 	private String id;
 	private String name;
 	private String description;
-	private List<Period> availablePeriods;// available period
-	private List<Reservation> reservations;// list reservation
+	private List<String> availablePeriods;// available periods' ids
+	private List<String> reservations;// list reservations' ids
 	
 	public String get_rid() {
 		return _rid;
@@ -43,20 +43,19 @@ public class Calendar {
 		this.description = description;
 	}
 	
-	public void addPeriod(Period period) {
-		this.availablePeriods.add(period);
+	public void addPeriod(String periodId) {
+		this.availablePeriods.add(periodId);
 	}
 	
-	public void addReservation(Reservation reservation) {
-		this.reservations.add(reservation);
+	public void addReservation(String reservationId) {
+		this.reservations.add(reservationId);
 	}
 	
-	public void cancelReservation(Reservation reservation) {
-		for (Reservation res: this.reservations) {
-			if(res.getClientName().equals(reservation.getClientName()) 
-					&& res.getStartDate().equals(reservation.getStartDate()) 
-						&& res.getEndDate().equals(reservation.getEndDate())) {
-				this.reservations.remove(res);
+	
+	public void cancelReservation(String reservationId) {
+		for (String resId: this.reservations) {
+			if(resId.equals(reservationId)) {
+				this.reservations.remove(resId);
 			}
 		}
 	}
