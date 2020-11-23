@@ -17,7 +17,7 @@ public class BlobStoreFunction {
 	public void run(
 			@BlobTrigger(name = "blob", dataType = "binary", path = "images/{name}", connection = "BlobStoreConnection") byte[] content,
 			@BindingName("name") String blobname, final ExecutionContext context) {
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
 			jedis.set("serverless::blob::name",
 					"Blob name : " + blobname + " ; size = " + (content == null ? "0" : content.length));
 		}

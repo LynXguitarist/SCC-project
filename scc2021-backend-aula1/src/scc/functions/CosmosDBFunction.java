@@ -21,7 +21,7 @@ public class CosmosDBFunction {
 			@CosmosDBTrigger(name = "messages", databaseName = AzureProperties.COSMOSDB_DATABASE, collectionName = "Forum", 
 			createLeaseCollectionIfNotExists = true, connectionStringSetting = "AzureCosmosDBConnection") String[] msgs,
 			final ExecutionContext context) {
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
 			try {
 				jedis.lpush("serverless::cosmos::msgs", new ObjectMapper().writeValueAsString(msgs));
 			} catch (JsonProcessingException e) {

@@ -28,7 +28,7 @@ public class TimerFunction {
 		synchronized (HttpFunction.class) {
 			HttpFunction.count++;
 		}
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
 			jedis.set("serverlesstime", new SimpleDateFormat().format(new Date()));
 			try {
 				CosmosPagedIterable<ForumMessage> it = CosmosDBLayer.getInstance(Forum.class).getCosmosClient()

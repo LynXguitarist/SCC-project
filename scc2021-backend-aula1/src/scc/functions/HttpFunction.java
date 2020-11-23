@@ -72,7 +72,7 @@ public class HttpFunction {
 		synchronized (HttpFunction.class) {
 			HttpFunction.count++;
 		}
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
 			String val = jedis.get(key);
 			return request.createResponseBuilder(HttpStatus.OK).body("GET key = " + key + "; val = " + val).build();
 		}
@@ -86,7 +86,7 @@ public class HttpFunction {
 			HttpFunction.count++;
 		}
 		String val = request.getBody().orElse("");
-		try (Jedis jedis = RedisCache.getCachePool().getResource()) {
+		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
 			jedis.set(key, val);
 			return request.createResponseBuilder(HttpStatus.OK).body("SET key = " + key + "; val = " + val).build();
 		}

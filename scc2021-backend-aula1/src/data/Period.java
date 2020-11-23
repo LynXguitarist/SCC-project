@@ -1,15 +1,16 @@
 package data;
 
 import java.util.Date;
+import java.util.List;
 
 public class Period {
 
 	private String _rid;
     private String id;
+    private String name;
 	private Date startDate;
 	private Date endDate;
-	private Date availableStartDate;
-	private Date availableEndDate;
+	private List<String> reservations;// list reservations' ids
 
 	public String get_rid() {
         return _rid;
@@ -21,9 +22,17 @@ public class Period {
     public String getId() {
         return id;
     }
+    
     public void setId(String id) {
         this.id = id;
     }
+    
+    public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
     
 	public Date getStartDate() {
 		return this.startDate;
@@ -40,42 +49,25 @@ public class Period {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
-	public void setAvStartDate(Date avStartDate) {
-		this.availableStartDate = avStartDate;
+	
+	public void addReservation(String reservationId) {
+		this.reservations.add(reservationId);
 	}
 	
-	public Date getAvStartDate() {
-		return this.availableStartDate;
-	}
 	
-	public void setAvEndDate(Date avEndDate) {
-		this.availableEndDate = avEndDate;
-	}
-	
-	public Date getAvEndDate() {
-		return this.availableEndDate;
-	}
-	
-	public void updateAvailablePeriod(Date resStartDate, Date resEndDate) { //doesn't allow reservations in the "middle"
-		if(resEndDate.before(this.availableEndDate)) {                      //reserv need to start exactly at the availableStartDate 
-			this.availableStartDate = resEndDate;                           //OR  end exactly at the availableEndDate
-		} else if(resStartDate.after(this.availableStartDate)) {
-			this.availableEndDate = resStartDate;
+	public void cancelReservation(String reservationId) {
+		for (String resId: this.reservations) {
+			if(resId.equals(reservationId)) {
+				this.reservations.remove(resId);
+			}
 		}
 	}
-	
-	public void cancelReservation(Date resStartDate, Date resEndDate) { //to be changed, prob doesn't work
-		if(resStartDate.before(this.availableStartDate)) {
-			this.availableStartDate = resStartDate;
-		} else if(resEndDate.after(this.availableEndDate)) {
-			this.availableEndDate = resEndDate;
-		}
-	}
+	//ADICIONAR AO TOSTRING A LISTA RESERVATIONS
 	
 	@Override
 	public String toString() {
-		return "Period [_rid=" + _rid + ", id=" + id + ", start_date=" + startDate + ", end_date=" + endDate +"]";
+		return "Period [_rid=" + _rid + ", id=" + id + ", name=" + name +", start_date=" + startDate + ", end_date=" + endDate +
+				", reservations=" + reservations.toString() + "]";
 	}
 
 }

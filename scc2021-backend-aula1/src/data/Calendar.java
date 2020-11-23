@@ -9,7 +9,6 @@ public class Calendar {
 	private String name;
 	private String description;
 	private List<String> availablePeriods;// available periods' ids
-	private List<String> reservations;// list reservations' ids
 	
 	public String get_rid() {
 		return _rid;
@@ -47,23 +46,10 @@ public class Calendar {
 		this.availablePeriods.add(periodId);
 	}
 	
-	public void addReservation(String reservationId) {
-		this.reservations.add(reservationId);
-	}
-	
-	
-	public void cancelReservation(String reservationId) {
-		for (String resId: this.reservations) {
-			if(resId.equals(reservationId)) {
-				this.reservations.remove(resId);
-			}
-		}
-	}
-	
 	@Override
 	public String toString() {
 		return "Calendar [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", availablePeriods="
-				+ availablePeriods.toString() + ", reservations=" + reservations.toString() + "]";
+				+ availablePeriods.toString() + "]";
 	}
 	
 }
