@@ -1,7 +1,6 @@
-- Criar tabelas reservation, avalaiblePeriods e forumMessage no AZURE MANAGEMENT(Main).
-- Criar prop file que dá para definir se usamos cache ou nao, etc
-
-- No cancel reservation, em vez de apagar na lista, a tabela ter uma coluna com estado ATIVO ou inativo se cancelled.
+- Ao adicionar Calendar ou Forum, a Entity tem de existir
+- Associar foto à Entity(Serviço)
+- Initial Page -> popular entities(3 que têm mais likes) e recent services(3 mais recentes)
 
 -> Ver Lab 5 -> Definir os resources para usar e quantas regioes vamos fazer, perceber bem o codigo AZURE MANAGEMENT
 // Auth file location

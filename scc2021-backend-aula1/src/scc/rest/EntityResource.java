@@ -18,11 +18,13 @@ import javax.ws.rs.core.Response.Status;
 
 import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.util.CosmosPagedIterable;
+import com.google.gson.Gson;
 
 import cosmos.CosmosDBLayer;
 import data.Entity;
 import scc.redis.CacheKeyNames;
 import scc.redis.RedisCache;
+import scc.utils.AdvanceFeatures;
 import scc.utils.TableName;
 
 @Path("/entity")
@@ -56,7 +58,6 @@ public class EntityResource {
 
 	@GET
 	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Entity getEntity(@PathParam("id") String id) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
@@ -67,27 +68,39 @@ public class EntityResource {
 		}
 		if (entity == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
-		
+
 		return entity;
 	}
-	
+
 	@GET
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Entity> getEntities() {
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
-		CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
 		List<Entity> entities = new LinkedList<>();
-		for (Object item : items) {
-			Entity entity = (Entity) item;
-			entities.add(entity);
-		}
-		if (entities.isEmpty())
-			throw new WebApplicationException(Status.NOT_FOUND);
-		
+
 		String key = CacheKeyNames.MR_ENTITY.getName();
-		RedisCache.getCache().addEntitiesToCache(key, entities);
+		List<String> values = RedisCache.getCache().getListFromCache(key);
+		// Verifies if there is a value for the key in cache
+		if (values.isEmpty() || !AdvanceFeatures.getProperty("Redis")) {
+			// Calls the Service(CosmosDB)
+			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
+			CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
+			for (Object item : items) {
+				Entity entity = (Entity) item;
+				entities.add(entity);
+			}
+			if (entities.isEmpty())
+				throw new WebApplicationException(Status.NOT_FOUND);
+
+			RedisCache.getCache().addListToCache(key, entities);
+		} else {
+			// Retrieves from cache
+			for (String v : values) {
+				Gson gson = new Gson();
+				Entity e = gson.fromJson(v, Entity.class);
+				entities.add(e);
+			}
+		}
 		return entities;
 	}
 

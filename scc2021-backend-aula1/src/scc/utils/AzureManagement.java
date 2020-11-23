@@ -49,7 +49,6 @@ public class AzureManagement {
 	// az ad sp create-for-rbac --sdk-auth > azure.auth
 	static final String AZURE_AUTH_LOCATION = "azure.auth";
 
-
 	public static Azure createManagementClient(String authFile) throws CloudException, IOException {
 		File credFile = new File(authFile);
 		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC).authenticate(credFile).withDefaultSubscription();
@@ -302,27 +301,32 @@ public class AzureManagement {
 			// TODO: These variable allow you to control what is being created
 			final boolean CREATE_STORAGE = false;
 			final boolean CREATE_COSMOSDB = false;
-			final boolean CREATE_REDIS = false;
-		
+			final boolean CREATE_REDIS = AdvanceFeatures.getProperty("Redis");
+			final boolean CREATE_FUNCTIONS = AdvanceFeatures.getProperty("Functions");
+			final boolean CREATE_SEARCH = AdvanceFeatures.getProperty("Search");
+			final boolean CREATE_GEO_REPLICATION = AdvanceFeatures.getProperty("Geo-Replicated");
+
 			// TODO: change your suffix and other names if you want
 			final String MY_SUFFIX = "41812-42764-50092"; // Add your suffix here
-			final String AZURE_COSMOSDB_NAME = "scc-groupBD" + MY_SUFFIX;	// Cosmos DB account name
-			final String AZURE_COSMOSDB_DATABASE = "sccBD" + MY_SUFFIX;	// Cosmos DB database name
-			final String[] BLOB_CONTAINERS = { "images" };	// Contaienrs to add to the blob storage
+			final String AZURE_COSMOSDB_NAME = "scc-groupBD" + MY_SUFFIX; // Cosmos DB account name
+			final String AZURE_COSMOSDB_DATABASE = "sccBD" + MY_SUFFIX; // Cosmos DB database name
+			final String[] BLOB_CONTAINERS = { "images" }; // Contaienrs to add to the blob storage
 
 			final Region[] REGIONS = new Region[] { Region.EUROPE_WEST }; // Define the regions to deploy resources here
 
 			// Name of property file with keys and URLS to access resources
 			final String[] AZURE_PROPS_LOCATIONS = Arrays.stream(REGIONS)
 					.map(reg -> "azurekeys-" + reg.name() + ".props").toArray(String[]::new);
-			// Name of shell script file with commands to set application setting for you application server
+			// Name of shell script file with commands to set application setting for you
+			// application server
 			// and Azure functions
 			final String[] AZURE_SETTINGS_LOCATIONS = Arrays.stream(REGIONS)
 					.map(reg -> "azureprops-" + reg.name() + ".sh").toArray(String[]::new);
 			// Name of resoruce group for each region
 			final String[] AZURE_RG_REGIONS = Arrays.stream(REGIONS)
 					.map(reg -> "scc2021-rg-" + reg.name() + "-" + MY_SUFFIX).toArray(String[]::new);
-			// Name of application server to be launched in each regions -- launching the application
+			// Name of application server to be launched in each regions -- launching the
+			// application
 			// server must be done using mvn, as you have been doing
 			final String[] AZURE_APP_NAME = Arrays.stream(REGIONS).map(reg -> "sccapp" + reg.name() + MY_SUFFIX)
 					.toArray(String[]::new);
@@ -340,7 +344,6 @@ public class AzureManagement {
 			Arrays.stream(REGIONS).forEach(reg -> props.put(reg.name(), new HashMap<String, String>()));
 
 			List<Thread> threads = new ArrayList<Thread>();
-
 
 			final Azure azure = createManagementClient(AZURE_AUTH_LOCATION);
 			if (args.length == 1 && args[0].equalsIgnoreCase("-delete")) {
@@ -399,19 +402,19 @@ public class AzureManagement {
 							}
 							CosmosClient cosmosClient = getCosmosClient(accountCosmosDB);
 							createCosmosDatabase(cosmosClient, AZURE_COSMOSDB_DATABASE);
-							//TODO: create the collections you have in your application
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.ENTITY.getName(), "/id",
-									new String[] { "/id2" });
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.FORUM.getName(), "/id",
-									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.CALENDAR.getName(), "/id",
-									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.FORUMMESSAGE.getName(), "/id",
-									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.PERIOD.getName(), "/id",
-									null);
-							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.RESERVATION.getName(), "/id",
-									null);
+							// TODO: create the collections you have in your application
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.ENTITY.getName(),
+									"/id", new String[] { "/id2" });
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.FORUM.getName(),
+									"/id", null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.CALENDAR.getName(),
+									"/id", null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE,
+									TableName.FORUMMESSAGE.getName(), "/id", null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.PERIOD.getName(),
+									"/id", null);
+							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE,
+									TableName.RESERVATION.getName(), "/id", null);
 
 						} catch (Exception e) {
 							System.err.println("Error while creating cosmos db resources");

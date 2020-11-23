@@ -1,7 +1,6 @@
 Suggestions:
-	- Use timer functions for periodically computing the initial page.
-	- Use blob function to geo-replicate images across regions.
-
+	- Use timer functions for periodically computing the initial page.(HTTP ou COSMOS)???
+	
 Timers:
 	- Apagar Calendars que estão inativas à mais de x tempo
 
@@ -13,4 +12,4 @@ CosmosDB:
 	-
 
 Blob:
-	- 
+	- Use blob function to geo-replicate images across regions.

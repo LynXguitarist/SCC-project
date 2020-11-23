@@ -1,0 +1,4 @@
+Redis=True
+Search=True
+Functions=True
+Geo-Replicated=True

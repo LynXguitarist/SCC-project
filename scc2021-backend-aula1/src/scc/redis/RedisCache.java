@@ -6,15 +6,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import data.Entity;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import scc.utils.AzureProperties;
 
 public class RedisCache {
-
-	// Generic type
 
 	static RedisCache cache;
 	private JedisPool jedisPool;
@@ -48,32 +45,19 @@ public class RedisCache {
 	}
 
 	/**
-	 * Adds a element or more to a list(Entities)
+	 * Adds an item or list of items to cache
+	 * 
+	 * @param <T>
 	 * 
 	 * @param key
 	 * @param listOfItems
 	 */
-	public void addEntitiesToCache(String key, List<Entity> listOfItems) {
+	public <T> void addListToCache(String key, List<T> listOfItems) {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try (Jedis jedis = getJedisPool().getResource()) {
 			jedis.lpush(key, mapper.writeValueAsString(listOfItems));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Adds an item to cache with the key 'key'
-	 * 
-	 * @param key
-	 * @param item
-	 */
-	public void addItemToCache(String key, String item) {
-		ObjectMapper mapper = new ObjectMapper();
-
-		try (Jedis jedis = getJedisPool().getResource()) {
-			jedis.set(key, mapper.writeValueAsString(item));
+			jedis.expire(key, 120);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
