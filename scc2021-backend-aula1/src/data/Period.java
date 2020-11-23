@@ -62,7 +62,6 @@ public class Period {
 			}
 		}
 	}
-	//ADICIONAR AO TOSTRING A LISTA RESERVATIONS
 	
 	@Override
 	public String toString() {

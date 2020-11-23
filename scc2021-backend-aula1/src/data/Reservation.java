@@ -53,7 +53,7 @@ public class Reservation {
 	}
 	
 	public void setPeriodId(String periodId) {
-		this.periodId = id;
+		this.periodId = periodId;
 	}
 	
 	public String getPeriodId() {
