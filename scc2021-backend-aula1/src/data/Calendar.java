@@ -8,8 +8,10 @@ public class Calendar {
 	private String id;
 	private String name;
 	private String description;
+	//tirar lista
 	private List<String> availablePeriods;// available periods' ids
-	
+	private String ownerId;
+
 	public String get_rid() {
 		return _rid;
 	}
@@ -25,7 +27,7 @@ public class Calendar {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -41,15 +43,23 @@ public class Calendar {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public void addPeriod(String periodId) {
 		this.availablePeriods.add(periodId);
 	}
-	
+
+	public String getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+
 	@Override
 	public String toString() {
-		return "Calendar [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", availablePeriods="
-				+ availablePeriods.toString() + "]";
+		return "Calendar [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description
+				+ ", availablePeriods=" + availablePeriods.toString() + "]";
 	}
-	
+
 }

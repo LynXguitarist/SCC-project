@@ -3,6 +3,7 @@ package data;
 import java.util.Date;
 import java.util.List;
 
+
 public class Period {
 
 	private String _rid;
@@ -10,7 +11,9 @@ public class Period {
     private String name;
 	private String startDate;
 	private String endDate;
+	//tirar lista
 	private List<String> reservations;// list reservations' ids
+	private String calendarId;
 
 	public String get_rid() {
         return _rid;
@@ -61,6 +64,13 @@ public class Period {
 				this.reservations.remove(resId);
 			}
 		}
+	}
+	
+	public String getCalendarId() {
+		return calendarId;
+	}
+	public void setCalendarId(String calendarId) {
+		this.calendarId = calendarId;
 	}
 	
 	@Override

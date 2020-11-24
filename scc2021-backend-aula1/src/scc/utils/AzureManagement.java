@@ -312,7 +312,9 @@ public class AzureManagement {
 			final String AZURE_COSMOSDB_DATABASE = "sccBD" + MY_SUFFIX; // Cosmos DB database name
 			final String[] BLOB_CONTAINERS = { "images" }; // Contaienrs to add to the blob storage
 
-			final Region[] REGIONS = new Region[] { Region.EUROPE_WEST }; // Define the regions to deploy resources here
+			// Define the regions to deploy resources here
+			// Region.findByLabelOrName(labelOrName)
+			final Region[] REGIONS = new Region[] { Region.EUROPE_WEST }; 
 
 			// Name of property file with keys and URLS to access resources
 			final String[] AZURE_PROPS_LOCATIONS = Arrays.stream(REGIONS)

@@ -22,6 +22,10 @@ import com.microsoft.azure.functions.*;
 public class TimerFunction {
 	static int count = 0;
 
+	/*
+	 * Timers para apagar coisas antigas e talvez para popular cache
+	 */
+
 	@FunctionName("periodic-compute")
 	public void cosmosFunction(@TimerTrigger(name = "keepAliveTrigger", schedule = "*/20 * * * * *") String timerInfo,
 			ExecutionContext context) {

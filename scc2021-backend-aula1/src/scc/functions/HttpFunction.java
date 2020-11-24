@@ -6,10 +6,16 @@ import java.util.Map.Entry;
 
 import com.microsoft.azure.functions.annotation.*;
 
+import cosmos.CosmosDBLayer;
+import data.Entity;
 import redis.clients.jedis.Jedis;
 import scc.redis.RedisCache;
 import scc.utils.AzureProperties;
+import scc.utils.TableName;
 
+import com.azure.cosmos.models.CosmosQueryRequestOptions;
+import com.azure.cosmos.util.CosmosPagedIterable;
+import com.google.gson.Gson;
 import com.microsoft.azure.functions.*;
 
 /**
@@ -19,51 +25,51 @@ import com.microsoft.azure.functions.*;
 public class HttpFunction {
 	static int count = 0;
 
-	@FunctionName("http-info")
-	public HttpResponseMessage run(@HttpTrigger(name = "req", methods = {
-			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/info") HttpRequestMessage<Optional<String>> request,
-			final ExecutionContext context) {
-		StringBuffer result = new StringBuffer();
-		result.append("Serverless stats: v. 0005 : \n");
-		result.append("HTTP functions called ");
-		synchronized (HttpFunction.class) {
-			result.append(HttpFunction.count);
-		}
-		result.append(" times with the current container\n");
-		result.append("CosmosDB functions called ");
-		synchronized (CosmosDBFunction.class) {
-			result.append(CosmosDBFunction.count);
-		}
-		result.append(" times with the current container\n");
-		result.append("Timer functions called ");
-		synchronized (TimerFunction.class) {
-			result.append(TimerFunction.count);
-		}
-		result.append(" times with the current container\n");
-		result.append("BlobStore functions called ");
-		synchronized (BlobStoreFunction.class) {
-			result.append(BlobStoreFunction.count);
-		}
-		result.append(" times with the current container\n");
-		result.append("\n");
-		result.append("Properties:\n");
-		for (Entry<Object, Object> entry : AzureProperties.getProperties().entrySet()) {
-			result.append(entry.getKey());
-			result.append(":");
-			result.append(entry.getValue());
-			result.append("\n");
-		}
+	/**
+	 * Function for the most popular entities(5 Entities)
+	 * 
+	 * @param request
+	 * @return list of most popular entities
+	 */
+	@FunctionName("popular-entities")
+	public HttpResponseMessage getPopularEntities(@HttpTrigger(name = "req", methods = {
+			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/popular/entities") HttpRequestMessage<Optional<String>> request) {
 
-		result.append("\n");
-		result.append("Directorty:");
-		result.append(new File(".").getAbsolutePath());
-		result.append("\n");
-		for (String f : new File(".").list()) {
-			result.append(f);
-			result.append("\n");
-		}
-		return request.createResponseBuilder(HttpStatus.OK).body(result.toString()).build();
+		// Use cache too
+		String query = "SELECT * FROM " + TableName.ENTITY.getName() + " e ORDER BY e.numberOfLikes DESC LIMIT 5";
+		CosmosPagedIterable<Entity> it = CosmosDBLayer.getInstance(Entity.class).getCosmosClient()
+				.getDatabase(AzureProperties.getProperty(AzureProperties.COSMOSDB_DATABASE))
+				.getContainer(TableName.ENTITY.getName())
+				.queryItems(query, new CosmosQueryRequestOptions(), Entity.class);
+
+		Gson gson = new Gson();
+		String result = gson.toJson(it);
+		return request.createResponseBuilder(HttpStatus.OK).body(result).build();
 	}
+
+	/**
+	 * Function for the recent entities(5 Entities)
+	 * 
+	 * @param request
+	 * @return list of the recent entities
+	 */
+	@FunctionName("recent-entities")
+	public HttpResponseMessage getRecentEntities(@HttpTrigger(name = "req", methods = {
+			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/recent/entities") HttpRequestMessage<Optional<String>> request) {
+
+		// use cache too
+		String query = "SELECT * FROM " + TableName.ENTITY.getName() + " e ORDER BY e._ts DESC LIMIT 5";
+		CosmosPagedIterable<Entity> it = CosmosDBLayer.getInstance(Entity.class).getCosmosClient()
+				.getDatabase(AzureProperties.getProperty(AzureProperties.COSMOSDB_DATABASE))
+				.getContainer(TableName.ENTITY.getName())
+				.queryItems(query, new CosmosQueryRequestOptions(), Entity.class);
+
+		Gson gson = new Gson();
+		String result = gson.toJson(it);
+		return request.createResponseBuilder(HttpStatus.OK).body(result).build();
+	}
+
+	/*
 
 	@FunctionName("get-redis")
 	public HttpResponseMessage getRedis(@HttpTrigger(name = "req", methods = {
@@ -91,14 +97,6 @@ public class HttpFunction {
 			return request.createResponseBuilder(HttpStatus.OK).body("SET key = " + key + "; val = " + val).build();
 		}
 	}
-
-	@FunctionName("echo")
-	public HttpResponseMessage echoRedis(@HttpTrigger(name = "req", methods = {
-			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/echo/{text}") HttpRequestMessage<Optional<String>> request,
-			@BindingName("text") String txt, final ExecutionContext context) {
-		synchronized (HttpFunction.class) {
-			HttpFunction.count++;
-		}
-		return request.createResponseBuilder(HttpStatus.OK).body(txt).build();
-	}
+	
+	*/
 }

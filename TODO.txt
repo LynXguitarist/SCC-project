@@ -1,9 +1,16 @@
-- Ao adicionar Calendar ou Forum, a Entity tem de existir
+- Ao adicionar Calendar, a Entity tem de existir
 - Associar foto à Entity(Serviço)
-- Initial Page -> popular entities(3 que têm mais likes) e recent services(3 mais recentes)
+- ATUALIZAR TO STRING DO ENTITY
+- Meter como variavel o TTL da cache e meter tambem no advFeatures para o p orf configurar
 
 -> Ver Lab 5 -> Definir os resources para usar e quantas regioes vamos fazer, perceber bem o codigo AZURE MANAGEMENT
 // Auth file location
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 // TODO: This file should be created by running in the console:
 // az ad sp create-for-rbac --sdk-auth > azure.auth
+
+- Testes artillery(TODOS)
+- Testar bem cache (FRED)
+- Testar novos pedidos (FRED)
+- Testar azure functions (ANDRE->Timers, RUBEN->HTTP Fun, ver se melhor ter fun para Redis ou usar como temos)
+- Criar recursos através do codigo de cima Lab 5

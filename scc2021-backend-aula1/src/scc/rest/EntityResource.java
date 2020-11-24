@@ -124,7 +124,10 @@ public class EntityResource {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
 			String id = entity.getId();
-			entity.setLiked(liked);
+			int inc = -1;
+			if (liked)
+				inc = 1;
+			entity.setNumberOfLikes(inc);
 			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);

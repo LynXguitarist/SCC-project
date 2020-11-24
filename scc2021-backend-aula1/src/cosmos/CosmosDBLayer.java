@@ -96,9 +96,7 @@ public class CosmosDBLayer<T> {
 	 */
 	public CosmosPagedIterable<T> getItems(String tableName) {
 		init(tableName);
-		String separator = "\"";
-		return container.queryItems(
-				"SELECT * FROM " + tableName + "ORDER BY " + separator + tableName +"._ts" + separator + " DESC",
+		return container.queryItems("SELECT * FROM " + tableName + " ORDER BY " + tableName + "._ts" + " DESC",
 				new CosmosQueryRequestOptions(), t);
 	}
 

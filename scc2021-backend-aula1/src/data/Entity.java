@@ -8,11 +8,9 @@ public class Entity {
 	private String name;
 	private String description;
 	private String[] mediaIds; // photo
-	private String[] calendarIds;
 	private int numberOfLikes;
 	private String forumId;
 	private boolean listed;
-	private boolean liked;
 
 	public String get_rid() {
 		return _rid;
@@ -54,14 +52,6 @@ public class Entity {
 		this.mediaIds = mediaIds;
 	}
 
-	public String[] getCalendarIds() {
-		return calendarIds;
-	}
-
-	public void setCalendarIds(String[] calendarIds) {
-		this.calendarIds = calendarIds;
-	}
-
 	public boolean isListed() {
 		return listed;
 	}
@@ -74,8 +64,13 @@ public class Entity {
 		return numberOfLikes;
 	}
 
-	public void setNumberOfLikes(int numberOfLikes) {
-		this.numberOfLikes = numberOfLikes;
+	/**
+	 * inc can be 1(if it was liked) or -1(if lost a like)
+	 * 
+	 * @param inc
+	 */
+	public void setNumberOfLikes(int inc) {
+		this.numberOfLikes += inc;
 	}
 
 	public String getForumId() {
@@ -86,19 +81,10 @@ public class Entity {
 		this.forumId = forumId;
 	}
 
-	public boolean isLiked() {
-		return liked;
-	}
-
-	public void setLiked(boolean liked) {
-		this.liked = liked;
-	}
-
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
-				+ Arrays.toString(mediaIds) + ", calendarId=" + Arrays.toString(calendarIds) + ", listed=" + listed
-				+ "]";
+				+ Arrays.toString(mediaIds) + ", listed=" + listed + "]";
 	}
 
 }

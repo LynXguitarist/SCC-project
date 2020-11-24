@@ -62,6 +62,17 @@ public class RedisCache {
 			e.printStackTrace();
 		}
 	}
+	
+	public <T> void addItemToCache(String key, T item) {
+		ObjectMapper mapper = new ObjectMapper();
+
+		try (Jedis jedis = getJedisPool().getResource()) {
+			jedis.set(key, mapper.writeValueAsString(item));
+			jedis.expire(key, 120);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Returns the value in cache for the key 'key'

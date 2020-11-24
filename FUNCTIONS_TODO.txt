@@ -1,9 +1,8 @@
-Suggestions:
-	- Use timer functions for periodically computing the initial page.(HTTP ou COSMOS)???
-	
 Timers:
 	- Apagar Calendars que estão inativas à mais de x tempo
-
+	SELECT * FROM TBNAME WHERE CurrentDate() - _ts > 90 (dar delete em bulk ou um a um)
+	ou
+	DELETE FROM TBNAME WHERE CurrentDate() - _ts > 90
 
 Http:
 	-
@@ -12,4 +11,4 @@ CosmosDB:
 	-
 
 Blob:
-	- Use blob function to geo-replicate images across regions.
+	- Use blob function to geo-replicate images across regions.(PARA ULTIMO)
