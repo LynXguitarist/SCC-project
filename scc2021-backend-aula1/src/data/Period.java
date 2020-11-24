@@ -8,8 +8,8 @@ public class Period {
 	private String _rid;
     private String id;
     private String name;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 	private List<String> reservations;// list reservations' ids
 
 	public String get_rid() {
@@ -34,19 +34,19 @@ public class Period {
 		this.name = name;
 	}
     
-	public Date getStartDate() {
+	public String getStartDate() {
 		return this.startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return this.endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 	
