@@ -11,9 +11,6 @@ public class Reservation {
 	private String end_date;
 	private String periodId;
 	
-	// BUSCAR PERIODS DENTRO DO CALENDAR DENTRO DO STARTDATE E ENDDATE
-	// BUSCAR RESERVATIONS DENTRO DO PERIOD EM QUE STARTDATE E ENDDATE NAO OCUPADOS
-	
 	public String get_rid() {
         return _rid;
     }

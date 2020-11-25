@@ -11,8 +11,6 @@ public class Period {
     private String name;
 	private String startDate;
 	private String endDate;
-	//tirar lista
-	private List<String> reservations;// list reservations' ids
 	private String calendarId;
 
 	public String get_rid() {
@@ -53,19 +51,6 @@ public class Period {
 		this.endDate = endDate;
 	}
 	
-	public void addReservation(String reservationId) {
-		this.reservations.add(reservationId);
-	}
-	
-	
-	public void cancelReservation(String reservationId) {
-		for (String resId: this.reservations) {
-			if(resId.equals(reservationId)) {
-				this.reservations.remove(resId);
-			}
-		}
-	}
-	
 	public String getCalendarId() {
 		return calendarId;
 	}
@@ -76,7 +61,7 @@ public class Period {
 	@Override
 	public String toString() {
 		return "Period [_rid=" + _rid + ", id=" + id + ", name=" + name +", start_date=" + startDate + ", end_date=" + endDate +
-				", reservations=" + reservations.toString() + "]";
+				", calendarId=" + calendarId + "]";
 	}
 
 }
