@@ -172,17 +172,19 @@ public class CalendarResource {
 						+ reservation.getPeriodId() + "\"", TableName.PERIOD.getName());
 		Period period = null;
 		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+		String query = //Query to find overlapping reservations for that period
+				"SELECT * FROM %1$s WHERE %1$s.periodId=\""
+				+ "%2$s" + "\"" + " AND ((" + //1st case overlap: exactly equal or totally inside an existent res
+				"%1$s.startDate<=\"" + reservation.getStartDate() + "\"" +
+				" AND %1$s.endDate>=\"" + reservation.getEndDate() + "\") OR (" //2nd case: right overlap
+				+ "%1$s.startDate>=\"" + reservation.getStartDate() + "\"" +
+				" AND %1$s.startDate<=\"" + reservation.getEndDate() + "\") OR (" //3rd case: left overlap
+				+ "%1$s.startDate<=\"" + reservation.getStartDate() + "\"" +
+				" AND %1$s.endDate>=\"" + reservation.getStartDate() + "\"))";
 		for (Object item : items) {
 			period = (Period) item;
-			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery( //Query to find overlapping reservations for that period
-					"SELECT * FROM " + TableName.RESERVATION.getName() + " WHERE " + TableName.RESERVATION.getName() + ".periodId=\""
-							+ period.getId() + "\"" + " AND ((" + //first case overlap: exactly equal or totally inside an existent res
-							TableName.RESERVATION.getName() + ".startDate<=\"" + reservation.getStartDate() + "\"" +
-							" AND " + TableName.RESERVATION.getName() + ".endDate>=\"" + reservation.getEndDate() + "\") OR (" //2nd case: right overlap
-							+ TableName.RESERVATION.getName() + ".startDate>=\"" + reservation.getStartDate() + "\"" +
-							" AND " + TableName.RESERVATION.getName() + ".startDate<=\"" + reservation.getEndDate() + "\") OR (" //3rd case: left overlap
-							+ TableName.RESERVATION.getName() + ".startDate<=\"" + reservation.getStartDate() + "\"" +
-							" AND " + TableName.RESERVATION.getName() + ".endDate>=\"" + reservation.getStartDate() + "\"))", TableName.RESERVATION.getName());
+			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(String.format(query, 
+													TableName.RESERVATION.getName(), period.getId()), TableName.RESERVATION.getName());
 			Reservation res = null;
 			for(Object itemRes: itemsRes) {
 				res = (Reservation) itemRes;
