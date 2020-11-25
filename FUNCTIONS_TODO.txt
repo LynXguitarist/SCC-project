@@ -4,6 +4,8 @@ Timers:
 	ou
 	DELETE FROM TBNAME WHERE CurrentDate() - _ts > 90
 
+	- Apagar Calendars, Forums, ForumMessages, etc, quando o "pai", já foi apagado
+
 Http:
 	-
 
