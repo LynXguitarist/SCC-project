@@ -176,9 +176,13 @@ public class CalendarResource {
 			period = (Period) item;
 			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery( //Query to find overlapping reservations for that period
 					"SELECT * FROM " + TableName.RESERVATION.getName() + " WHERE " + TableName.RESERVATION.getName() + ".periodId=\""
-							+ period.getId() + "\"" + " AND NOT (" +
+							+ period.getId() + "\"" + " AND ((" + //first case overlap: exactly equal or totally inside an existent res
 							TableName.RESERVATION.getName() + ".startDate<=\"" + reservation.getStartDate() + "\"" +
-							" AND " + TableName.RESERVATION.getName() + ".endDate>=\"" + reservation.getEndDate() + "\")", TableName.RESERVATION.getName());
+							" AND " + TableName.RESERVATION.getName() + ".endDate>=\"" + reservation.getEndDate() + "\") OR (" //2nd case: right overlap
+							+ TableName.RESERVATION.getName() + ".startDate>=\"" + reservation.getStartDate() + "\"" +
+							" AND " + TableName.RESERVATION.getName() + ".startDate<=\"" + reservation.getEndDate() + "\") OR (" //3rd case: left overlap
+							+ TableName.RESERVATION.getName() + ".startDate<=\"" + reservation.getStartDate() + "\"" +
+							" AND " + TableName.RESERVATION.getName() + ".endDate>=\"" + reservation.getStartDate() + "\"))", TableName.RESERVATION.getName());
 			Reservation res = null;
 			for(Object itemRes: itemsRes) {
 				res = (Reservation) itemRes;
