@@ -77,7 +77,7 @@ public class EntityResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Entity> getEntities() {
 		List<Entity> entities = new LinkedList<>();
-
+		// Cache
 		String key = CacheKeyNames.MR_ENTITY.getName();
 		List<String> values = RedisCache.getCache().getListFromCache(key);
 		// Verifies if there is a value for the key in cache
@@ -92,7 +92,7 @@ public class EntityResource {
 			if (entities.isEmpty())
 				throw new WebApplicationException(Status.NOT_FOUND);
 
-			RedisCache.getCache().addListToCache(key, entities);
+			RedisCache.getCache().addListToCache(key, entities, 120);
 		} else {
 			// Retrieves from cache
 			for (String v : values) {

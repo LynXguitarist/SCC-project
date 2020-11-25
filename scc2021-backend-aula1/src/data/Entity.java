@@ -9,8 +9,6 @@ public class Entity {
 	private String description;
 	private String[] mediaIds; // photo
 	private int numberOfLikes;
-	private String forumId;
-	private boolean listed;
 
 	public String get_rid() {
 		return _rid;
@@ -52,14 +50,6 @@ public class Entity {
 		this.mediaIds = mediaIds;
 	}
 
-	public boolean isListed() {
-		return listed;
-	}
-
-	public void setListed(boolean listed) {
-		this.listed = listed;
-	}
-
 	public int getNumberOfLikes() {
 		return numberOfLikes;
 	}
@@ -73,18 +63,10 @@ public class Entity {
 		this.numberOfLikes += inc;
 	}
 
-	public String getForumId() {
-		return forumId;
-	}
-
-	public void setForumId(String forumId) {
-		this.forumId = forumId;
-	}
-
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
-				+ Arrays.toString(mediaIds) + ", listed=" + listed + "]";
+				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + "]";
 	}
 
 }

@@ -45,30 +45,40 @@ public class RedisCache {
 	}
 
 	/**
-	 * Adds an item or list of items to cache
+	 * Adds an item or list of items to cache with expire = expireTime
 	 * 
 	 * @param <T>
 	 * 
 	 * @param key
 	 * @param listOfItems
+	 * @param expireTime
 	 */
-	public <T> void addListToCache(String key, List<T> listOfItems) {
+	public <T> void addListToCache(String key, List<T> listOfItems, int expireTime) {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try (Jedis jedis = getJedisPool().getResource()) {
 			jedis.lpush(key, mapper.writeValueAsString(listOfItems));
-			jedis.expire(key, 120);
+			jedis.expire(key, expireTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public <T> void addItemToCache(String key, T item) {
+
+	/**
+	 * Adds an item to cache with expire = expireTime. Diff between this method and
+	 * addListToCache is that is suppose to be only one value for the key
+	 * 
+	 * @param <T>
+	 * @param key
+	 * @param item
+	 * @param expireTime
+	 */
+	public <T> void addItemToCache(String key, T item, int expireTime) {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try (Jedis jedis = getJedisPool().getResource()) {
 			jedis.set(key, mapper.writeValueAsString(item));
-			jedis.expire(key, 120);
+			jedis.expire(key, expireTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

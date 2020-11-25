@@ -1,7 +1,5 @@
 - Ao adicionar Calendar, a Entity tem de existir
-- Associar foto à Entity(Serviço)
-- ATUALIZAR TO STRING DO ENTITY
-- Meter como variavel o TTL da cache e meter tambem no advFeatures para o p orf configurar
+- meter tambem no advFeatures para o prof configurar o expireTime
 
 -> Ver Lab 5 -> Definir os resources para usar e quantas regioes vamos fazer, perceber bem o codigo AZURE MANAGEMENT
 // Auth file location
