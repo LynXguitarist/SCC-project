@@ -24,6 +24,7 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 import cosmos.CosmosDBLayer;
 import data.Calendar;
 import data.Entity;
+import data.ForumMessage;
 import data.Period;
 import data.Reservation;
 import scc.utils.TableName;
@@ -107,6 +108,22 @@ public class CalendarResource {
 			dbLayerPeriod.putItem(periodId, period, TableName.PERIOD.getName());
 		}
 	}
+	
+	@GET
+    @Path("/period/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Period getAvailablePeriod(@PathParam("id") String id) {
+        CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+        CosmosPagedIterable<?> items = dbLayerPeriod.getItemById(id, TableName.PERIOD.getName());
+        Period period = null;
+        for (Object item : items) {
+            period = (Period) item;
+        }
+        if (period == null)
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        return period;
+    }
 
 	// ---------------------------------RESERVATION----------------------------------//
 
@@ -123,7 +140,7 @@ public class CalendarResource {
 		if (calendar == null) {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		} else {
-			Period availablePeriod = getAvailablePeriod(reservation);
+			Period availablePeriod = getAvailablePeriodQuery(reservation);
 			if (availablePeriod == null) {
 				throw new WebApplicationException(Status.CONFLICT);
 			} else {
@@ -167,10 +184,26 @@ public class CalendarResource {
 			}
 		}
 	}
+	
+	@GET
+    @Path("/reservation/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Reservation getReservation(@PathParam("id") String id) {
+        CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+        CosmosPagedIterable<?> items = dbLayerReservation.getItemById(id, TableName.RESERVATION.getName());
+        Reservation res = null;
+        for (Object item : items) {
+            res = (Reservation) item;
+        }
+        if (res == null)
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        return res;
+    }
 
 	// ---------------------------------AUX FUNCTIONS----------------------------------//
 	
-	private Period getAvailablePeriod(Reservation reservation) {
+	private Period getAvailablePeriodQuery(Reservation reservation) {
 		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
 		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery( //Query to find available periods for the reservation
 				"SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName() + ".id=\""

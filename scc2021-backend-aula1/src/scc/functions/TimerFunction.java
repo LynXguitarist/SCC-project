@@ -12,6 +12,8 @@ import data.Entity;
 import data.Calendar;
 import data.Forum;
 import data.ForumMessage;
+import data.Period;
+import data.Reservation;
 import scc.redis.RedisCache;
 import scc.utils.AzureProperties;
 import scc.utils.TableName;
@@ -61,24 +63,44 @@ public class TimerFunction {
 			ExecutionContext context) {
 		CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
 		CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
+		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
 		String entityTable = TableName.ENTITY.getName();
 		String calendarTable = TableName.CALENDAR.getName();
+		String periodTable = TableName.PERIOD.getName();
+		String resTable = TableName.RESERVATION.getName();
 		// query that selects all entities marked as deleted and which delete period of
 		// 10 days has expired
-		String query = "SELECT * FROM " + entityTable + " WHERE " + entityTable + ".isDeleted=1 AND " + entityTable
+		String query = "SELECT "  + entityTable + ".id" + " FROM " + entityTable + " WHERE " + entityTable + ".isDeleted=1 AND " + entityTable
 				+ ".deletionDate<=\"" + LocalDateTime.now(ZoneOffset.UTC).minusDays(10) + "\"";
 		CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery(query, entityTable);
 
 		for (Object item : items) {
-			Entity entity = (Entity) item;
+			String entityId = (String) item;
 			// delete calendars
 			// query that selects all calendars of that entity
-			String calendarQuery = "SELECT * FROM " + calendarTable + " WHERE " + calendarTable + ".ownerId=\""
-					+ entity.getId() + "\"";
+			String calendarQuery = "SELECT " + calendarTable + ".id" + " FROM " + calendarTable + " WHERE " + calendarTable + ".ownerId=\""
+					+ entityId + "\"";
 			CosmosPagedIterable<?> itemsCalendar = dbLayerCalendar.getItemsBySpecialQuery(calendarQuery, calendarTable);
 			for (Object itemCalendar : itemsCalendar) {
-				Calendar calendar = (Calendar) itemCalendar;
-				dbLayerCalendar.delItem(calendar.getId(), calendarTable);
+				String calendarId = (String) itemCalendar;
+				dbLayerCalendar.delItem(calendarId, calendarTable);
+				//delete periods
+				String periodQuery = "SELECT " + periodTable + ".id" + " FROM " + periodTable + " WHERE " + periodTable + ".calendarId=\""
+						+ calendarId + "\"";
+				CosmosPagedIterable<?> itemsPeriod = dbLayerCalendar.getItemsBySpecialQuery(periodQuery, periodTable);
+				for (Object itemPeriod: itemsPeriod) {
+					String periodId = (String) itemPeriod;
+					dbLayerPeriod.delItem(periodId, periodTable);
+						//delete reservations
+						String resQuery = "SELECT " + resTable + ".id" + " FROM " + resTable + " WHERE " + resTable + ".periodId=\""
+								+ periodId + "\"";
+						CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(resQuery, resTable);
+						for (Object itemRes: itemsRes) {
+							String reservationId = (String) itemRes;
+							dbLayerReservation.delItem(reservationId, resTable);
+						}
+				}
 			}
 		}
 	}
