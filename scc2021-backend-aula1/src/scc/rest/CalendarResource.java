@@ -168,12 +168,43 @@ public class CalendarResource {
 		}
 	}
 
-	// mudar a query, fred depois ajuda
+	// ---------------------------------AUX FUNCTIONS----------------------------------//
+	
 	private Period getAvailablePeriod(Reservation reservation) {
 		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery( //Query to find available periods for the reservation
+				"SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName() + ".id=\""
+						+ reservation.getPeriodId() + "\"", TableName.PERIOD.getName());
+		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+		String query = //Query to find overlapping reservations for that period
+				"SELECT * FROM %1$s WHERE %1$s.periodId=\""
+				+ "%2$s" + "\"" + " AND ((" + //1st case overlap: exactly equal or totally inside an existent res
+				"%1$s.startDate<=\"" + reservation.getStartDate() + "\"" +
+				" AND %1$s.endDate>=\"" + reservation.getEndDate() + "\") OR (" //2nd case: right overlap
+				+ "%1$s.startDate>=\"" + reservation.getStartDate() + "\"" +
+				" AND %1$s.startDate<=\"" + reservation.getEndDate() + "\") OR (" //3rd case: left overlap
+				+ "%1$s.startDate<=\"" + reservation.getStartDate() + "\"" +
+				" AND %1$s.endDate>=\"" + reservation.getStartDate() + "\"))";
+		Period period = null;
+		for (Object item : items) {
+			period = (Period) item;
+			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(String.format(query, 
+													TableName.RESERVATION.getName(), period.getId()), TableName.RESERVATION.getName());
+			Reservation res = null;
+			for(Object itemRes: itemsRes) {
+				res = (Reservation) itemRes;
+			}
+			if(res == null) { //no overlapping reservations were found, this period is free for the reservation
+				break;
+			}
+		}
+		return period;
+	}
+	
+	private Period getReservationPeriod(Reservation reservation) {
+		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
 		String query = "SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName()
-				+ ".startDate<=\"" + reservation.getStartDate() + "\"" + " AND " + TableName.PERIOD.getName()
-				+ ".endDate>=\"" + reservation.getEndDate() + "\"";
+				+ ".id=\"" + reservation.getPeriodId() + "\"";
 		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery(query, TableName.PERIOD.getName());
 		Period period = null;
 		for (Object item : items) {
@@ -181,54 +212,18 @@ public class CalendarResource {
 		}
 		return period;
 	}
-
-	private Period getReservationPeriod(Reservation reservation) {
-		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery( // Query to find available periods for the
-																				// reservation
-				"SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName() + ".id=\""
-						+ reservation.getPeriodId() + "\"",
-				TableName.PERIOD.getName());
-		Period period = null;
-		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-		String query = // Query to find overlapping reservations for that period
-				"SELECT * FROM %1$s WHERE %1$s.periodId=\"" + "%2$s" + "\"" + " AND ((" + // 1st case overlap: exactly
-																							// equal or totally inside
-																							// an existent res
-						"%1$s.startDate<=\"" + reservation.getStartDate() + "\"" + " AND %1$s.endDate>=\""
-						+ reservation.getEndDate() + "\") OR (" // 2nd case: right overlap
-						+ "%1$s.startDate>=\"" + reservation.getStartDate() + "\"" + " AND %1$s.startDate<=\""
-						+ reservation.getEndDate() + "\") OR (" // 3rd case: left overlap
-						+ "%1$s.startDate<=\"" + reservation.getStartDate() + "\"" + " AND %1$s.endDate>=\""
-						+ reservation.getStartDate() + "\"))";
-		for (Object item : items) {
-			period = (Period) item;
-			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(
-					String.format(query, TableName.RESERVATION.getName(), period.getId()),
-					TableName.RESERVATION.getName());
-			Reservation res = null;
-			for (Object itemRes : itemsRes) {
-				res = (Reservation) itemRes;
-			}
-			if (res == null) { // no overlapping reservations were found, this period is free for the
-								// reservation
-				break;
-			}
-		}
-		return period;
-	}
-
+	
 	private boolean ownerExists(String id) {
-		CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
-		CosmosPagedIterable<?> items = dbLayerEntity.getItemById(id, TableName.ENTITY.getName());
-		Entity entity = null;
-		for (Object item : items) {
-			entity = (Entity) item;
-		}
-		if (entity == null)
-			return false;
-		else {
-			return true;
-		}
-	}
+        CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
+        CosmosPagedIterable<?> items = dbLayerEntity.getItemById(id, TableName.ENTITY.getName());
+        Entity entity = null;
+        for (Object item : items) {
+            entity = (Entity) item;
+        }
+        if (entity == null)
+            return false;
+        else {
+            return true;
+        }
+    }
 }
