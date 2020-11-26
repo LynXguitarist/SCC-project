@@ -55,27 +55,32 @@ public class TimerFunction {
 			}
 		}
 	}
-	
+
 	@FunctionName("periodic-delete")
-	public void deleteCalendars(@TimerTrigger(name = "keepAliveTrigger", schedule = "0 0 0 * * Sun") String timerInfo, ExecutionContext context) {
+	public void deleteCalendars(@TimerTrigger(name = "keepAliveTrigger", schedule = "0 0 0 * * Sun") String timerInfo,
+			ExecutionContext context) {
 		CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
 		CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
-		//query that selects all entities marked as deleted and which delete period of 10 days has expired
-		String query = "SELECT * FROM "+ TableName.ENTITY.getName() + " WHERE " + TableName.ENTITY.getName() + ".isDeleted=true AND " +
-				TableName.ENTITY.getName() + ".deletionDate<=\"" + LocalDateTime.now(ZoneOffset.UTC).minusDays(10) + "\"";
-		CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery(query, TableName.ENTITY.getName());		
+		String entityTable = TableName.ENTITY.getName();
+		String calendarTable = TableName.CALENDAR.getName();
+		// query that selects all entities marked as deleted and which delete period of
+		// 10 days has expired
+		String query = "SELECT * FROM " + entityTable + " WHERE " + entityTable + ".isDeleted=1 AND " + entityTable
+				+ ".deletionDate<=\"" + LocalDateTime.now(ZoneOffset.UTC).minusDays(10) + "\"";
+		CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery(query, entityTable);
+
 		for (Object item : items) {
 			Entity entity = (Entity) item;
-			//delete calendars
-			//query that selects all calendars of that entity
-			String calendarQuery = "SELECT * FROM " + TableName.CALENDAR.getName() + " WHERE " + TableName.CALENDAR.getName() + 
-					".ownerId=\"" + entity.getId() + "\"";
-			CosmosPagedIterable<?> itemsCalendar = dbLayerCalendar.getItemsBySpecialQuery(calendarQuery, TableName.CALENDAR.getName());		
+			// delete calendars
+			// query that selects all calendars of that entity
+			String calendarQuery = "SELECT * FROM " + calendarTable + " WHERE " + calendarTable + ".ownerId=\""
+					+ entity.getId() + "\"";
+			CosmosPagedIterable<?> itemsCalendar = dbLayerCalendar.getItemsBySpecialQuery(calendarQuery, calendarTable);
 			for (Object itemCalendar : itemsCalendar) {
 				Calendar calendar = (Calendar) itemCalendar;
-				dbLayerCalendar.delItem(calendar.getId(), TableName.CALENDAR.getName());
+				dbLayerCalendar.delItem(calendar.getId(), calendarTable);
 			}
 		}
 	}
-	
+
 }
