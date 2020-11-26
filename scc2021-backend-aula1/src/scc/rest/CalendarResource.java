@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -78,10 +79,9 @@ public class CalendarResource {
 
 	// -----------------------------------AVAILABLE_PERIOD-----------------------------//
 
-	@PUT
+	@POST
 	@Path("/period/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public void setAvailablePeriod(@PathParam("id") String id, Period period) {
 		CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
 		CosmosPagedIterable<?> items = dbLayerCalendar.getItemById(id, TableName.CALENDAR.getName());
@@ -110,10 +110,9 @@ public class CalendarResource {
 
 	// ---------------------------------RESERVATION----------------------------------//
 
-	@PUT
+	@POST
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public void addReservation(@PathParam("id") String id, Reservation reservation) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
 		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
@@ -146,10 +145,9 @@ public class CalendarResource {
 		}
 	}
 
-	@PUT
+	@DELETE
 	@Path("/reservation/cancel/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public void cancelReservation(@PathParam("id") String id, Reservation reservation) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
 		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
