@@ -1,5 +1,6 @@
 package scc.rest;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public class EntityResource {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
 			entity.setId(UUID.randomUUID().toString());
+			entity.setDeleted(false);
 			dbLayer.createItem(entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.CONFLICT);
@@ -47,10 +49,14 @@ public class EntityResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void updateEntity(@PathParam("id") String id, Entity entity) {
+		// This method handles the update to isDeleted too
+		// The remove of the entity is done via Timer Function
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
-			// This method handles the update to isDeleted too
-			// The remove of the entity is done via Timer Function
+			// If isDeleted, deleteDate = currDate
+			if (entity.isDeleted())
+				entity.setDeletionDate(LocalDateTime.now());
+
 			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);

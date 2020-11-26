@@ -1,5 +1,6 @@
 package data;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class Entity {
@@ -10,6 +11,8 @@ public class Entity {
 	private String[] mediaIds; // photo
 	private int numberOfLikes;
 	private boolean isDeleted;
+	// date of the deletion of the ENtity
+	private LocalDateTime deletionDate;
 
 	public String get_rid() {
 		return _rid;
@@ -72,10 +75,19 @@ public class Entity {
 		this.isDeleted = isDeleted;
 	}
 
+	public LocalDateTime getDeletionDate() {
+		return deletionDate;
+	}
+
+	public void setDeletionDate(LocalDateTime deletionDate) {
+		this.deletionDate = deletionDate;
+	}
+
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
-				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + ", isDeleted=" + isDeleted + "]";
+				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + ", isDeleted=" + isDeleted
+				+ ", deletionDate=" + deletionDate + "]";
 	}
 
 }
