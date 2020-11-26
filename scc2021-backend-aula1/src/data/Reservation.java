@@ -1,5 +1,6 @@
 package data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Reservation {
@@ -7,9 +8,10 @@ public class Reservation {
 	private String _rid;
     private String id;
 	private String client_name;
-	private String start_date;
-	private String end_date;
+	private LocalDateTime start_date;
+	private LocalDateTime end_date;
 	private String periodId;
+	private Integer ttl;
 	
 	public String get_rid() {
         return _rid;
@@ -29,11 +31,11 @@ public class Reservation {
 		return this.client_name;
 	}
 	
-	public String getStartDate() {
+	public LocalDateTime getStartDate() {
 		return this.start_date;
 	}
 	
-	public String getEndDate() {
+	public LocalDateTime getEndDate() {
 		return this.end_date;
 	}
 	
@@ -41,11 +43,11 @@ public class Reservation {
 		this.client_name = clientName;
 	}
 	
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.start_date = startDate;
 	}
 	
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.end_date = endDate;
 	}
 	
@@ -61,5 +63,11 @@ public class Reservation {
 	public String toString() {
 		return "Reservation [_rid=" + _rid + ", id=" + id + ", client_name=" + client_name + ", start_date=" + start_date
 				+ ", end_date=" + end_date + ", period_id=" + periodId + "]";
+	}
+	public Integer getTtl() {
+		return ttl;
+	}
+	public void setTtl(Integer ttl) {
+		this.ttl = ttl;
 	}
 }

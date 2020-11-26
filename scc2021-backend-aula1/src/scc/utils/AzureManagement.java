@@ -49,13 +49,6 @@ public class AzureManagement {
 	// az ad sp create-for-rbac --sdk-auth > azure.auth
 	static final String AZURE_AUTH_LOCATION = "azure.auth";
 
-	private static final int ENTITY_TTL = -1; // (never expire by default)
-	private static final int CALENDAR_TTL = -1; // (never expire by default)
-	private static final int FORUM_TTL = -1; // (never expire by default)
-	private static final int FORUM_MESSAGE_TTL = 90 * 60 * 60 * 24; // expire all documents after 90 days
-	private static final int PERIOD_TTL = 90 * 60 * 60 * 24; // expire all documents after 90 days
-	private static final int RESERVATION_TTL = 90 * 60 * 60 * 24; // expire all documents after 90 days
-
 	public static Azure createManagementClient(String authFile) throws CloudException, IOException {
 		File credFile = new File(authFile);
 		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC).authenticate(credFile).withDefaultSubscription();
@@ -242,7 +235,7 @@ public class AzureManagement {
 	}
 
 	static void createCosmosCollection(CosmosClient client, String dbname, String collectionName, String partKeys,
-			String[] uniqueKeys, int timeToLive) {
+			String[] uniqueKeys) {
 		try {
 			CosmosDatabase db = client.getDatabase(dbname);
 			CosmosContainerProperties props = new CosmosContainerProperties(collectionName, partKeys);
@@ -255,8 +248,6 @@ public class AzureManagement {
 				uniqueKeyDef.setUniqueKeys(uniqueKeyL);
 				props.setUniqueKeyPolicy(uniqueKeyDef);
 			}
-			// Defines the timeToLive of records of the container
-			props.setDefaultTimeToLiveInSeconds(timeToLive);
 			db.createContainer(props);
 			System.out.println("CosmosDB collection created with success: name = " + collectionName + "@" + dbname);
 
@@ -416,17 +407,17 @@ public class AzureManagement {
 							// TODO: create the collections you have in your application
 
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.ENTITY.getName(),
-									"/id", new String[] { "/id2" }, ENTITY_TTL);
+									"/id", new String[] { "/id2" });
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.FORUM.getName(),
-									"/id", null, FORUM_TTL);
+									"/id", null);
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.CALENDAR.getName(),
-									"/id", null, CALENDAR_TTL);
+									"/id", null);
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE,
-									TableName.FORUMMESSAGE.getName(), "/id", null, FORUM_MESSAGE_TTL);
+									TableName.FORUMMESSAGE.getName(), "/id", null);
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE, TableName.PERIOD.getName(),
-									"/id", null, PERIOD_TTL);
+									"/id", null);
 							createCosmosCollection(cosmosClient, AZURE_COSMOSDB_DATABASE,
-									TableName.RESERVATION.getName(), "/id", null, RESERVATION_TTL);
+									TableName.RESERVATION.getName(), "/id", null);
 
 						} catch (Exception e) {
 							System.err.println("Error while creating cosmos db resources");
