@@ -9,6 +9,7 @@ public class Entity {
 	private String description;
 	private String[] mediaIds; // photo
 	private int numberOfLikes;
+	private boolean isDeleted;
 
 	public String get_rid() {
 		return _rid;
@@ -63,10 +64,18 @@ public class Entity {
 		this.numberOfLikes += inc;
 	}
 
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
-				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + "]";
+				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + ", isDeleted=" + isDeleted + "]";
 	}
 
 }

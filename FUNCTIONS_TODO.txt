@@ -1,10 +1,5 @@
 Timers:
-	- Apagar Calendars que estão inativas à mais de x tempo
-	SELECT * FROM TBNAME WHERE CurrentDate() - _ts > 90 (dar delete em bulk ou um a um)
-	ou
-	DELETE FROM TBNAME WHERE CurrentDate() - _ts > 90
-
-	- Apagar Calendars, Forums, ForumMessages, etc, quando o "pai", já foi apagado
+	- Apagar Calendars, Forums, ForumMessages, etc, quando o "pai", já foi apagado(ANDRE)
 
 Http:
 	-

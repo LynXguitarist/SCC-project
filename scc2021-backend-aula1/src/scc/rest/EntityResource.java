@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -50,6 +49,8 @@ public class EntityResource {
 	public void updateEntity(@PathParam("id") String id, Entity entity) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
+			// This method handles the update to isDeleted too
+			// The remove of the entity is done via Timer Function
 			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);
@@ -102,18 +103,6 @@ public class EntityResource {
 			}
 		}
 		return entities;
-	}
-
-	@DELETE
-	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void deleteEntity(@PathParam("id") String id) {
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
-		try {
-			dbLayer.delItem(id, TableName.ENTITY.getName());
-		} catch (CosmosException e) {
-			throw new WebApplicationException(Status.NOT_FOUND);
-		}
 	}
 
 	@PUT
