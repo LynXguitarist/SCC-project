@@ -1,15 +1,19 @@
 package scc.functions;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import com.microsoft.azure.functions.annotation.*;
 
 import cosmos.CosmosDBLayer;
 import redis.clients.jedis.Jedis;
+import data.Entity;
 import data.Forum;
 import data.ForumMessage;
 import scc.redis.RedisCache;
 import scc.utils.AzureProperties;
+import scc.utils.TableName;
 
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.util.CosmosPagedIterable;
@@ -50,4 +54,19 @@ public class TimerFunction {
 			}
 		}
 	}
+	
+	@FunctionName("periodic-delete")
+	public void deleteCalendars(@TimerTrigger(name = "keepAliveTrigger", schedule = "0 0 0 * * Sun") String timerInfo, ExecutionContext context) {
+		CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
+		CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
+		//query that gets all entities marked as deleted and which delete period of 10 days has expired
+		String query = "SELECT * FROM "+ TableName.ENTITY.getName() + " WHERE " + TableName.ENTITY.getName() + ".isDeleted=true AND " +
+				TableName.ENTITY.getName() + ".deletionDate<=\"" + LocalDateTime.now(ZoneOffset.UTC).minusDays(10) + "\"";
+		CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery(query, TableName.ENTITY.getName());		
+		for (Object item : items) {
+			Entity entity = (Entity) item;
+			//delete calendars? or set a ttl
+		}
+	}
+	
 }
