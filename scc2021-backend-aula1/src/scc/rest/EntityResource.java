@@ -125,16 +125,16 @@ public class EntityResource {
 	}
 
 	@PUT
-	@Path("/likes/{liked}")
+	@Path("/likes/{liked}/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void likeOrdislike(@PathParam("liked") boolean liked, Entity entity) {
+	public void likeOrdislike(@PathParam("liked") boolean liked, @PathParam("id") String id, Entity entity) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
-			String id = entity.getId();
 			int inc = -1;
 			if (liked)
 				inc = 1;
+			entity.setId(id);
 			entity.setNumberOfLikes(inc);
 			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {

@@ -8,6 +8,5 @@
 // az ad sp create-for-rbac --sdk-auth > azure.auth
 
 - Testes artillery(TODOS)
-- Testar novos pedidos (FRED)
 - Testar azure functions (ANDRE->Timers, RUBEN->HTTP Fun)
 - Criar recursos através do codigo de cima Lab 5
