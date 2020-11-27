@@ -1,7 +1,7 @@
-Redis=True
-Search=True
-Functions=True
-Geo-Replicated=True
+REDIS=true
+SEARCH=true
+FUNCTIONS=true
+GEO-REPLICATED=true
 ###choose the regions, separate them with "," Example - EUROPE_WEST, EUROPE_NORTH 
 Regions=EUROPE_WEST
 #####ExpireTimes#########

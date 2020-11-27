@@ -1,6 +1,8 @@
 package scc.rest;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +20,8 @@ import javax.ws.rs.core.Response.Status;
 
 import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.util.CosmosPagedIterable;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cosmos.CosmosDBLayer;
 import data.Entity;
@@ -55,8 +58,9 @@ public class EntityResource {
 		try {
 			// If isDeleted, deleteDate = currDate
 			if (entity.isDeleted())
-				entity.setDeletionDate(LocalDateTime.now());
+				entity.setDeletionDate(LocalDate.now(ZoneOffset.UTC).toString());
 
+			entity.setId(id);
 			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);
@@ -83,13 +87,16 @@ public class EntityResource {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Entity> getEntities() {
+		// entities to return
 		List<Entity> entities = new LinkedList<>();
-		// Cache
+
 		String key = CacheKeyNames.MR_ENTITY.getName();
-		List<String> values = RedisCache.getCache().getListFromCache(key);
-		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty("Redis"));
-		// Verifies if there is a value for the key in cache
-		if (values.isEmpty() || !hasCache) {
+		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		List<String> values = new ArrayList<>();
+		if (hasCache)
+			values = RedisCache.getCache().getListFromCache(key);
+
+		if (values.isEmpty() || !hasCache) { // Verifies if there is a value for the key in cache
 			// Calls the Service(CosmosDB)
 			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 			CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
@@ -99,14 +106,19 @@ public class EntityResource {
 			}
 			if (entities.isEmpty())
 				throw new WebApplicationException(Status.NOT_FOUND);
-
 			RedisCache.getCache().addListToCache(key, entities, 120);
+
 		} else {
 			// Retrieves from cache
 			for (String v : values) {
-				Gson gson = new Gson();
-				Entity e = gson.fromJson(v, Entity.class);
-				entities.add(e);
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Entity e = mapper.readValue(v, Entity.class);
+					entities.add(e);
+				} catch (JsonProcessingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 		return entities;

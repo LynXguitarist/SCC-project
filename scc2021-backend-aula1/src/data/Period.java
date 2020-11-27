@@ -7,10 +7,8 @@ public class Period {
 	private String _rid;
 	private String id;
 	private String name;
-	//private String startDate;
-	//private String endDate;
-	private LocalDateTime startDate;
-	private LocalDateTime endDate;
+	private String startDate;
+	private String endDate;
 	private String calendarId;
 	private Integer ttl;
 
@@ -38,19 +36,19 @@ public class Period {
 		this.name = name;
 	}
 
-	public LocalDateTime getStartDate() {
+	public String getStartDate() {
 		return this.startDate;
 	}
 
-	public void setStartDate(LocalDateTime startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public LocalDateTime getEndDate() {
+	public String getEndDate() {
 		return this.endDate;
 	}
 
-	public void setEndDate(LocalDateTime endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 

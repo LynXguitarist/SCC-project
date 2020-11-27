@@ -1,15 +1,12 @@
 package data;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 public class Reservation {
 
 	private String _rid;
     private String id;
 	private String client_name;
-	private LocalDateTime start_date;
-	private LocalDateTime end_date;
+	private String start_date;
+	private String end_date;
 	private String periodId;
 	private Integer ttl;
 	
@@ -31,11 +28,11 @@ public class Reservation {
 		return this.client_name;
 	}
 	
-	public LocalDateTime getStartDate() {
+	public String getStartDate() {
 		return this.start_date;
 	}
 	
-	public LocalDateTime getEndDate() {
+	public String getEndDate() {
 		return this.end_date;
 	}
 	
@@ -43,11 +40,11 @@ public class Reservation {
 		this.client_name = clientName;
 	}
 	
-	public void setStartDate(LocalDateTime startDate) {
+	public void setStartDate(String startDate) {
 		this.start_date = startDate;
 	}
 	
-	public void setEndDate(LocalDateTime endDate) {
+	public void setEndDate(String endDate) {
 		this.end_date = endDate;
 	}
 	

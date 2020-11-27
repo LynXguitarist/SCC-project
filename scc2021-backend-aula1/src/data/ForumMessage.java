@@ -1,14 +1,11 @@
 package data;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 public class ForumMessage {
 
     private String _rid;
     private String id;
     private String forumId;
-    private LocalDateTime replyTime;
+    private String replyTime;
     private String sender;
     private String msg;
     private String reply;
@@ -21,11 +18,11 @@ public class ForumMessage {
         this.forumId = forumId;
     }
 
-    public LocalDateTime getReplyTime() {
+    public String getReplyTime() {
         return replyTime;
     }
 
-    public void setReplyTime(LocalDateTime replyTime) {
+    public void setReplyTime(String replyTime) {
         this.replyTime = replyTime;
     }
 

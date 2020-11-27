@@ -11,7 +11,9 @@ import scc.utils.TableName;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -147,7 +149,7 @@ public class ForumResource {
 
             if (message != null) {
                 message.setReply(reply);
-                message.setReplyTime(LocalDateTime.now());
+                message.setReplyTime(LocalDateTime.now(ZoneOffset.UTC).toString());
 
                 CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
                 dbLayerMessages.putItem(id,message, TableName.FORUMMESSAGE.getName());

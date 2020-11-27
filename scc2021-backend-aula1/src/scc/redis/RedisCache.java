@@ -56,8 +56,11 @@ public class RedisCache {
 	public <T> void addListToCache(String key, List<T> listOfItems, int expireTime) {
 		ObjectMapper mapper = new ObjectMapper();
 
-		try (Jedis jedis = getJedisPool().getResource()) {
-			jedis.lpush(key, mapper.writeValueAsString(listOfItems));
+		try (Jedis jedis = cache.getJedisPool().getResource()) {
+			for(T item : listOfItems) {
+				String value = mapper.writeValueAsString(item);
+				jedis.lpush(key, value);
+			}
 			jedis.expire(key, expireTime);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,7 +79,7 @@ public class RedisCache {
 	public <T> void addItemToCache(String key, T item, int expireTime) {
 		ObjectMapper mapper = new ObjectMapper();
 
-		try (Jedis jedis = getJedisPool().getResource()) {
+		try (Jedis jedis = cache.getJedisPool().getResource()) {
 			jedis.set(key, mapper.writeValueAsString(item));
 			jedis.expire(key, expireTime);
 		} catch (Exception e) {
@@ -93,7 +96,7 @@ public class RedisCache {
 	public String getItemFromCache(String key) {
 		String item = "";
 
-		try (Jedis jedis = getJedisPool().getResource()) {
+		try (Jedis jedis = cache.getJedisPool().getResource()) {
 			item = jedis.get(key);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +114,7 @@ public class RedisCache {
 		// list to be filled from cache and returned
 		List<String> items = new ArrayList<>();
 		try {
-			try (Jedis jedis = getJedisPool().getResource()) {
+			try (Jedis jedis = cache.getJedisPool().getResource()) {
 				items = jedis.lrange(key, 0, -1);
 				return items;
 			}

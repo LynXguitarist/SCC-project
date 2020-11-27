@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 public class AdvanceFeatures {
+	
+	public static final String REDIS = "REDIS";
 
 	public static final String PROPS_FILE = "AdvFeatures.props";
 	private static Properties props;
