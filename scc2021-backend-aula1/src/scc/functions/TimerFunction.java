@@ -71,8 +71,9 @@ public class TimerFunction {
 		String resTable = TableName.RESERVATION.getName();
 		// query that selects all entities marked as deleted and which delete period of
 		// 10 days has expired
+		LocalDateTime utcDateLimit = LocalDateTime.now(ZoneOffset.UTC).minusDays(10);
 		String query = "SELECT "  + entityTable + ".id" + " FROM " + entityTable + " WHERE " + entityTable + ".isDeleted=1 AND " + entityTable
-				+ ".deletionDate<=\"" + LocalDateTime.now(ZoneOffset.UTC).minusDays(10) + "\"";
+				+ ".deletionDate<=\"" + utcDateLimit + "\"";
 		CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery(query, entityTable);
 
 		for (Object item : items) {

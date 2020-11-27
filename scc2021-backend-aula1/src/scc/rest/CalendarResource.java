@@ -3,6 +3,8 @@ package scc.rest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -20,12 +22,17 @@ import javax.ws.rs.core.Response.Status;
 
 import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.util.CosmosPagedIterable;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cosmos.CosmosDBLayer;
 import data.Calendar;
 import data.Entity;
 import data.Period;
 import data.Reservation;
+import scc.redis.CacheKeyNames;
+import scc.redis.RedisCache;
+import scc.utils.AdvanceFeatures;
 import scc.utils.TableName;
 
 @Path("/calendar")
@@ -66,14 +73,32 @@ public class CalendarResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Calendar getCalendar(@PathParam("id") String id) {
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
-		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
 		Calendar calendar = null;
-		for (Object item : items) {
-			calendar = (Calendar) item;
+		String key = id;
+		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		String cacheItem = new String();
+		if (hasCache)
+			cacheItem = RedisCache.getCache().getItemFromCache(key);
+		if(cacheItem.isEmpty() || !hasCache) { //calls the service
+			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+			CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
+			for (Object item : items) {
+				calendar = (Calendar) item;
+			}
+			if (calendar == null) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			} else {
+				RedisCache.getCache().addItemToCache(calendar.getId(), calendar, 120);
+			}
+		} else { //retrieves from cache
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				Calendar cal = mapper.readValue(cacheItem, Calendar.class);
+				calendar = cal;
+			} catch (JsonProcessingException e1) {
+				e1.printStackTrace();
+			}
 		}
-		if (calendar == null)
-			throw new WebApplicationException(Status.NOT_FOUND);
 		return calendar;
 	}
 
@@ -113,14 +138,32 @@ public class CalendarResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Period getAvailablePeriod(@PathParam("id") String id) {
-		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-		CosmosPagedIterable<?> items = dbLayerPeriod.getItemById(id, TableName.PERIOD.getName());
 		Period period = null;
-		for (Object item : items) {
-			period = (Period) item;
+		String key = id;
+		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		String cacheItem = new String();
+		if (hasCache)
+			cacheItem = RedisCache.getCache().getItemFromCache(key);
+		if(cacheItem.isEmpty() || !hasCache) { //calls the service
+			CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+			CosmosPagedIterable<?> items = dbLayerPeriod.getItemById(id, TableName.PERIOD.getName());
+			for (Object item : items) {
+				period = (Period) item;
+			}
+			if (period == null) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			} else {
+				RedisCache.getCache().addItemToCache(period.getId(), period, 120);
+			}
+		} else { //retrieves from cache
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				Period per = mapper.readValue(cacheItem, Period.class);
+				period = per;
+			} catch (JsonProcessingException e1) {
+				e1.printStackTrace();
+			}
 		}
-		if (period == null)
-			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		return period;
 	}
 
@@ -191,15 +234,33 @@ public class CalendarResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Reservation getReservation(@PathParam("id") String id) {
-		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-		CosmosPagedIterable<?> items = dbLayerReservation.getItemById(id, TableName.RESERVATION.getName());
-		Reservation res = null;
-		for (Object item : items) {
-			res = (Reservation) item;
+		Reservation reservation = null;
+		String key = id;
+		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		String cacheItem = new String();
+		if (hasCache)
+			cacheItem = RedisCache.getCache().getItemFromCache(key);
+		if(cacheItem.isEmpty() || !hasCache) { //calls the service
+			CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+			CosmosPagedIterable<?> items = dbLayerReservation.getItemById(id, TableName.RESERVATION.getName());
+			for (Object item : items) {
+				reservation = (Reservation) item;
+			}
+			if (reservation == null) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			} else {
+				RedisCache.getCache().addItemToCache(reservation.getId(), reservation, 120);
+			}
+		} else { //retrieves from cache
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				Reservation res = mapper.readValue(cacheItem, Reservation.class);
+				reservation = res;
+			} catch (JsonProcessingException e1) {
+				e1.printStackTrace();
+			}
 		}
-		if (res == null)
-			throw new WebApplicationException(Response.Status.NOT_FOUND);
-		return res;
+		return reservation;
 	}
 
 	// ---------------------------------AUX
