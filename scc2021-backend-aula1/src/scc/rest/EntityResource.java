@@ -95,8 +95,8 @@ public class EntityResource {
 		List<String> values = new ArrayList<>();
 		if (hasCache)
 			values = RedisCache.getCache().getListFromCache(key);
-
-		if (values.isEmpty() || !hasCache) { // Verifies if there is a value for the key in cache
+		// Verifies if there is a value for the key in cache
+		if (values.isEmpty() || !hasCache) {
 			// Calls the Service(CosmosDB)
 			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 			CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
