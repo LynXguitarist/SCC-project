@@ -11,6 +11,7 @@ import scc.utils.TableName;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,42 +77,42 @@ public class ForumResource {
     @Path("/message/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addMessage(@PathParam("id") String id, ForumMessage message) {
-        if (ownerExists(message.getEntityId())) {
-            if (getForum(id) != null) {
-                CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
-                String messageId = UUID.randomUUID().toString();
-                CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
-                CosmosPagedIterable<?> items = dbLayerForum.getItemById(id, TableName.FORUM.getName());
-                Forum forum = null;
-                for (Object item : items) {
-                    forum = (Forum) item;
-                }
+
+        if (getForum(id) != null) {
+            CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
+            String messageId = UUID.randomUUID().toString();
+            CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
+            CosmosPagedIterable<?> items = dbLayerForum.getItemById(id, TableName.FORUM.getName());
+            Forum forum = null;
+            for (Object item : items) {
+                forum = (Forum) item;
+            }
+
+            try {
+                message.setId(messageId);
+                message.setReply(null);
+                message.setForumId(id);
+                message.setReplyTime(null);
+                dbLayerMessages.createItem(message, TableName.FORUMMESSAGE.getName());
+            } catch (CosmosException e) {
+                throw new WebApplicationException(Response.Status.CONFLICT);
+            }
+
+            if (forumMessageExists(messageId)) {
+                String[] arr = forum.getMessageIds();
+
+                List<String> arrlist = new ArrayList<String>(Arrays.asList(arr));
+                arrlist.add(messageId);
+
+                arr = arrlist.toArray(arr);
+
+                forum.setMessages(arr);
 
                 try {
-                    message.setId(messageId);
-                    dbLayerMessages.createItem(message, TableName.FORUMMESSAGE.getName());
+                    dbLayerForum.putItem(id, forum, TableName.FORUM.getName());
                 } catch (CosmosException e) {
-                    throw new WebApplicationException(Response.Status.CONFLICT);
+                    throw new WebApplicationException(Response.Status.NOT_FOUND);
                 }
-
-                if (forumMessageExists(messageId)) {
-                    String[] arr = forum.getMessageIds();
-
-                    List<String> arrlist = new ArrayList<String>(Arrays.asList(arr));
-                    arrlist.add(messageId);
-
-                    arr = arrlist.toArray(arr);
-
-                    forum.setMessages(arr);
-
-                    try {
-                        dbLayerForum.putItem(id, forum, TableName.FORUM.getName());
-                    } catch (CosmosException e) {
-                        throw new WebApplicationException(Response.Status.NOT_FOUND);
-                    }
-                }
-            } else {
-                throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
         } else {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -138,49 +139,43 @@ public class ForumResource {
     @Path("/message/{id}/{idMessage}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, ForumMessage message) {
-        if (ownerExists(message.getEntityId())) {
-            if (getForum(id) != null) {
-                if (forumMessageExists(idMessage)) {
-                    //Só existe uma resposta e será do owner
-                    if (!forumMessageReplyFromOwnerExists(idMessage, message.getEntityId())) {
-                        CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
-                        String messageId = UUID.randomUUID().toString();
+    public void addReply(@PathParam("id") String id, @PathParam("idMessage") String idMessage, String reply) {
 
-                        try {
-                            message.setId(messageId);
-                            dbLayerMessages.createItem(message, TableName.FORUMMESSAGE.getName());
-                        } catch (CosmosException e) {
-                            throw new WebApplicationException(Response.Status.CONFLICT);
-                        }
-                    } else {
-                        throw new WebApplicationException(Response.Status.CONFLICT);
-                    }
-                } else {
-                    throw new WebApplicationException(Response.Status.NOT_FOUND);
-                }
-            } else {
+        if (getForum(id) != null) {
+
+            ForumMessage message = getForumMessage(idMessage);
+
+            if (message != null) {
+                message.setReply(reply);
+                message.setReplyTime(LocalDateTime.now());
+
+                CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
+                dbLayerMessages.putItem(id,message, TableName.FORUMMESSAGE.getName());
+            }else {
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
+//            if (forumMessageExists(idMessage)) {
+//                //Só existe uma resposta e será do owner
+//                if (!forumMessageReplyFromOwnerExists(idMessage)) {
+//                    CosmosDBLayer<?> dbLayerMessages = CosmosDBLayer.getInstance(ForumMessage.class);
+//                    String messageId = UUID.randomUUID().toString();
+//
+//                    try {
+//                        message.setId(messageId);
+//                        dbLayerMessages.createItem(message, TableName.FORUMMESSAGE.getName());
+//                    } catch (CosmosException e) {
+//                        throw new WebApplicationException(Response.Status.CONFLICT);
+//                    }
+//                } else {
+//                    throw new WebApplicationException(Response.Status.CONFLICT);
+//                }
+//            } else {
+//                throw new WebApplicationException(Response.Status.NOT_FOUND);
+//            }
         } else {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-    }
 
-    @GET
-    @Path("/message/{id}/reply")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public ForumMessage getForumMessageReply(@PathParam("id") String id) {
-        CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
-        CosmosPagedIterable<?> items = dbLayerMessage.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " WHERE " + TableName.FORUMMESSAGE.getName() + ".replyToId=\"" + id + "\"", TableName.FORUMMESSAGE.getName());
-        ForumMessage message = null;
-        for (Object item : items) {
-            message = (ForumMessage) item;
-        }
-        if (message == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        return message;
     }
 
     private boolean ownerExists(String id) {
@@ -211,9 +206,11 @@ public class ForumResource {
         }
     }
 
-    private boolean forumMessageReplyFromOwnerExists(String id, String ownerId) {
+    private boolean forumMessageReplyFromOwnerExists(String id) {
         CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
-        CosmosPagedIterable<?> items = dbLayerMessage.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " WHERE " + TableName.FORUMMESSAGE.getName() + ".replyToId=\"" + id + "\"", TableName.FORUMMESSAGE.getName());
+        CosmosPagedIterable<?> items = dbLayerMessage.getItemsBySpecialQuery("SELECT * FROM " + TableName.FORUMMESSAGE.getName() +
+                " WHERE " + TableName.FORUMMESSAGE.getName() + ".id=\"" + id + "\" AND" + TableName.FORUMMESSAGE.getName() + ".reply IS NULL" +
+                " OR " + TableName.FORUMMESSAGE.getName() + ".reply=\"\"", TableName.FORUMMESSAGE.getName());
         ForumMessage forumMessage = null;
         for (Object item : items) {
             forumMessage = (ForumMessage) item;
@@ -221,11 +218,12 @@ public class ForumResource {
         if (forumMessage == null)
             return false;
         else {
-            if (forumMessage.getEntityId().equals(ownerId)) {
-                return true;
-            } else {
-                return false;
-            }
+            return true;
+//            if (forumMessage.getReply() == null || !forumMessage.getReply().equals("")) {
+//                return true;
+//            } else {
+//                return false;
+//            }
         }
     }
 

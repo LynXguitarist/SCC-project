@@ -6,6 +6,7 @@ import com.microsoft.azure.functions.annotation.*;
 
 import cosmos.CosmosDBLayer;
 import data.Entity;
+import data.ForumMessage;
 import scc.utils.AzureProperties;
 import scc.utils.TableName;
 
@@ -65,4 +66,27 @@ public class HttpFunction {
 		return request.createResponseBuilder(HttpStatus.OK).body(result).build();
 	}
 
+	/**
+	 * Function for the recent forumMessages of the owner without Reply
+	 *
+	 * @param request
+	 * @return list of messages without replies
+	 */
+	@FunctionName("recent-entities")
+	public HttpResponseMessage getRecentForumMessagesWithoutReply(@HttpTrigger(name = "req", methods = {
+			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/recent/messages/withoutreply") HttpRequestMessage<Optional<String>> request) {
+
+		String forumId = request.getQueryParameters().getOrDefault("forumId", "");
+
+		// use cache too
+		String query = "SELECT * FROM " + TableName.FORUMMESSAGE.getName() + " e WHERE e.forumId=\"" + forumId + "\" AND e.reply IS NULL ORDER BY e._ts DESC LIMIT 5";
+		CosmosPagedIterable<ForumMessage> it = CosmosDBLayer.getInstance(ForumMessage.class).getCosmosClient()
+				.getDatabase(AzureProperties.getProperty(AzureProperties.COSMOSDB_DATABASE))
+				.getContainer(TableName.FORUMMESSAGE.getName())
+				.queryItems(query, new CosmosQueryRequestOptions(), ForumMessage.class);
+
+		Gson gson = new Gson();
+		String result = gson.toJson(it);
+		return request.createResponseBuilder(HttpStatus.OK).body(result).build();
+	}
 }

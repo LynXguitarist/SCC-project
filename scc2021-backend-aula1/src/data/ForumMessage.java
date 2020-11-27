@@ -1,62 +1,75 @@
 package data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-public class  ForumMessage {
+public class ForumMessage {
 
     private String _rid;
     private String id;
-    private String entityId;
-    private Date creationTime;
-    private String fromWho;
+    private String forumId;
+    private LocalDateTime replyTime;
+    private String sender;
     private String msg;
-    private String replyToId;
+    private String reply;
 
-    public String getEntityId() {
-        return entityId;
+    public String getForumId() {
+        return forumId;
     }
-    public void setEntityId(String entityId) {
-        this.entityId = entityId;
+
+    public void setForumId(String forumId) {
+        this.forumId = forumId;
     }
-    public Date getCreationTime() {
-        return creationTime;
+
+    public LocalDateTime getReplyTime() {
+        return replyTime;
     }
-    public void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
+
+    public void setReplyTime(LocalDateTime replyTime) {
+        this.replyTime = replyTime;
     }
-    public String getReplyToId() {
-        return replyToId;
+
+    public String getReply() {
+        return reply;
     }
-    public void setReplyToId(String replyToId) {
-        this.replyToId = replyToId;
-    }
+
+    public void setReply(String reply) { this.reply = reply; }
+
     public String getMsg() {
         return msg;
     }
+
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
     public String get_rid() {
         return _rid;
     }
+
     public void set_rid(String _rid) {
         this._rid = _rid;
     }
-    public String getFromWho() {
-        return fromWho;
+
+    public String getSender() {
+        return sender;
     }
-    public void setFromWho(String fromWho) {
-        this.fromWho = fromWho;
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     @Override
     public String toString() {
-        return "ForumMessage [_rid=" + _rid + ", id=" + id + ", entityId=" + entityId + ", creationTime=" + creationTime
-                + ", fromWho=" + fromWho + ", msg=" + msg + ", replyToId=" + replyToId + "]";
+        return "ForumMessage [_rid=" + _rid + ", id=" + id + ", forumId=" + forumId + ", replyTime=" + replyTime
+                + ", sender=" + sender + ", msg=" + msg + ", reply=" + reply + "]";
     }
 }
