@@ -10,7 +10,7 @@ public class Entity {
 	private String description;
 	private String[] mediaIds; // photo
 	private int numberOfLikes;
-	private boolean isDeleted;
+	private boolean deleted;
 	// date of the deletion of the ENtity
 	private LocalDateTime deletionDate;
 
@@ -68,11 +68,11 @@ public class Entity {
 	}
 
 	public boolean isDeleted() {
-		return isDeleted;
+		return deleted;
 	}
 
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public LocalDateTime getDeletionDate() {
@@ -86,7 +86,7 @@ public class Entity {
 	@Override
 	public String toString() {
 		return "Entity [_rid=" + _rid + ", id=" + id + ", name=" + name + ", description=" + description + ", mediaID="
-				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + ", isDeleted=" + isDeleted
+				+ Arrays.toString(mediaIds) + ", number of likes=" + numberOfLikes + ", isDeleted=" + deleted
 				+ ", deletionDate=" + deletionDate + "]";
 	}
 
