@@ -1,15 +1,11 @@
 package scc.functions;
 
-import java.io.File;
 import java.util.*;
-import java.util.Map.Entry;
 
 import com.microsoft.azure.functions.annotation.*;
 
 import cosmos.CosmosDBLayer;
 import data.Entity;
-import redis.clients.jedis.Jedis;
-import scc.redis.RedisCache;
 import scc.utils.AzureProperties;
 import scc.utils.TableName;
 
@@ -69,34 +65,4 @@ public class HttpFunction {
 		return request.createResponseBuilder(HttpStatus.OK).body(result).build();
 	}
 
-	/*
-
-	@FunctionName("get-redis")
-	public HttpResponseMessage getRedis(@HttpTrigger(name = "req", methods = {
-			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/redis/{key}") HttpRequestMessage<Optional<String>> request,
-			@BindingName("key") String key, final ExecutionContext context) {
-		synchronized (HttpFunction.class) {
-			HttpFunction.count++;
-		}
-		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
-			String val = jedis.get(key);
-			return request.createResponseBuilder(HttpStatus.OK).body("GET key = " + key + "; val = " + val).build();
-		}
-	}
-
-	@FunctionName("set-redis")
-	public HttpResponseMessage setRedis(@HttpTrigger(name = "req", methods = {
-			HttpMethod.POST }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/redis/{key}") HttpRequestMessage<Optional<String>> request,
-			@BindingName("key") String key, final ExecutionContext context) {
-		synchronized (HttpFunction.class) {
-			HttpFunction.count++;
-		}
-		String val = request.getBody().orElse("");
-		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
-			jedis.set(key, val);
-			return request.createResponseBuilder(HttpStatus.OK).body("SET key = " + key + "; val = " + val).build();
-		}
-	}
-	
-	*/
 }

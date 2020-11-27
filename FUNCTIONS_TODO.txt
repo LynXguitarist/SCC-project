@@ -1,6 +1,3 @@
-Timers:
-	- Apagar Calendars, Forums, ForumMessages, etc, quando o "pai", já foi apagado(ANDRE)
-
 Http:
 	-
 

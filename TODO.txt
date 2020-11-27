@@ -1,4 +1,3 @@
-- Ao adicionar Calendar, a Entity tem de existir
 - meter tambem no advFeatures para o prof configurar o expireTime
 - Download Excel de cenas de historico antes de apagar
 
@@ -11,5 +10,5 @@
 - Testes artillery(TODOS)
 - Testar bem cache (FRED)
 - Testar novos pedidos (FRED)
-- Testar azure functions (ANDRE->Timers, RUBEN->HTTP Fun, ver se melhor ter fun para Redis ou usar como temos)
+- Testar azure functions (ANDRE->Timers, RUBEN->HTTP Fun)
 - Criar recursos através do codigo de cima Lab 5

@@ -1,31 +1,38 @@
 package scc.utils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 public class AdvanceFeatures {
 
-	/**
-	 * Returns true if the property = true
-	 * 
-	 * @param property
-	 * @return true or false
-	 */
-	public static boolean getProperty(String property) {
-		boolean value = false;
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("AdvFeatures"));
-			for (int i = 0; i < 4; i++) {
-				String[] line = reader.readLine().split("=");
-				if (line[0].toUpperCase().equals(property.toUpperCase()))
-					value = Boolean.parseBoolean(line[1]);
+	public static final String PROPS_FILE = "AdvFeatures.props";
+	private static Properties props;
+
+	public static synchronized Properties getProperties() {
+		if (props == null) {
+			props = new Properties();
+			try {
+				props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPS_FILE));
+			} catch (Exception e) {
+				// do nothing
 			}
-			reader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			try {
+				props.load(new FileInputStream(PROPS_FILE));
+			} catch (Exception e) {
+				// do nothing
+			}
 		}
-		return value;
+		return props;
+	}
+
+	public static String getProperty(String key) {
+		try {
+			String val = System.getenv(key);
+			if (val != null)
+				return val;
+		} catch (Exception e) {
+			// do nothing
+		}
+		return getProperties().getProperty(key);
 	}
 }

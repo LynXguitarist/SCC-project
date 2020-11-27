@@ -299,21 +299,24 @@ public class AzureManagement {
 	public static void main(String[] args) {
 		try {
 			// TODO: These variable allow you to control what is being created
-			final boolean CREATE_STORAGE = false;
-			final boolean CREATE_COSMOSDB = false;
-			final boolean CREATE_REDIS = AdvanceFeatures.getProperty("Redis");
-			final boolean CREATE_FUNCTIONS = AdvanceFeatures.getProperty("Functions");
-			final boolean CREATE_SEARCH = AdvanceFeatures.getProperty("Search");
-			final boolean CREATE_GEO_REPLICATION = AdvanceFeatures.getProperty("Geo-Replicated");
+			final boolean CREATE_STORAGE = true;
+			final boolean CREATE_COSMOSDB = true;
+			// ou retornar logo true ou false
+			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Redis"));
+			// fazer como esta embaixo, um for para criar ou nao os recursos
+			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Functions"));
+			final boolean CREATE_SEARCH = Boolean.parseBoolean(AdvanceFeatures.getProperty("Search"));
+			final boolean CREATE_GEO_REPLICATION = Boolean.parseBoolean(AdvanceFeatures.getProperty("Geo-Replicated"));
 
 			// TODO: change your suffix and other names if you want
 			final String MY_SUFFIX = "41812-42764-50092"; // Add your suffix here
 			final String AZURE_COSMOSDB_NAME = "scc-groupBD" + MY_SUFFIX; // Cosmos DB account name
 			final String AZURE_COSMOSDB_DATABASE = "sccBD" + MY_SUFFIX; // Cosmos DB database name
-			final String[] BLOB_CONTAINERS = { "images" }; // Contaienrs to add to the blob storage
+			final String[] BLOB_CONTAINERS = { "images" }; // Containers to add to the blob storage
 
 			// Define the regions to deploy resources here
-			// Region.findByLabelOrName(labelOrName)
+			// to define more regions call AdvFeatures and use the function
+			// Region.findByLabelOrName("west");
 			final Region[] REGIONS = new Region[] { Region.EUROPE_WEST };
 
 			// Name of property file with keys and URLS to access resources

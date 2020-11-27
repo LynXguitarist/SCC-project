@@ -3,8 +3,7 @@ package scc.utils;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-public class AzureProperties
-{
+public class AzureProperties {
 	public static final String BLOB_KEY = "DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net";
 	public static final String COSMOSDB_KEY = "7Vp8kAIdWCueWcMkRNuBUcMoNu93VXj3HMEbdo0aT1TwXnstcUiOdYvunokuZ1P3cMJpxKQ4zAYmYbcd4NdKHw==";
 	public static final String COSMOSDB_URL = "https://scc-group-db.documents.azure.com:443/";
@@ -14,32 +13,32 @@ public class AzureProperties
 
 	public static final String PROPS_FILE = "azurekeys-westeurope.props";
 	private static Properties props;
-	
+
 	public static synchronized Properties getProperties() {
-		if( props == null) {
+		if (props == null) {
 			props = new Properties();
 			try {
-				props.load( Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPS_FILE));
+				props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(PROPS_FILE));
 			} catch (Exception e) {
 				// do nothing
 			}
 			try {
-				props.load( new FileInputStream(PROPS_FILE));
+				props.load(new FileInputStream(PROPS_FILE));
 			} catch (Exception e) {
 				// do nothing
 			}
 		}
 		return props;
 	}
-	
-	public static String getProperty( String key) {
+
+	public static String getProperty(String key) {
 		try {
-			String val = System.getenv( key);
-			if( val != null)
+			String val = System.getenv(key);
+			if (val != null)
 				return val;
-		} catch( Exception e) {
+		} catch (Exception e) {
 			// do nothing
 		}
-		return getProperties().getProperty(key);		
+		return getProperties().getProperty(key);
 	}
 }
