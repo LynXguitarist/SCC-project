@@ -36,9 +36,7 @@ public class TimerFunction {
 	@FunctionName("periodic-compute")
 	public void cosmosFunction(@TimerTrigger(name = "keepAliveTrigger", schedule = "*/20 * * * * *") String timerInfo,
 			ExecutionContext context) {
-//		synchronized (HttpFunction.class) {
-//			HttpFunction.count++;
-//		}
+
 		try (Jedis jedis = RedisCache.getCache().getJedisPool().getResource()) {
 			jedis.set("serverlesstime", new SimpleDateFormat().format(new Date()));
 			try {
@@ -59,12 +57,10 @@ public class TimerFunction {
 	}
 
 	@FunctionName("periodic-delete")
-	public void periodDelete(
+	public void bulkDelete(
 			@TimerTrigger(name = "PeriodDeleteTrigger", schedule = "0 0 0 * * Sun") String timerInfo,
 			ExecutionContext context) {
-//		synchronized (HttpFunction.class) {
-//			HttpFunction.count++;
-//		}
+
 		CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
 		CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
 		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
