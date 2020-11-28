@@ -301,7 +301,8 @@ public class AzureManagement {
 			// TODO: These variable allow you to control what is being created
 			final boolean CREATE_STORAGE = true;
 			final boolean CREATE_COSMOSDB = true;
-			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Redis"));
+			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty("REDIS"));
+			
 			// fazer como esta embaixo, um for para criar ou nao os recursos
 			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Functions"));
 			final boolean CREATE_SEARCH = Boolean.parseBoolean(AdvanceFeatures.getProperty("Search"));

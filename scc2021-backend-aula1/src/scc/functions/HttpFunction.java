@@ -31,9 +31,9 @@ public class HttpFunction {
 	@FunctionName("popular-entities")
 	public HttpResponseMessage getPopularEntities(@HttpTrigger(name = "req", methods = {
 			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/popular/entities") HttpRequestMessage<Optional<String>> request) {
-		synchronized (HttpFunction.class) {
-			HttpFunction.count++;
-		}
+//		synchronized (HttpFunction.class) {
+//			HttpFunction.count++;
+//		}
 		// Use cache too
 		String query = "SELECT * FROM " + TableName.ENTITY.getName() + " e ORDER BY e.numberOfLikes DESC LIMIT 5";
 		CosmosPagedIterable<Entity> it = CosmosDBLayer.getInstance(Entity.class).getCosmosClient()
@@ -55,9 +55,9 @@ public class HttpFunction {
 	@FunctionName("recent-entities")
 	public HttpResponseMessage getRecentEntities(@HttpTrigger(name = "req", methods = {
 			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/recent/entities") HttpRequestMessage<Optional<String>> request) {
-		synchronized (HttpFunction.class) {
-			HttpFunction.count++;
-		}
+//		synchronized (HttpFunction.class) {
+//			HttpFunction.count++;
+//		}
 		// use cache too
 		String query = "SELECT * FROM " + TableName.ENTITY.getName() + " e ORDER BY e._ts DESC LIMIT 5";
 		CosmosPagedIterable<Entity> it = CosmosDBLayer.getInstance(Entity.class).getCosmosClient()
@@ -79,9 +79,9 @@ public class HttpFunction {
 	@FunctionName("recent-messages-without-reply")
 	public HttpResponseMessage getRecentForumMessagesWithoutReply(@HttpTrigger(name = "req", methods = {
 			HttpMethod.GET }, authLevel = AuthorizationLevel.ANONYMOUS, route = "serverless/recent/messages/withoutreply") HttpRequestMessage<Optional<String>> request) {
-		synchronized (HttpFunction.class) {
-			HttpFunction.count++;
-		}
+//		synchronized (HttpFunction.class) {
+//			HttpFunction.count++;
+//		}
 		String forumId = request.getQueryParameters().getOrDefault("forumId", "");
 
 		// use cache too
