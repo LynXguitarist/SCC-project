@@ -4,40 +4,43 @@
   <modelVersion>4.0.0</modelVersion>  
   <groupId>pt.unl.fct.di.scc</groupId>  
   <artifactId>scc2021-backend</artifactId>  
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging> 
-  
-  <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <java.version>11</java.version>
-        <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
-        <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>
-        <functionAppName>scc-functions</functionAppName>
-        <functionAppRegion>westeurope</functionAppRegion>
-        <functionPricingTier>B1</functionPricingTier>
-        <functionResourceGroup>scc-group</functionResourceGroup>
-        <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-  </properties>
-   
-  <dependencies>
-  	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>3.8.1</version>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>com.microsoft.azure</groupId>
-		<artifactId>azure</artifactId>
-		<version>1.27.0</version>
-	</dependency>
-  	<dependency>
-      <groupId>com.microsoft.azure.functions</groupId>
-      <artifactId>azure-functions-java-library</artifactId>
-      <version>${azure.functions.java.library.version}</version>
-    </dependency> 
+  <version>1.0-SNAPSHOT</version>  
+  <packaging>jar</packaging>  
+  <properties> 
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+    <maven.compiler.source>11</maven.compiler.source>  
+    <maven.compiler.target>11</maven.compiler.target>  
+    <java.version>11</java.version>  
+    <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>  
+    <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>  
+    <functionAppName>scc-functions-afr</functionAppName>  
+    <functionAppRegion>westeurope</functionAppRegion>  
+    <functionPricingTier>B1</functionPricingTier>  
+    <functionResourceGroup>scc-group-afr</functionResourceGroup>  
+    <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory> 
+  </properties>  
+  <dependencies> 
+    <dependency> 
+      <groupId>com.google.code.gson</groupId>  
+      <artifactId>gson</artifactId>  
+      <version>2.8.6</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>junit</groupId>  
+      <artifactId>junit</artifactId>  
+      <version>3.8.1</version>  
+      <scope>test</scope> 
+    </dependency>  
+    <dependency> 
+      <groupId>com.microsoft.azure</groupId>  
+      <artifactId>azure</artifactId>  
+      <version>1.27.0</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>com.microsoft.azure.functions</groupId>  
+      <artifactId>azure-functions-java-library</artifactId>  
+      <version>${azure.functions.java.library.version}</version> 
+    </dependency>  
     <dependency> 
       <groupId>javax.ws.rs</groupId>  
       <artifactId>javax.ws.rs-api</artifactId>  
@@ -102,56 +105,52 @@
       <groupId>org.jboss.resteasy</groupId>  
       <artifactId>resteasy-jackson2-provider</artifactId>  
       <version>4.5.8.Final</version> 
-    </dependency>
-    <dependency>
-		<groupId>redis.clients</groupId>
-		<artifactId>jedis</artifactId>
-		<version>3.3.0</version>
-	</dependency>
-    
-    
-            <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-jackson</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-client</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-server</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-jaxb</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.containers</groupId>
-                <artifactId>jersey-container-jdk-http</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.inject</groupId>
-                <artifactId>jersey-hk2</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-common</artifactId>
-                <version>2.30.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.xml.ws</groupId>
-                <artifactId>jaxws-rt</artifactId>
-                <version>2.3.2-1</version>
-            </dependency>
-             
-             
+    </dependency>  
+    <dependency> 
+      <groupId>redis.clients</groupId>  
+      <artifactId>jedis</artifactId>  
+      <version>3.3.0</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.media</groupId>  
+      <artifactId>jersey-media-json-jackson</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.core</groupId>  
+      <artifactId>jersey-client</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.core</groupId>  
+      <artifactId>jersey-server</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.media</groupId>  
+      <artifactId>jersey-media-jaxb</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.containers</groupId>  
+      <artifactId>jersey-container-jdk-http</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.inject</groupId>  
+      <artifactId>jersey-hk2</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>org.glassfish.jersey.core</groupId>  
+      <artifactId>jersey-common</artifactId>  
+      <version>2.30.1</version> 
+    </dependency>  
+    <dependency> 
+      <groupId>com.sun.xml.ws</groupId>  
+      <artifactId>jaxws-rt</artifactId>  
+      <version>2.3.2-1</version> 
+    </dependency> 
   </dependencies>  
   <build> 
     <sourceDirectory>src</sourceDirectory>  
@@ -171,15 +170,15 @@
         <configuration> 
           <schemaVersion>V2</schemaVersion>  
           <authType>azure_cli</authType>  
-          <subscriptionId>95fbb6ef-9d77-4b92-86f3-024b1dd4ae32</subscriptionId>  
-          <resourceGroup>sccProjectGroup</resourceGroup>  
-          <appName>sccProject</appName>  
+          <subscriptionId>6d1d26bd-007e-412e-8fbf-0ea815a6bba8</subscriptionId>  
+          <resourceGroup>scc-group-afr</resourceGroup>  
+          <appName>scc-app-afr</appName>  
           <pricingTier>P1v2</pricingTier>  
           <region>westeurope</region>  
           <runtime> 
             <os>windows</os>
             <javaVersion>11</javaVersion>
-            <webContainer>tomcat 9.0.0</webContainer>
+            <webContainer>java 11</webContainer>
           </runtime>  
           <deployment> 
             <resources> 
@@ -192,53 +191,52 @@
             </resources> 
           </deployment> 
         </configuration> 
-      </plugin> 
-      <plugin>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-functions-maven-plugin</artifactId>
-                <version>${azure.functions.maven.plugin.version}</version>
-                <configuration>
-                    <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <appName>${functionAppName}</appName>
-                    <region>${functionAppRegion}</region>
-                    <!-- function pricingTier, default to be consumption if not specified -->
-                    <pricingTier>${functionPricingTier}</pricingTier>
-                    <!-- Whether to disable application insights, default is false -->
-                    <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details for all valid configurations for application insights-->
-                    <disableAppInsights></disableAppInsights>
-
-                    <!-- function app service plan name -->
-<!--                     <appServicePlanName>java-functions-app-service-plan</appServicePlanName>
-      -->               
-                    <runtime>
-                        <!-- runtime os, could be windows, linux or docker-->
-                        <os>windows</os>
-                        <javaVersion>11</javaVersion>
-                        <!-- for docker function, please set the following parameters -->
-                        <!-- <image>[hub-user/]repo-name[:tag]</image> -->
-                        <!-- <serverId></serverId> -->
-                        <!-- <registryUrl></registryUrl>  -->
-                    </runtime>
-                    <appSettings>
-                        <property>
-                            <name>FUNCTIONS_EXTENSION_VERSION</name>
-                            <value>~3</value>
-                        </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
-                        </property>
-                    </appSettings>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>package-functions</id>
-                        <goals>
-                            <goal>package</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> 
+      </plugin>  
+      <plugin> 
+        <groupId>com.microsoft.azure</groupId>  
+        <artifactId>azure-functions-maven-plugin</artifactId>  
+        <version>${azure.functions.maven.plugin.version}</version>  
+        <configuration> 
+          <resourceGroup>${functionResourceGroup}</resourceGroup>  
+          <appName>${functionAppName}</appName>  
+          <region>${functionAppRegion}</region>  
+          <!-- function pricingTier, default to be consumption if not specified -->  
+          <pricingTier>${functionPricingTier}</pricingTier>  
+          <!-- Whether to disable application insights, default is false -->  
+          <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details for all valid configurations for application insights-->  
+          <disableAppInsights/>  
+          <!-- function app service plan name -->  
+          <!--                     <appServicePlanName>java-functions-app-service-plan</appServicePlanName>
+      -->  
+          <runtime> 
+            <!-- runtime os, could be windows, linux or docker-->  
+            <os>windows</os>  
+            <javaVersion>11</javaVersion>  
+            <!-- for docker function, please set the following parameters -->  
+            <!-- <image>[hub-user/]repo-name[:tag]</image> -->  
+            <!-- <serverId></serverId> -->  
+            <!-- <registryUrl></registryUrl>  --> 
+          </runtime>  
+          <appSettings> 
+            <property> 
+              <name>FUNCTIONS_EXTENSION_VERSION</name>  
+              <value>~3</value> 
+            </property>  
+            <property> 
+              <name>WEBSITE_RUN_FROM_PACKAGE</name>  
+              <value>1</value> 
+            </property> 
+          </appSettings> 
+        </configuration>  
+        <executions> 
+          <execution> 
+            <id>package-functions</id>  
+            <goals> 
+              <goal>package</goal> 
+            </goals> 
+          </execution> 
+        </executions> 
+      </plugin>  
       <plugin> 
         <artifactId>maven-war-plugin</artifactId>  
         <version>3.2.1</version>  
@@ -269,8 +267,8 @@
               </resource> 
             </resources> 
           </deployment>  
-          <resourceGroup>scc-group</resourceGroup>  
-          <appName>scc-project</appName> 
+          <resourceGroup>scc-group-afr</resourceGroup>  
+          <appName>scc-project-afr</appName> 
         </configuration> 
       </plugin> 
     </plugins> 

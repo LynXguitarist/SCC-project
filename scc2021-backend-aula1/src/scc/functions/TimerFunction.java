@@ -32,7 +32,7 @@ public class TimerFunction {
 	/*
 	 * Timers para apagar coisas antigas e talvez para popular cache
 	 */
-
+	
 	@FunctionName("periodic-compute")
 	public void cosmosFunction(@TimerTrigger(name = "keepAliveTrigger", schedule = "*/20 * * * * *") String timerInfo,
 			ExecutionContext context) {
@@ -59,12 +59,17 @@ public class TimerFunction {
 	}
 
 	@FunctionName("periodic-delete")
-	public void deleteCalendars(@TimerTrigger(name = "keepAliveTrigger", schedule = "0 0 0 * * Sun") String timerInfo,
+	public void periodDelete(
+			@TimerTrigger(name = "PeriodDeleteTrigger", schedule = "0 0 0 * * Sun") String timerInfo,
 			ExecutionContext context) {
+		synchronized (HttpFunction.class) {
+			HttpFunction.count++;
+		}
 		CosmosDBLayer<?> dbLayerEntity = CosmosDBLayer.getInstance(Entity.class);
 		CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
 		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
 		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+		
 		String entityTable = TableName.ENTITY.getName();
 		String calendarTable = TableName.CALENDAR.getName();
 		String periodTable = TableName.PERIOD.getName();
@@ -72,38 +77,39 @@ public class TimerFunction {
 		// query that selects all entities marked as deleted and which delete period of
 		// 10 days has expired
 		LocalDateTime utcDateLimit = LocalDateTime.now(ZoneOffset.UTC).minusDays(10);
-		String query = "SELECT "  + entityTable + ".id" + " FROM " + entityTable + " WHERE " + entityTable + ".isDeleted=1 AND " + entityTable
-				+ ".deletionDate<=\"" + utcDateLimit + "\"";
+		String query = "SELECT " + entityTable + ".id" + " FROM " + entityTable + " WHERE " + entityTable
+				+ ".deleted=1 AND " + entityTable + ".deletionDate<=\"" + utcDateLimit + "\"";
 		CosmosPagedIterable<?> items = dbLayerEntity.getItemsBySpecialQuery(query, entityTable);
 
 		for (Object item : items) {
 			String entityId = (String) item;
+			
 			// delete calendars
 			// query that selects all calendars of that entity
-			String calendarQuery = "SELECT " + calendarTable + ".id" + " FROM " + calendarTable + " WHERE " + calendarTable + ".ownerId=\""
-					+ entityId + "\"";
+			String calendarQuery = "SELECT " + calendarTable + ".id" + " FROM " + calendarTable + " WHERE "
+					+ calendarTable + ".ownerId=\"" + entityId + "\"";
 			CosmosPagedIterable<?> itemsCalendar = dbLayerCalendar.getItemsBySpecialQuery(calendarQuery, calendarTable);
 			for (Object itemCalendar : itemsCalendar) {
 				String calendarId = (String) itemCalendar;
 				dbLayerCalendar.delItem(calendarId, calendarTable);
-				//delete periods
-				String periodQuery = "SELECT " + periodTable + ".id" + " FROM " + periodTable + " WHERE " + periodTable + ".calendarId=\""
-						+ calendarId + "\"";
-				CosmosPagedIterable<?> itemsPeriod = dbLayerCalendar.getItemsBySpecialQuery(periodQuery, periodTable);
-				for (Object itemPeriod: itemsPeriod) {
+				// delete periods
+				String periodQuery = "SELECT " + periodTable + ".id" + " FROM " + periodTable + " WHERE " + periodTable
+						+ ".calendarId=\"" + calendarId + "\"";
+				CosmosPagedIterable<?> itemsPeriod = dbLayerPeriod.getItemsBySpecialQuery(periodQuery, periodTable);
+				for (Object itemPeriod : itemsPeriod) {
 					String periodId = (String) itemPeriod;
 					dbLayerPeriod.delItem(periodId, periodTable);
-						//delete reservations
-						String resQuery = "SELECT " + resTable + ".id" + " FROM " + resTable + " WHERE " + resTable + ".periodId=\""
-								+ periodId + "\"";
-						CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(resQuery, resTable);
-						for (Object itemRes: itemsRes) {
-							String reservationId = (String) itemRes;
-							dbLayerReservation.delItem(reservationId, resTable);
-						}
+					// delete reservations
+					String resQuery = "SELECT " + resTable + ".id" + " FROM " + resTable + " WHERE " + resTable
+							+ ".periodId=\"" + periodId + "\"";
+					CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(resQuery, resTable);
+					for (Object itemRes : itemsRes) {
+						String reservationId = (String) itemRes;
+						dbLayerReservation.delItem(reservationId, resTable);
+					}
 				}
 			}
 		}
 	}
-
+	
 }

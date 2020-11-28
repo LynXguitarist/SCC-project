@@ -47,7 +47,7 @@ public class AzureManagement {
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 	// TODO: This file should be created by running in the console:
 	// az ad sp create-for-rbac --sdk-auth > azure.auth
-	static final String AZURE_AUTH_LOCATION = "azure.auth";
+	static final String AZURE_AUTH_LOCATION = System.getProperty("user.dir") + "/azure.auth";
 
 	public static Azure createManagementClient(String authFile) throws CloudException, IOException {
 		File credFile = new File(authFile);
@@ -301,7 +301,6 @@ public class AzureManagement {
 			// TODO: These variable allow you to control what is being created
 			final boolean CREATE_STORAGE = true;
 			final boolean CREATE_COSMOSDB = true;
-			// ou retornar logo true ou false
 			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Redis"));
 			// fazer como esta embaixo, um for para criar ou nao os recursos
 			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Functions"));

@@ -11,6 +11,7 @@ import javax.net.ssl.SSLContext;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import scc.functions.HttpFunction;
 import scc.rest.CalendarResource;
 import scc.rest.EntityResource;
 import scc.rest.ForumResource;
@@ -37,6 +38,7 @@ public class Server {
 		config.register(new EntityResource());
 		config.register(new CalendarResource());
 		config.register(new ForumResource());
+		config.register(new HttpFunction());
 
 		try {
 			JdkHttpServerFactory.createHttpServer(serverURI, config, SSLContext.getDefault());
