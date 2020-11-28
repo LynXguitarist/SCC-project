@@ -301,12 +301,8 @@ public class AzureManagement {
 			// TODO: These variable allow you to control what is being created
 			final boolean CREATE_STORAGE = true;
 			final boolean CREATE_COSMOSDB = true;
-			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty("REDIS"));
-			
-			// fazer como esta embaixo, um for para criar ou nao os recursos
-			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvanceFeatures.getProperty("Functions"));
-			final boolean CREATE_SEARCH = Boolean.parseBoolean(AdvanceFeatures.getProperty("Search"));
-			final boolean CREATE_GEO_REPLICATION = Boolean.parseBoolean(AdvanceFeatures.getProperty("Geo-Replicated"));
+			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.FUNCTION));
 
 			// TODO: change your suffix and other names if you want
 			final String MY_SUFFIX = "afr"; // Add your suffix here
@@ -376,6 +372,9 @@ public class AzureManagement {
 						try {
 							final Azure azure0 = createManagementClient(AZURE_AUTH_LOCATION);
 							for (int i = 0; i < REGIONS.length; i++) {
+								if(!CREATE_FUNCTIONS)
+									AZURE_FUNCTIONS_NAME[i] = null;
+								
 								StorageAccount accountStorage = createStorageAccount(azure0, AZURE_RG_REGIONS[i],
 										AZURE_STORAGE_NAME[i], REGIONS[i]);
 								dumpStorageKey(props.get(REGIONS[i].name()), AZURE_PROPS_LOCATIONS[i],
