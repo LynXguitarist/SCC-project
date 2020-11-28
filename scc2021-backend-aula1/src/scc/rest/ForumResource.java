@@ -2,10 +2,15 @@ package scc.rest;
 
 import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.util.CosmosPagedIterable;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cosmos.CosmosDBLayer;
+import data.Calendar;
 import data.Entity;
 import data.Forum;
 import data.ForumMessage;
+import scc.redis.RedisCache;
+import scc.utils.AdvanceFeatures;
 import scc.utils.TableName;
 
 import javax.ws.rs.*;
@@ -62,14 +67,34 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Forum getForum(@PathParam("id") String id) {
-        CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
-        CosmosPagedIterable<?> items = dbLayerForum.getItemById(id, TableName.FORUM.getName());
+        boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+        String cacheItem = new String();
+        String key = TableName.FORUM.getName() + id;
         Forum forum = null;
-        for (Object item : items) {
-            forum = (Forum) item;
+
+        if(hasCache)
+            cacheItem = RedisCache.getCache().getItemFromCache(key);
+        if(cacheItem == null || !hasCache){
+            CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
+            CosmosPagedIterable<?> items = dbLayerForum.getItemById(id, TableName.FORUM.getName());
+
+            for (Object item : items) {
+                forum = (Forum) item;
+            }
+            if (forum == null)
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
+            if (hasCache){
+                RedisCache.getCache().addItemToCache(key, forum, 120);}
+        } else { //retrieves from cache
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                Forum cal = mapper.readValue(cacheItem, Forum.class);
+                forum = cal;
+            } catch (JsonProcessingException e1) {
+                e1.printStackTrace();
+            }
         }
-        if (forum == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+
         return forum;
     }
 
@@ -126,15 +151,39 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ForumMessage getForumMessage(@PathParam("id") String id) {
-        CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
-        CosmosPagedIterable<?> items = dbLayerMessage.getItemById(id, TableName.FORUMMESSAGE.getName());
         ForumMessage message = null;
-        for (Object item : items) {
-            message = (ForumMessage) item;
+
+        boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+        String cacheItem = new String();
+        String key = TableName.FORUMMESSAGE.getName() + message.getId();
+
+        if(hasCache){
+            cacheItem = RedisCache.getCache().getItemFromCache(key);
         }
-        if (message == null)
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        if (cacheItem == null || !hasCache){
+            CosmosDBLayer<?> dbLayerMessage = CosmosDBLayer.getInstance(ForumMessage.class);
+            CosmosPagedIterable<?> items = dbLayerMessage.getItemById(id, TableName.FORUMMESSAGE.getName());
+
+            for (Object item : items) {
+                message = (ForumMessage) item;
+            }
+            if (message == null)
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
+            if (hasCache){
+                RedisCache.getCache().addItemToCache(key, message, 120);
+            }
+
+        } else { //retrieves from cache
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                ForumMessage msg = mapper.readValue(cacheItem, ForumMessage.class);
+                message = msg;
+            } catch (JsonProcessingException e1) {
+                e1.printStackTrace();
+            }
+        }
         return message;
+
     }
 
     @PUT
