@@ -71,6 +71,7 @@ public class EntityResource {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Entity getEntity(@PathParam("id") String id) {
+		// METER CACHE
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.ENTITY.getName());
 		Entity entity = null;
@@ -106,7 +107,8 @@ public class EntityResource {
 			}
 			if (entities.isEmpty())
 				throw new WebApplicationException(Status.NOT_FOUND);
-			RedisCache.getCache().addListToCache(key, entities, 120);
+			else if (hasCache)
+				RedisCache.getCache().addListToCache(key, entities, 120);
 
 		} else {
 			// Retrieves from cache

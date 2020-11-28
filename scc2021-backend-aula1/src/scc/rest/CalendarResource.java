@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +18,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.azure.cosmos.CosmosException;
@@ -42,7 +42,7 @@ public class CalendarResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createCalendar(Calendar calendar) {
-		if (!ownerExists(calendar.getOwnerId())) {
+		if (ownerExists(calendar.getOwnerId())) {
 			CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
 			try {
 				calendar.setId(UUID.randomUUID().toString());
@@ -51,7 +51,7 @@ public class CalendarResource {
 				throw new WebApplicationException(Status.CONFLICT);
 			}
 		} else {
-			throw new WebApplicationException(Response.Status.CONFLICT);
+			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 	}
 
@@ -62,6 +62,7 @@ public class CalendarResource {
 	public void updateCalendar(@PathParam("id") String id, Calendar calendar) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
 		try {
+			calendar.setId(id);
 			dbLayer.putItem(id, calendar, TableName.CALENDAR.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);
@@ -74,12 +75,12 @@ public class CalendarResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Calendar getCalendar(@PathParam("id") String id) {
 		Calendar calendar = null;
-		String key = id;
+		String key = TableName.CALENDAR.getName() + id;
 		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
 		String cacheItem = new String();
 		if (hasCache)
 			cacheItem = RedisCache.getCache().getItemFromCache(key);
-		if(cacheItem.isEmpty() || !hasCache) { //calls the service
+		if (cacheItem == null || !hasCache) { // calls the service
 			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
 			CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
 			for (Object item : items) {
@@ -87,10 +88,10 @@ public class CalendarResource {
 			}
 			if (calendar == null) {
 				throw new WebApplicationException(Status.NOT_FOUND);
-			} else {
-				RedisCache.getCache().addItemToCache(calendar.getId(), calendar, 120);
+			} else if (hasCache) {
+				RedisCache.getCache().addItemToCache(key, calendar, 120);
 			}
-		} else { //retrieves from cache
+		} else { // retrieves from cache
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				Calendar cal = mapper.readValue(cacheItem, Calendar.class);
@@ -100,6 +101,51 @@ public class CalendarResource {
 			}
 		}
 		return calendar;
+	}
+
+	@GET
+	@Path("/entities/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Calendar> getCalendarsByEntityId(@PathParam("id") String id) {
+		// entities to return
+		List<Calendar> calendars = new LinkedList<>();
+
+		String key = CacheKeyNames.MR_CALENDAR.getName();
+		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		List<String> values = new ArrayList<>();
+		if (hasCache)
+			values = RedisCache.getCache().getListFromCache(key);
+		// Verifies if there is a value for the key in cache
+		if (values.isEmpty() || !hasCache) {
+			// Calls the Service(CosmosDB)
+			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
+			String query = "SELECT * FROM " + TableName.CALENDAR.getName() + " WHERE " + TableName.CALENDAR.getName()
+					+ ".ownerId=\"" + id + "\"";
+			CosmosPagedIterable<?> items = dbLayer.getItemsBySpecialQuery(query, TableName.CALENDAR.getName());
+			for (Object item : items) {
+				Calendar entity = (Calendar) item;
+				calendars.add(entity);
+			}
+			if (calendars.isEmpty())
+				throw new WebApplicationException(Status.NOT_FOUND);
+			else if (hasCache)
+				RedisCache.getCache().addListToCache(key, calendars, 120);
+
+		} else {
+			// Retrieves from cache
+			for (String v : values) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Calendar e = mapper.readValue(v, Calendar.class);
+					calendars.add(e);
+				} catch (JsonProcessingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		return calendars;
 	}
 
 	// -----------------------------------AVAILABLE_PERIOD-----------------------------//
@@ -114,60 +160,77 @@ public class CalendarResource {
 		for (Object item : items) {
 			calendar = (Calendar) item;
 		}
-		if (calendar == null) {
+		if (calendar == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
-		} else {
-			String periodId = UUID.randomUUID().toString();
-			period.setId(periodId);
-			// Define TTL
-			LocalDateTime currDate = LocalDateTime.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			LocalDateTime endDate = LocalDateTime.parse(period.getEndDate(), formatter);
-			
-			int ttl = (int) ChronoUnit.DAYS.between(currDate, endDate) * 60 * 24 * 30;
-			period.setTtl(ttl);
 
-			// add new available period
-			CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-			dbLayerPeriod.putItem(periodId, period, TableName.PERIOD.getName());
-		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime startDate = LocalDateTime.parse(period.getStartDate(), formatter);
+		LocalDateTime endDate = LocalDateTime.parse(period.getEndDate(), formatter);
+		LocalDateTime currDate = LocalDateTime.now();
+		// startDate cant be before currDate and startDate cant be after endDate
+		if (startDate.compareTo(currDate) < 0 || endDate.compareTo(startDate) < 0)
+			throw new WebApplicationException(Status.BAD_REQUEST);
+
+		String periodId = UUID.randomUUID().toString();
+		period.setId(periodId);
+		period.setCalendarId(id);
+		// Define TTL
+		int ttl = (int) ChronoUnit.DAYS.between(currDate, endDate) * 60 * 24 * 30;
+		period.setTtl(ttl);
+
+		// add new available period
+		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+		dbLayerPeriod.createItem(period, TableName.PERIOD.getName());
+
 	}
 
 	@GET
 	@Path("/period/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Period getAvailablePeriod(@PathParam("id") String id) {
-		Period period = null;
-		String key = id;
+	public List<Period> getAvailablePeriodByCalendarId(@PathParam("id") String id) {
+		List<Period> periods = new ArrayList<>();
+		String key = TableName.PERIOD.getName() + id;
 		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
-		String cacheItem = new String();
+		List<String> cacheItem = new ArrayList<>();
+
 		if (hasCache)
-			cacheItem = RedisCache.getCache().getItemFromCache(key);
-		if(cacheItem.isEmpty() || !hasCache) { //calls the service
+			cacheItem = RedisCache.getCache().getListFromCache(key);
+
+		if (cacheItem.isEmpty() || !hasCache) { // calls the service
 			CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-			CosmosPagedIterable<?> items = dbLayerPeriod.getItemById(id, TableName.PERIOD.getName());
+			String query = "SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName()
+					+ ".calendarId=\"" + id + "\"";
+			CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery(query, TableName.PERIOD.getName());
 			for (Object item : items) {
-				period = (Period) item;
+				Period period = (Period) item;
+				periods.add(period);
 			}
-			if (period == null) {
+
+			if (periods.isEmpty()) {
 				throw new WebApplicationException(Status.NOT_FOUND);
-			} else {
-				RedisCache.getCache().addItemToCache(period.getId(), period, 120);
+			} else if (hasCache) {
+				RedisCache.getCache().addListToCache(key, periods, 120);
 			}
-		} else { //retrieves from cache
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				Period per = mapper.readValue(cacheItem, Period.class);
-				period = per;
-			} catch (JsonProcessingException e1) {
-				e1.printStackTrace();
+
+		} else { // retrieves from cache
+			for (String v : cacheItem) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Period p = mapper.readValue(v, Period.class);
+					periods.add(p);
+				} catch (JsonProcessingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
-		return period;
+		return periods;
 	}
 
 	// ---------------------------------RESERVATION----------------------------------//
+
+	// APARTIR DAQUI
 
 	@POST
 	@Path("/reservation/{id}")
@@ -179,31 +242,32 @@ public class CalendarResource {
 		for (Object item : items) {
 			calendar = (Calendar) item;
 		}
-		if (calendar == null) {
+		if (calendar == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
-		} else {
-			Period availablePeriod = getAvailablePeriodQuery(reservation);
-			if (availablePeriod == null) {
-				throw new WebApplicationException(Status.CONFLICT);
-			} else {
-				String reservationId = UUID.randomUUID().toString();
-				reservation.setId(reservationId);
-				reservation.setPeriodId(availablePeriod.getId());
-				// Define TTL
-				LocalDateTime currDate = LocalDateTime.now();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-				LocalDateTime endDate = LocalDateTime.parse(reservation.getEndDate(), formatter);
-				
-				int ttl = (int) ChronoUnit.DAYS.between(currDate, endDate) * 60 * 24 * 30;
-				reservation.setTtl(ttl);
 
-				// LocalDateTime.now(ZoneOffset.UTC);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime startDate = LocalDateTime.parse(reservation.getStartDate(), formatter);
+		LocalDateTime endDate = LocalDateTime.parse(reservation.getEndDate(), formatter);
+		LocalDateTime currDate = LocalDateTime.now();
+		// startDate cant be before currDate and startDate cant be after endDate
+		if (startDate.compareTo(currDate) < 0 || endDate.compareTo(startDate) < 0)
+			throw new WebApplicationException(Status.BAD_REQUEST);
 
-				// add new reservation
-				CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-				dbLayerReservation.putItem(reservationId, reservation, TableName.RESERVATION.getName());
-			}
-		}
+		Period availablePeriod = getAvailablePeriodQuery(reservation, startDate, endDate);
+		if (availablePeriod == null)
+			throw new WebApplicationException(Status.CONFLICT);
+
+		String reservationId = UUID.randomUUID().toString();
+		reservation.setId(reservationId);
+		reservation.setPeriodId(id);
+		// Define TTL
+		int ttl = (int) ChronoUnit.DAYS.between(currDate, endDate) * 60 * 24 * 30;
+		reservation.setTtl(ttl);
+
+		// add new reservation
+		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+		dbLayerReservation.putItem(reservationId, reservation, TableName.RESERVATION.getName());
+
 	}
 
 	@DELETE
@@ -240,7 +304,7 @@ public class CalendarResource {
 		String cacheItem = new String();
 		if (hasCache)
 			cacheItem = RedisCache.getCache().getItemFromCache(key);
-		if(cacheItem.isEmpty() || !hasCache) { //calls the service
+		if (cacheItem.isEmpty() || !hasCache) { // calls the service
 			CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
 			CosmosPagedIterable<?> items = dbLayerReservation.getItemById(id, TableName.RESERVATION.getName());
 			for (Object item : items) {
@@ -251,7 +315,7 @@ public class CalendarResource {
 			} else {
 				RedisCache.getCache().addItemToCache(reservation.getId(), reservation, 120);
 			}
-		} else { //retrieves from cache
+		} else { // retrieves from cache
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				Reservation res = mapper.readValue(cacheItem, Reservation.class);
@@ -266,38 +330,42 @@ public class CalendarResource {
 	// ---------------------------------AUX
 	// FUNCTIONS----------------------------------//
 
-	private Period getAvailablePeriodQuery(Reservation reservation) {
-		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery( // Query to find available periods for the
-																				// reservation
-				"SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName() + ".id=\""
-						+ reservation.getPeriodId() + "\"",
-				TableName.PERIOD.getName());
-		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-		String query = // Query to find overlapping reservations for that period
-				"SELECT * FROM %1$s WHERE %1$s.periodId=\"" + "%2$s" + "\"" + " AND ((" + // 1st case overlap: exactly
-																							// equal or totally inside
-																							// an existent res
-						"%1$s.startDate<=\"" + reservation.getStartDate() + "\"" + " AND %1$s.endDate>=\""
-						+ reservation.getEndDate() + "\") OR (" // 2nd case: right overlap
-						+ "%1$s.startDate>=\"" + reservation.getStartDate() + "\"" + " AND %1$s.startDate<=\""
-						+ reservation.getEndDate() + "\") OR (" // 3rd case: left overlap
-						+ "%1$s.startDate<=\"" + reservation.getStartDate() + "\"" + " AND %1$s.endDate>=\""
-						+ reservation.getStartDate() + "\"))";
+	private Period getAvailablePeriodQuery(Reservation reservation, LocalDateTime startDate, LocalDateTime endDate) {
 		Period period = null;
+		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
+
+		String query = "SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName()
+				+ ".startDate<=\"" + startDate + "\"" + " AND " + TableName.PERIOD.getName() + ".endDate>=\"" + endDate
+				+ "\"";
+		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery(query, TableName.PERIOD.getName());
 		for (Object item : items) {
-			period = (Period) item;
-			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(
-					String.format(query, TableName.RESERVATION.getName(), period.getId()),
+			Period p = (Period) item;
+			CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
+			String query2 = "SELECT * FROM " + TableName.RESERVATION.getName() + " WHERE "
+					+ TableName.RESERVATION.getName() + ".periodId=\"" + p.getId() + "\"";
+			List<Reservation> reservations = new ArrayList<>();
+			CosmosPagedIterable<?> itemsRes = dbLayerReservation.getItemsBySpecialQuery(query2,
 					TableName.RESERVATION.getName());
-			Reservation res = null;
 			for (Object itemRes : itemsRes) {
-				res = (Reservation) itemRes;
+				Reservation r = (Reservation) itemRes;
+				reservations.add(r);
 			}
-			if (res == null) { // no overlapping reservations were found, this period is free for the
-								// reservation
+
+			if (reservations.isEmpty()) {
+				period = p;
 				break;
 			}
+
+			for (Reservation r : reservations) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				LocalDateTime resStartDate = LocalDateTime.parse(r.getStartDate(), formatter);
+				LocalDateTime resEndDate = LocalDateTime.parse(r.getEndDate(), formatter);
+				if ((startDate.compareTo(resStartDate) >= 0 && startDate.compareTo(resEndDate) <= 0)
+						|| (endDate.compareTo(resStartDate) >= 0 && endDate.compareTo(resEndDate) <= 0)) {
+					return null;
+				}
+			}
+
 		}
 		return period;
 	}

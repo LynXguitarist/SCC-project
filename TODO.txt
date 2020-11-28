@@ -1,5 +1,6 @@
 - meter tambem no advFeatures para o prof configurar o expireTime
 - Download Excel de cenas de historico antes de apagar
+- Tud o que esta TableName.BLA passar para variavel
 
 -> Ver Lab 5 -> Definir os resources para usar e quantas regioes vamos fazer, perceber bem o codigo AZURE MANAGEMENT
 // Auth file location

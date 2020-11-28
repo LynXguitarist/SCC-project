@@ -32,7 +32,7 @@ public class CosmosDBLayer<T> {
 
 	public static synchronized <T> CosmosDBLayer<?> getInstance(Class<T> t) {
 		Locale.setDefault(Locale.US);
-		if (instance != null)
+		if (instance != null && instance.t == t)
 			return instance;
 
 		CosmosClient client = new CosmosClientBuilder()
