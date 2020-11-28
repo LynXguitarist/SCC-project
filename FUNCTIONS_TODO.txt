@@ -1,8 +1,0 @@
-Http:
-	-
-
-CosmosDB:
-	-
-
-Blob:
-	- Use blob function to geo-replicate images across regions.(PARA ULTIMO)
