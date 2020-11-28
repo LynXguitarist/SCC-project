@@ -163,7 +163,7 @@ public class CalendarResource {
 		if (calendar == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm");
 		LocalDateTime startDate = LocalDateTime.parse(period.getStartDate(), formatter);
 		LocalDateTime endDate = LocalDateTime.parse(period.getEndDate(), formatter);
 		LocalDateTime currDate = LocalDateTime.now();
@@ -181,7 +181,6 @@ public class CalendarResource {
 		// add new available period
 		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
 		dbLayerPeriod.createItem(period, TableName.PERIOD.getName());
-
 	}
 
 	@GET
@@ -230,8 +229,6 @@ public class CalendarResource {
 
 	// ---------------------------------RESERVATION----------------------------------//
 
-	// APARTIR DAQUI
-
 	@POST
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -253,43 +250,47 @@ public class CalendarResource {
 		if (startDate.compareTo(currDate) < 0 || endDate.compareTo(startDate) < 0)
 			throw new WebApplicationException(Status.BAD_REQUEST);
 
-		Period availablePeriod = getAvailablePeriodQuery(reservation, startDate, endDate);
+		Period availablePeriod = getAvailablePeriodQuery(id, reservation, startDate, endDate);
 		if (availablePeriod == null)
 			throw new WebApplicationException(Status.CONFLICT);
 
 		String reservationId = UUID.randomUUID().toString();
 		reservation.setId(reservationId);
-		reservation.setPeriodId(id);
+		reservation.setPeriodId(availablePeriod.getId());
 		// Define TTL
 		int ttl = (int) ChronoUnit.DAYS.between(currDate, endDate) * 60 * 24 * 30;
 		reservation.setTtl(ttl);
 
 		// add new reservation
 		CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-		dbLayerReservation.putItem(reservationId, reservation, TableName.RESERVATION.getName());
+		dbLayerReservation.createItem(reservation, TableName.RESERVATION.getName());
 
 	}
 
 	@DELETE
 	@Path("/reservation/cancel/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void cancelReservation(@PathParam("id") String id, Reservation reservation) {
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Calendar.class);
-		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.CALENDAR.getName());
-		Calendar calendar = null;
+	public void cancelReservation(@PathParam("id") String id) {
+		Reservation reservation = null;
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Reservation.class);
+		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.RESERVATION.getName());
 		for (Object item : items) {
-			calendar = (Calendar) item;
+			reservation = (Reservation) item;
 		}
-		if (calendar == null) {
+		if (reservation == null)
 			throw new WebApplicationException(Status.NOT_FOUND);
-		} else {
-			if (getReservationPeriod(reservation) == null) {
-				throw new WebApplicationException(Status.NOT_FOUND);
-			} else {
-				// delete reservation
-				CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-				dbLayerReservation.delItem(reservation.getId(), TableName.RESERVATION.getName());
-			}
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime endDate = LocalDateTime.parse(reservation.getEndDate(), formatter);
+		LocalDateTime currDate = LocalDateTime.now();
+
+		if (endDate.compareTo(currDate) < 0)
+			throw new WebApplicationException(Status.CONFLICT);
+
+		try {
+			dbLayer.delItem(id, TableName.RESERVATION.getName());
+		} catch (CosmosException e) {
+			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 	}
 
@@ -308,8 +309,8 @@ public class CalendarResource {
 
 		if (cacheItem.isEmpty() || !hasCache) { // calls the service
 			CosmosDBLayer<?> dbLayerRes = CosmosDBLayer.getInstance(Reservation.class);
-			String query = "SELECT * FROM " + TableName.RESERVATION.getName() + " WHERE " + TableName.RESERVATION.getName()
-					+ ".periodId=\"" + id + "\"";
+			String query = "SELECT * FROM " + TableName.RESERVATION.getName() + " WHERE "
+					+ TableName.RESERVATION.getName() + ".periodId=\"" + id + "\"";
 			CosmosPagedIterable<?> items = dbLayerRes.getItemsBySpecialQuery(query, TableName.RESERVATION.getName());
 			for (Object item : items) {
 				Reservation res = (Reservation) item;
@@ -340,13 +341,14 @@ public class CalendarResource {
 	// ---------------------------------AUX
 	// FUNCTIONS----------------------------------//
 
-	private Period getAvailablePeriodQuery(Reservation reservation, LocalDateTime startDate, LocalDateTime endDate) {
+	private Period getAvailablePeriodQuery(String id, Reservation reservation, LocalDateTime startDate,
+			LocalDateTime endDate) {
 		Period period = null;
 		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-
-		String query = "SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName()
-				+ ".startDate<=\"" + startDate + "\"" + " AND " + TableName.PERIOD.getName() + ".endDate>=\"" + endDate
-				+ "\"";
+		String tableName = TableName.PERIOD.getName();
+		String query = "SELECT * FROM " + tableName + " WHERE " + tableName + ".calendarId=\"" + id + "\"" + " AND (\""
+				+ startDate + "\" BETWEEN " + tableName + ".startDate AND " + tableName + ".endDate) AND (\"" + endDate
+				+ "\" BETWEEN " + tableName + ".startDate AND " + tableName + ".endDate)";
 		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery(query, TableName.PERIOD.getName());
 		for (Object item : items) {
 			Period p = (Period) item;
@@ -376,18 +378,6 @@ public class CalendarResource {
 				}
 			}
 
-		}
-		return period;
-	}
-
-	private Period getReservationPeriod(Reservation reservation) {
-		CosmosDBLayer<?> dbLayerPeriod = CosmosDBLayer.getInstance(Period.class);
-		String query = "SELECT * FROM " + TableName.PERIOD.getName() + " WHERE " + TableName.PERIOD.getName() + ".id=\""
-				+ reservation.getPeriodId() + "\"";
-		CosmosPagedIterable<?> items = dbLayerPeriod.getItemsBySpecialQuery(query, TableName.PERIOD.getName());
-		Period period = null;
-		for (Object item : items) {
-			period = (Period) item;
 		}
 		return period;
 	}
