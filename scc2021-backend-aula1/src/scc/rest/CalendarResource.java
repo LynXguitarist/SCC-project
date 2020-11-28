@@ -297,34 +297,44 @@ public class CalendarResource {
 	@Path("/reservation/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Reservation getReservation(@PathParam("id") String id) {
-		Reservation reservation = null;
-		String key = id;
+	public List<Reservation> getReservationByPeriodId(@PathParam("id") String id) {
+		List<Reservation> reservations = new ArrayList<>();
+		String key = TableName.RESERVATION.getName() + id;
 		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
-		String cacheItem = new String();
+		List<String> cacheItem = new ArrayList<>();
+
 		if (hasCache)
-			cacheItem = RedisCache.getCache().getItemFromCache(key);
+			cacheItem = RedisCache.getCache().getListFromCache(key);
+
 		if (cacheItem.isEmpty() || !hasCache) { // calls the service
-			CosmosDBLayer<?> dbLayerReservation = CosmosDBLayer.getInstance(Reservation.class);
-			CosmosPagedIterable<?> items = dbLayerReservation.getItemById(id, TableName.RESERVATION.getName());
+			CosmosDBLayer<?> dbLayerRes = CosmosDBLayer.getInstance(Reservation.class);
+			String query = "SELECT * FROM " + TableName.RESERVATION.getName() + " WHERE " + TableName.RESERVATION.getName()
+					+ ".periodId=\"" + id + "\"";
+			CosmosPagedIterable<?> items = dbLayerRes.getItemsBySpecialQuery(query, TableName.RESERVATION.getName());
 			for (Object item : items) {
-				reservation = (Reservation) item;
+				Reservation res = (Reservation) item;
+				reservations.add(res);
 			}
-			if (reservation == null) {
+
+			if (reservations.isEmpty()) {
 				throw new WebApplicationException(Status.NOT_FOUND);
-			} else {
-				RedisCache.getCache().addItemToCache(reservation.getId(), reservation, 120);
+			} else if (hasCache) {
+				RedisCache.getCache().addListToCache(key, reservations, 120);
 			}
+
 		} else { // retrieves from cache
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				Reservation res = mapper.readValue(cacheItem, Reservation.class);
-				reservation = res;
-			} catch (JsonProcessingException e1) {
-				e1.printStackTrace();
+			for (String v : cacheItem) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Reservation p = mapper.readValue(v, Reservation.class);
+					reservations.add(p);
+				} catch (JsonProcessingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
-		return reservation;
+		return reservations;
 	}
 
 	// ---------------------------------AUX
