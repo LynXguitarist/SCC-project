@@ -308,7 +308,7 @@ public class AzureManagement {
 			final boolean CREATE_GEO_REPLICATION = Boolean.parseBoolean(AdvanceFeatures.getProperty("Geo-Replicated"));
 
 			// TODO: change your suffix and other names if you want
-			final String MY_SUFFIX = "41812-42764-50092"; // Add your suffix here
+			final String MY_SUFFIX = "afr"; // Add your suffix here
 			final String AZURE_COSMOSDB_NAME = "scc-groupBD" + MY_SUFFIX; // Cosmos DB account name
 			final String AZURE_COSMOSDB_DATABASE = "sccBD" + MY_SUFFIX; // Cosmos DB database name
 			final String[] BLOB_CONTAINERS = { "images" }; // Containers to add to the blob storage

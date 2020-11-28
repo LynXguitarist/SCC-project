@@ -1,7 +1,5 @@
-# Date : 11/3/20, 11:56 AM
-BlobStoreConnection=DefaultEndpointsProtocol=https;AccountName=sc42764;AccountKey=A/ACsdA6CYx4UrS0D2Z329z9AykGT2MJicbcxqPbH/fTnEXKVKxJLhE4csZyfsWKHZpLG4cchjspctwEMBq+oA==;EndpointSuffix=core.windows.net
-COSMOSDB_KEY=7Vp8kAIdWCueWcMkRNuBUcMoNu93VXj3HMEbdo0aT1TwXnstcUiOdYvunokuZ1P3cMJpxKQ4zAYmYbcd4NdKHw==
-COSMOSDB_URL=https://scc-group-db.documents.azure.com:443/
-COSMOSDB_DATABASE=sc42764Db
-REDIS_KEY=Nl31CTkaOIK3SsXUnbQzcWJwUM3jihjHvYwRZ2jYv2Y=
-REDIS_URL=scc-group-cache.redis.cache.windows.net
+# Date : 28/11/20, 21:27
+BlobStoreConnection=DefaultEndpointsProtocol=https;AccountName=sccstorewesteuropeafr;AccountKey=5oZpL5X+5jBC9tjewoiTZhSa1XMq95PWaH/gLsF5duX/j2avGwTdpklj3uSNIYA0GJAlyo/dp3sJGHwx5HBdHA==;EndpointSuffix=core.windows.net
+COSMOSDB_KEY=inKOxAByrFB0JxkWJSiKZ8gJKfEXEIrFATVcyfePwg0l1QhFFUgX5LgHx6EUwJR9gFd6PuhVJZLWJ2UfgZPHEw==
+COSMOSDB_URL=https://scc-groupbdafr.documents.azure.com:443/
+COSMOSDB_DATABASE=sccBDafr
