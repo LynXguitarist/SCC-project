@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 public class AzureProperties {
-	public static final String BLOB_KEY = "BLOB_KEY";
+	public static final String BLOB_KEY = "BlobStoreConnection";
 	public static final String COSMOSDB_KEY = "COSMOSDB_KEY";
 	public static final String COSMOSDB_URL = "COSMOSDB_URL";
 	public static final String COSMOSDB_DATABASE = "COSMOSDB_DATABASE";

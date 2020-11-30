@@ -15,6 +15,7 @@ import scc.functions.HttpFunction;
 import scc.rest.CalendarResource;
 import scc.rest.EntityResource;
 import scc.rest.ForumResource;
+import scc.rest.MediaResource;
 import scc.utils.InsecureHostnameVerifier;
 
 public class Server {
@@ -35,6 +36,7 @@ public class Server {
 		HttpsURLConnection.setDefaultHostnameVerifier(new InsecureHostnameVerifier());
 
 		ResourceConfig config = new ResourceConfig();
+		config.register(new MediaResource());
 		config.register(new EntityResource());
 		config.register(new CalendarResource());
 		config.register(new ForumResource());
