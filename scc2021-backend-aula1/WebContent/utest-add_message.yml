@@ -35,6 +35,6 @@ scenarios:
   weight: 1
   flow:
     - get:
-        url: "/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2"
+        url: "/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd"
         expect:
           statusCode: 204
