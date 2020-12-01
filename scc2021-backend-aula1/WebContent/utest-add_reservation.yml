@@ -1,0 +1,56 @@
+config:
+  target: http://localhost:8080/rest
+  plugins:
+    metrics-by-endpoint: {
+      }
+    expect: {
+      }
+  processor: ../test-utils.js
+  variables:
+    metricsProcessEndpoint: myProcessEndpoint
+  phases:
+  - duration: 30
+    arrivalCount: 30
+    name: "Upload period"
+  - duration: 30
+    arrivalCount: 30
+    name: "Getting periods"
+scenarios:
+- name: Upload reservation
+  weight: 1
+  flow:
+  - function: genNewEntity
+  - post:
+      url: /media
+      headers:
+        Content-Type: application/octet-stream
+        Accept: application/json
+      beforeRequest: reqPostMedia
+      capture:
+      - regexp: .*
+        as: imageId
+      expect:
+      - statusCode: 200
+  - post:
+      url: /calendar/reservation
+      headers:
+        Accept: application/json
+      json:
+        clientName: "{{ clientName }}"
+        startDate: "{{ startDate }}"
+        endDate: "{{ endDate }}"
+        periodId: "{{ periodId }}"
+      afterResponse: replyPostEntity
+      capture:
+        json: $.id
+        as: id
+      expect:
+      - statusCode: 204
+- name: Getting reservation
+  weight: 1
+  flow: 
+  - function: selectEntity
+  - get:
+     url: "/calendar/reservation"
+     expect: 
+       statusCode: 204 
