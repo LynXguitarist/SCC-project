@@ -1,0 +1,282 @@
+{
+  "aggregate": {
+    "timestamp": "2020-12-01T22:58:38.237Z",
+    "scenariosCreated": 30,
+    "scenariosCompleted": 0,
+    "requestsCompleted": 30,
+    "latency": {
+      "min": 702.8,
+      "max": 3861.9,
+      "median": 989.7,
+      "p95": 2593.2,
+      "p99": 3861.9
+    },
+    "rps": {
+      "count": 30,
+      "mean": 1
+    },
+    "scenarioDuration": {
+      "min": null,
+      "max": null,
+      "median": null,
+      "p95": null,
+      "p99": null
+    },
+    "scenarioCounts": {
+      "Reply to message": 30
+    },
+    "errors": {},
+    "codes": {
+      "204": 30
+    },
+    "matches": 0,
+    "customStats": {
+      "POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+        "min": 704,
+        "max": 3902,
+        "median": 991.5,
+        "p95": 2596,
+        "p99": 3902
+      }
+    },
+    "counters": {
+      "code 204 on POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 30
+    },
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Reply to message"
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2020-12-01T22:58:17.198Z",
+      "scenariosCreated": 9,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 9,
+      "latency": {
+        "min": 752.6,
+        "max": 3861.9,
+        "median": 1501.9,
+        "p95": 3861.9,
+        "p99": 3861.9
+      },
+      "rps": {
+        "count": 9,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
+      },
+      "scenarioCounts": {
+        "Reply to message": 9
+      },
+      "errors": {},
+      "codes": {
+        "204": 9
+      },
+      "matches": 0,
+      "latencies": [
+        1501878000,
+        2593205100,
+        752607600,
+        3861875400,
+        1044380800,
+        1753252500,
+        832698600,
+        1783643300,
+        869972000
+      ],
+      "customStats": {
+        "POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 754,
+          "max": 3902,
+          "median": 1506,
+          "p95": 3902,
+          "p99": 3902
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 9
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:58:27.195Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 703.3,
+        "max": 1703.8,
+        "median": 984.6,
+        "p95": 1703.8,
+        "p99": 1703.8
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
+      },
+      "scenarioCounts": {
+        "Reply to message": 10
+      },
+      "errors": {},
+      "codes": {
+        "204": 10
+      },
+      "matches": 0,
+      "latencies": [
+        1005424300,
+        978308400,
+        972626000,
+        1513267500,
+        703341100,
+        1633955400,
+        712493300,
+        1703782900,
+        795928600,
+        990824300
+      ],
+      "customStats": {
+        "POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 704,
+          "max": 1705,
+          "median": 986.5,
+          "p95": 1705,
+          "p99": 1705
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 10
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:58:37.196Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 702.8,
+        "max": 2204.8,
+        "median": 985.6,
+        "p95": 2204.8,
+        "p99": 2204.8
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
+      },
+      "scenarioCounts": {
+        "Reply to message": 10
+      },
+      "errors": {},
+      "codes": {
+        "204": 10
+      },
+      "matches": 0,
+      "latencies": [
+        954152300,
+        942567200,
+        988646900,
+        954500400,
+        1012990100,
+        982489700,
+        1022580500,
+        2204768900,
+        1626040500,
+        702760300
+      ],
+      "customStats": {
+        "POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 704,
+          "max": 2206,
+          "median": 986.5,
+          "p95": 2206,
+          "p99": 2206
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 10
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:58:38.216Z",
+      "scenariosCreated": 1,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 1,
+      "latency": {
+        "min": 981.9,
+        "max": 981.9,
+        "median": 981.9,
+        "p95": 981.9,
+        "p99": 981.9
+      },
+      "rps": {
+        "count": 1,
+        "mean": 0.98
+      },
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
+      },
+      "scenarioCounts": {
+        "Reply to message": 1
+      },
+      "errors": {},
+      "codes": {
+        "204": 1
+      },
+      "matches": 0,
+      "latencies": [
+        981907800
+      ],
+      "customStats": {
+        "POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 984,
+          "max": 984,
+          "median": 984,
+          "p95": 984,
+          "p99": 984
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}
