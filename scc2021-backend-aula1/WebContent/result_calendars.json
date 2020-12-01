@@ -1,0 +1,534 @@
+{
+  "aggregate": {
+    "timestamp": "2020-12-01T22:08:02.810Z",
+    "scenariosCreated": 60,
+    "scenariosCompleted": 25,
+    "requestsCompleted": 60,
+    "latency": {
+      "min": 170.5,
+      "max": 13708.6,
+      "median": 654.1,
+      "p95": 3579,
+      "p99": 13499.8
+    },
+    "rps": {
+      "count": 60,
+      "mean": 1
+    },
+    "scenarioDuration": {
+      "min": 173.3,
+      "max": 13713.6,
+      "median": 234.9,
+      "p95": 12146,
+      "p99": 13713.6
+    },
+    "scenarioCounts": {
+      "Upload calendar": 35,
+      "Get Calendars By EntityId": 25
+    },
+    "errors": {},
+    "codes": {
+      "200": 25,
+      "204": 35
+    },
+    "matches": 0,
+    "customStats": {
+      "POST:/rest/calendar": {
+        "min": 614,
+        "max": 4570,
+        "median": 696,
+        "p95": 2332.5,
+        "p99": 4570
+      },
+      "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+        "min": 172,
+        "max": 13713,
+        "median": 234,
+        "p95": 12144.8,
+        "p99": 13713
+      }
+    },
+    "counters": {
+      "code 204 on POST:/rest/calendar": 35,
+      "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 25
+    },
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Upload calendar"
+      },
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Get Calendars By EntityId"
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2020-12-01T22:07:11.720Z",
+      "scenariosCreated": 9,
+      "scenariosCompleted": 1,
+      "requestsCompleted": 7,
+      "latency": {
+        "min": 359.9,
+        "max": 4524.4,
+        "median": 778.6,
+        "p95": 4524.4,
+        "p99": 4524.4
+      },
+      "rps": {
+        "count": 9,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 362.5,
+        "max": 362.5,
+        "median": 362.5,
+        "p95": 362.5,
+        "p99": 362.5
+      },
+      "scenarioCounts": {
+        "Upload calendar": 6,
+        "Get Calendars By EntityId": 3
+      },
+      "errors": {},
+      "codes": {
+        "200": 1,
+        "204": 6
+      },
+      "matches": 0,
+      "latencies": [
+        4524364400,
+        2633567100,
+        778646100,
+        359867800,
+        694716200,
+        886663400,
+        654603400
+      ],
+      "customStats": {
+        "POST:/rest/calendar": {
+          "min": 656,
+          "max": 4570,
+          "median": 834,
+          "p95": 4570,
+          "p99": 4570
+        },
+        "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+          "min": 361,
+          "max": 361,
+          "median": 361,
+          "p95": 361,
+          "p99": 361
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/calendar": 6,
+        "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 1
+      },
+      "concurrency": 2,
+      "pendingRequests": 2,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:07:21.736Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 7,
+      "requestsCompleted": 12,
+      "latency": {
+        "min": 219.8,
+        "max": 13708.6,
+        "median": 673.4,
+        "p95": 13499.8,
+        "p99": 13708.6
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 222.9,
+        "max": 13713.6,
+        "median": 299.3,
+        "p95": 13713.6,
+        "p99": 13713.6
+      },
+      "scenarioCounts": {
+        "Upload calendar": 5,
+        "Get Calendars By EntityId": 5
+      },
+      "errors": {},
+      "codes": {
+        "200": 7,
+        "204": 5
+      },
+      "matches": 0,
+      "latencies": [
+        697866800,
+        295676600,
+        219847300,
+        247762400,
+        648959600,
+        241271900,
+        11621011200,
+        13708597100,
+        1387302300,
+        827086700,
+        395289600,
+        699301300
+      ],
+      "customStats": {
+        "POST:/rest/calendar": {
+          "min": 650,
+          "max": 1388,
+          "median": 701,
+          "p95": 1388,
+          "p99": 1388
+        },
+        "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+          "min": 222,
+          "max": 13713,
+          "median": 299,
+          "p95": 13713,
+          "p99": 13713
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/calendar": 5,
+        "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 7
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:07:31.721Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 4,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 217.1,
+        "max": 872.7,
+        "median": 663.8,
+        "p95": 872.7,
+        "p99": 872.7
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 221,
+        "max": 263.2,
+        "median": 240.2,
+        "p95": 263.2,
+        "p99": 263.2
+      },
+      "scenarioCounts": {
+        "Get Calendars By EntityId": 4,
+        "Upload calendar": 6
+      },
+      "errors": {},
+      "codes": {
+        "200": 4,
+        "204": 6
+      },
+      "matches": 0,
+      "latencies": [
+        251239300,
+        686860900,
+        661058800,
+        717985800,
+        694443800,
+        232180500,
+        242396200,
+        666517100,
+        217148800,
+        872729500
+      ],
+      "customStats": {
+        "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+          "min": 220,
+          "max": 254,
+          "median": 239,
+          "p95": 254,
+          "p99": 254
+        },
+        "POST:/rest/calendar": {
+          "min": 663,
+          "max": 874,
+          "median": 693,
+          "p95": 874,
+          "p99": 874
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 4,
+        "code 204 on POST:/rest/calendar": 6
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:07:41.732Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 5,
+      "requestsCompleted": 9,
+      "latency": {
+        "min": 170.5,
+        "max": 1423.4,
+        "median": 668.7,
+        "p95": 1423.4,
+        "p99": 1423.4
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 173.3,
+        "max": 1211.3,
+        "median": 266.6,
+        "p95": 1211.3,
+        "p99": 1211.3
+      },
+      "scenarioCounts": {
+        "Upload calendar": 5,
+        "Get Calendars By EntityId": 5
+      },
+      "errors": {},
+      "codes": {
+        "200": 5,
+        "204": 4
+      },
+      "matches": 0,
+      "latencies": [
+        263032500,
+        1423422400,
+        198074700,
+        673371900,
+        778938000,
+        1207413300,
+        423601200,
+        668657900,
+        170548000
+      ],
+      "customStats": {
+        "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+          "min": 172,
+          "max": 1210,
+          "median": 266,
+          "p95": 1210,
+          "p99": 1210
+        },
+        "POST:/rest/calendar": {
+          "min": 670,
+          "max": 1425,
+          "median": 728,
+          "p95": 1425,
+          "p99": 1425
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 5,
+        "code 204 on POST:/rest/calendar": 4
+      },
+      "concurrency": 1,
+      "pendingRequests": 1,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:07:51.727Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 5,
+      "requestsCompleted": 11,
+      "latency": {
+        "min": 172.5,
+        "max": 1307.2,
+        "median": 631.5,
+        "p95": 1295.6,
+        "p99": 1307.2
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 176.3,
+        "max": 222,
+        "median": 193.8,
+        "p95": 222,
+        "p99": 222
+      },
+      "scenarioCounts": {
+        "Upload calendar": 5,
+        "Get Calendars By EntityId": 5
+      },
+      "errors": {},
+      "codes": {
+        "200": 5,
+        "204": 6
+      },
+      "matches": 0,
+      "latencies": [
+        1075104700,
+        1307189200,
+        933978700,
+        631453600,
+        653533100,
+        655591800,
+        219586900,
+        178155700,
+        190588100,
+        172498600,
+        200274400
+      ],
+      "customStats": {
+        "POST:/rest/calendar": {
+          "min": 633,
+          "max": 1309,
+          "median": 795.5,
+          "p95": 1309,
+          "p99": 1309
+        },
+        "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+          "min": 175,
+          "max": 221,
+          "median": 193,
+          "p95": 221,
+          "p99": 221
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/calendar": 6,
+        "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 5
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:08:01.731Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 3,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 172.2,
+        "max": 817,
+        "median": 633.9,
+        "p95": 817,
+        "p99": 817
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 175.8,
+        "max": 216.8,
+        "median": 201.1,
+        "p95": 216.8,
+        "p99": 216.8
+      },
+      "scenarioCounts": {
+        "Get Calendars By EntityId": 3,
+        "Upload calendar": 7
+      },
+      "errors": {},
+      "codes": {
+        "200": 3,
+        "204": 7
+      },
+      "matches": 0,
+      "latencies": [
+        172226000,
+        816993100,
+        660666200,
+        214428000,
+        625614400,
+        642119700,
+        612933800,
+        672169700,
+        197882000,
+        646955400
+      ],
+      "customStats": {
+        "GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": {
+          "min": 175,
+          "max": 216,
+          "median": 200,
+          "p95": 216,
+          "p99": 216
+        },
+        "POST:/rest/calendar": {
+          "min": 614,
+          "max": 818,
+          "median": 648,
+          "p95": 818,
+          "p99": 818
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e": 3,
+        "code 204 on POST:/rest/calendar": 7
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:08:02.764Z",
+      "scenariosCreated": 1,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 1,
+      "latency": {
+        "min": 635.2,
+        "max": 635.2,
+        "median": 635.2,
+        "p95": 635.2,
+        "p99": 635.2
+      },
+      "rps": {
+        "count": 1,
+        "mean": 0.97
+      },
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
+      },
+      "scenarioCounts": {
+        "Upload calendar": 1
+      },
+      "errors": {},
+      "codes": {
+        "204": 1
+      },
+      "matches": 0,
+      "latencies": [
+        635186400
+      ],
+      "customStats": {
+        "POST:/rest/calendar": {
+          "min": 638,
+          "max": 638,
+          "median": 638,
+          "p95": 638,
+          "p99": 638
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/calendar": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}

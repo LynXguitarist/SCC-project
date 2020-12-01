@@ -1,5 +1,5 @@
 config:
-  target: http://localhost:8080/rest
+  target: https://scc-project-tls.azurewebsites.net/rest
   plugins:
     metrics-by-endpoint: {
       }
