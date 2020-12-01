@@ -24,9 +24,9 @@ scenarios:
       headers:
         Accept: application/json
       json:
-        name: "{{ name1 }}"
-        description: "{{ description1 }}"
-        ownerId: "1a84b54d-3342-4dbd-8552-b6fcb840358c"
+        name: "name1"
+        description: "description1"
+        ownerId: "ef9bb13c-ab43-432e-a78e-ec468046329e"
       capture:
         json: $.id
         as: calendarId
@@ -36,6 +36,6 @@ scenarios:
   weight: 1
   flow:
     - get:
-        url: "/calendar/entities/1a84b54d-3342-4dbd-8552-b6fcb840358c"
+        url: "/calendar/entities/ef9bb13c-ab43-432e-a78e-ec468046329e"
         expect:
           statusCode: 204
