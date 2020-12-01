@@ -11,10 +11,24 @@ config:
   phases:
   - duration: 30
     arrivalCount: 30
-    name: "Add message"
-
+    name: "Entity does not exist"
+  - duration: 30
+    arrivalCount: 30
+    name: "Create forum"
 scenarios:
-- name: Add message
+- name: Entity does not exist
+  weight: 1
+  flow:
+  - function: genNewMessage
+  - post:
+      url: /forum
+      headers:
+        Accept: application/json
+      json:
+        ownerId: "fake"
+      expect:
+      - statusCode: 409
+- name: Create forum
   weight: 1
   flow:
     - post:
@@ -36,13 +50,6 @@ scenarios:
         expect:
         - statusCode: 204
     - get:
-        url: "/forum/message/{{ forumId }}"
-        headers:
-          Accept: application/json
-          json:
-            msg: "{{ msg }}"
-        capture:
-          json: $.id
-          as: forumId
+        url: "/forum/{{ forumId }}"
         expect:
           statusCode: 204
