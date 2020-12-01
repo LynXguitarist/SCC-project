@@ -20,15 +20,14 @@ scenarios:
 - name: Add message
   weight: 1
   flow:
-    - function: genNewMessage
     - put:
         url: "/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2"
         headers:
           Accept: application/json
           json:
-            msg: "{{ msg }}"
-            forumId: "{{ forumId }}"
-            sender: "{{ fromWho }}"
+            msg: "Isto é uma mensagem"
+            forumId: "ceb56dc9-34dd-4a27-bd7b-6df88da977d2"
+            sender: "Alberto"
         expect:
           statusCode: 204
 - name: Get message

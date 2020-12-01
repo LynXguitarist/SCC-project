@@ -24,7 +24,6 @@ scenarios:
             Accept: application/json
           json:
             entityId: "c5f6213a-9198-4a9c-82df-40365f0ec797"
-            fromWho: "Alberto"
             replyToId: "Ok"
           capture: 
             - json: '$.id'
