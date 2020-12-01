@@ -1,5 +1,5 @@
 config:
-  target: http://localhost:8080/rest
+  target: https://scc-project-tls.azurewebsites.net/rest
   plugins:
     metrics-by-endpoint: {
       }
@@ -26,7 +26,6 @@ scenarios:
           Accept: application/json
           json:
             msg: "Isto é uma mensagem"
-            forumId: "ceb56dc9-34dd-4a27-bd7b-6df88da977d2"
             sender: "Alberto"
         expect:
           statusCode: 204
