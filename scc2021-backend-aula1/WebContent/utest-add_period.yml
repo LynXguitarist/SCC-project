@@ -12,9 +12,6 @@ config:
   - duration: 30
     arrivalCount: 30
     name: "Upload period"
-  - duration: 30
-    arrivalCount: 30
-    name: "Getting periods"
 scenarios:
 - name: Upload period
   weight: 1
@@ -32,13 +29,40 @@ scenarios:
       expect:
       - statusCode: 200
   - post:
+      url: /entity
+      headers:
+        Accept: application/json
+      json:
+        name: "{{ name1 }}"
+        description: "{{ description1 }}"
+      afterResponse: replyPostEntity
+      capture:
+        json: $.id
+        as: ownerId
+      expect:
+      - statusCode: 204
+  - post:
+      url: /calendar
+      headers:
+        Accept: application/json
+      json:
+        name: "{{ name1 }}"
+        description: "{{ description1 }}"
+        ownerId: "{{ ownerId }}"
+      afterResponse: replyPostEntity
+      capture:
+        json: $.id
+        as: calendarId
+      expect:
+      - statusCode: 204
+  - post:
       url: /calendar/period
       headers:
         Accept: application/json
       json:
         name: "{{ name }}"
-        startDate: "{{ startDate }}"
-        endDate: "{{ endDate }}"
+        startDate: "{{ 2020-12-10T15:00 }}"
+        endDate: "{{ 2020-12-15T15:00 }}"
         calendarId: "{{ calendarId }}"
       afterResponse: replyPostEntity
       capture:
@@ -46,11 +70,7 @@ scenarios:
         as: id
       expect:
       - statusCode: 204
-- name: Getting period
-  weight: 1
-  flow: 
-  - function: selectEntity
   - get:
-     url: "/calendar/period"
-     expect: 
-       statusCode: 204 
+        url: "/period/{{ calendarId }}"
+        expect:
+          statusCode: 204

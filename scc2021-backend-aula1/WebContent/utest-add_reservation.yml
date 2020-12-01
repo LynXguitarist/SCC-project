@@ -11,10 +11,7 @@ config:
   phases:
   - duration: 30
     arrivalCount: 30
-    name: "Upload period"
-  - duration: 30
-    arrivalCount: 30
-    name: "Getting periods"
+    name: "Upload Reservation"
 scenarios:
 - name: Upload reservation
   weight: 1
@@ -32,25 +29,63 @@ scenarios:
       expect:
       - statusCode: 200
   - post:
-      url: /calendar/reservation
+      url: /entity
+      headers:
+        Accept: application/json
+      json:
+        name: "{{ name1 }}"
+        description: "{{ description1 }}"
+      afterResponse: replyPostEntity
+      capture:
+        json: $.id
+        as: ownerId
+      expect:
+      - statusCode: 204
+  - post:
+      url: /calendar
+      headers:
+        Accept: application/json
+      json:
+        name: "{{ name1 }}"
+        description: "{{ description1 }}"
+        ownerId: "{{ ownerId }}"
+      afterResponse: replyPostEntity
+      capture:
+        json: $.id
+        as: calendarId
+      expect:
+      - statusCode: 204
+  - post:
+      url: /calendar/period
+      headers:
+        Accept: application/json
+      json:
+        name: "{{ name }}"
+        startDate: "{{ 2020-12-10T15:00 }}"
+        endDate: "{{ 2020-12-15T15:00 }}"
+        calendarId: "{{ calendarId }}"
+      afterResponse: replyPostEntity
+      capture:
+        json: $.id
+        as: periodId
+      expect:
+      - statusCode: 204
+  - post:
+      url: /calendar/reservation/"{{ calendarId }}"
       headers:
         Accept: application/json
       json:
         clientName: "{{ clientName }}"
-        startDate: "{{ startDate }}"
-        endDate: "{{ endDate }}"
+        startDate: "{{ 2020-12-10T15:30 }}"
+        endDate: "{{ 2020-12-11T15:00 }}"
         periodId: "{{ periodId }}"
       afterResponse: replyPostEntity
       capture:
         json: $.id
-        as: id
+        as: reservationId
       expect:
       - statusCode: 204
-- name: Getting reservation
-  weight: 1
-  flow: 
-  - function: selectEntity
   - get:
-     url: "/calendar/reservation"
+     url: "/calendar/reservation/{{ periodId }}"
      expect: 
        statusCode: 204 
