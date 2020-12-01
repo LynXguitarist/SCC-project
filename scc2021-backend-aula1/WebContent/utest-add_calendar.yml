@@ -12,35 +12,13 @@ config:
   - duration: 30
     arrivalCount: 30
     name: "Upload calendar"
+  - duration: 30
+    arrivalCount: 30
+    name: "Get Calendars By EntityId"
 scenarios:
 - name: Upload calendar
   weight: 1
   flow:
-  - function: genNewEntity
-  - post:
-      url: /media
-      headers:
-        Content-Type: application/octet-stream
-        Accept: application/json
-      beforeRequest: reqPostMedia
-      capture:
-      - regexp: .*
-        as: imageId
-      expect:
-      - statusCode: 200
-  - post:
-      url: /entity
-      headers:
-        Accept: application/json
-      json:
-        name: "{{ name1 }}"
-        description: "{{ description1 }}"
-      afterResponse: replyPostEntity
-      capture:
-        json: $.id
-        as: ownerId
-      expect:
-      - statusCode: 204
   - post:
       url: /calendar
       headers:
@@ -48,18 +26,16 @@ scenarios:
       json:
         name: "{{ name1 }}"
         description: "{{ description1 }}"
-        ownerId: "{{ ownerId }}"
-      afterResponse: replyPostEntity
+        ownerId: "1a84b54d-3342-4dbd-8552-b6fcb840358c"
       capture:
         json: $.id
         as: calendarId
       expect:
       - statusCode: 204
-  - get:
-        url: "/calendar/{{ calendarId }}"
-        expect:
-          statusCode: 204
-  - get:
-        url: "/calendar/entities/{{ entityId }}"
+- name: Get Calendars By EntityId
+  weight: 1
+  flow:
+    - get:
+        url: "/calendar/entities/1a84b54d-3342-4dbd-8552-b6fcb840358c"
         expect:
           statusCode: 204

@@ -12,80 +12,32 @@ config:
   - duration: 30
     arrivalCount: 30
     name: "Upload Reservation"
+  - duration: 30
+    arrivalCount: 30
+    name: "Get Reservations By PeriodId"
 scenarios:
 - name: Upload reservation
   weight: 1
   flow:
-  - function: genNewEntity
   - post:
-      url: /media
-      headers:
-        Content-Type: application/octet-stream
-        Accept: application/json
-      beforeRequest: reqPostMedia
-      capture:
-      - regexp: .*
-        as: imageId
-      expect:
-      - statusCode: 200
-  - post:
-      url: /entity
-      headers:
-        Accept: application/json
-      json:
-        name: "{{ name1 }}"
-        description: "{{ description1 }}"
-      afterResponse: replyPostEntity
-      capture:
-        json: $.id
-        as: ownerId
-      expect:
-      - statusCode: 204
-  - post:
-      url: /calendar
-      headers:
-        Accept: application/json
-      json:
-        name: "{{ name1 }}"
-        description: "{{ description1 }}"
-        ownerId: "{{ ownerId }}"
-      afterResponse: replyPostEntity
-      capture:
-        json: $.id
-        as: calendarId
-      expect:
-      - statusCode: 204
-  - post:
-      url: /calendar/period
-      headers:
-        Accept: application/json
-      json:
-        name: "{{ name }}"
-        startDate: "{{ 2020-12-10T15:00 }}"
-        endDate: "{{ 2020-12-15T15:00 }}"
-        calendarId: "{{ calendarId }}"
-      afterResponse: replyPostEntity
-      capture:
-        json: $.id
-        as: periodId
-      expect:
-      - statusCode: 204
-  - post:
-      url: /calendar/reservation/"{{ calendarId }}"
+      url: "/calendar/reservation/19ac9a3e-f6fe-4a1a-83a4-82bf73589425"
       headers:
         Accept: application/json
       json:
         clientName: "{{ clientName }}"
-        startDate: "{{ 2020-12-10T15:30 }}"
-        endDate: "{{ 2020-12-11T15:00 }}"
-        periodId: "{{ periodId }}"
+        startDate: "2020-12-10T15:30"
+        endDate: "2020-12-11T15:00"
+        periodId: "periodId"
       afterResponse: replyPostEntity
       capture:
         json: $.id
         as: reservationId
       expect:
-      - statusCode: 204
-  - get:
-     url: "/calendar/reservation/{{ periodId }}"
-     expect: 
-       statusCode: 204 
+      - statusCode: 204 
+- name: Get Reservations By PeriodId
+  weight: 1
+  flow:
+    - get:
+        url: "/calendar/reservation/b0db72ed-ac53-4810-ac6d-ca0726237ee9"
+        expect:
+          statusCode: 204
