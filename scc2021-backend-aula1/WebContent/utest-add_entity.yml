@@ -9,14 +9,16 @@ config:
   variables:
     metricsProcessEndpoint: myProcessEndpoint
   phases:
-  - duration: 30
+  - name: "Creating"
+    duration: 30
     arrivalCount: 30
-    name: "Upload entity"
-  - duration: 30
+    
+  - name: "Getting"
+    duration: 30
     arrivalCount: 30
-    name: "Getting entities"
+    
 scenarios:
-- name: Upload entity
+- name: 'Upload entity'
   weight: 1
   flow:
   - function: genNewEntity
@@ -44,7 +46,8 @@ scenarios:
         as: id
       expect:
       - statusCode: 204
-- name: Getting entity
+      
+- name: 'Getting entities'
   weight: 1
   flow: 
   - function: selectEntity
