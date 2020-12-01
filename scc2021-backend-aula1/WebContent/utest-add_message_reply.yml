@@ -1,8 +1,7 @@
 # Unit test using artillery
 # Test: post message to entity; get message
 config:
-#  target: 'http://localhost:8080/scc2021-backend-solved'
-  target: 'https://sccappwesteurope4204.azurewebsites.net'
+  target: http://localhost:8080/rest
   plugins:
     metrics-by-endpoint: {}
     expect: {}
@@ -10,35 +9,26 @@ config:
   variables:
      metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
   phases:
-  - duration: 1
-    arrivalCount: 1 
- 
+  - duration: 30
+    arrivalCount: 30
+    name: "Reply to message"
 
 scenarios:
-  - flow:
-      - function: "selectEntity"
-      - get:
-          url: "/forum/{{ entityId }}?start=0&count=10" # List last 10 messages for the given entity
-          headers:
-            Accept: application/json
-          afterResponse: "selectMsgFromList"            
-          expect:
-            - statusCode: 200
-          ifTrue: "entityId"
-      - function: "genNewMessageReply"
+  - name: Reply to message
+    weight: 1
+    flow:
+
       - post:
-          url: "/forum"
+          url: "/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2/9e8f3a15-109b-4a67-b99b-e9990e94fecd"
           headers:
             Accept: application/json
           json:
-            entityId: "{{ entityId }}"
-            fromWho: "{{ fromWho }}"
-            msg: "{{ msg }}"
-            replyToId: "{{ replyToId }}"
+            entityId: "c5f6213a-9198-4a9c-82df-40365f0ec797"
+            fromWho: "Alberto"
+            replyToId: "Ok"
           capture: 
             - json: '$.id'
               as: "msgId"
           expect:
-            - statusCode: 200
-          ifTrue: "replyToId"
+            - statusCode: 204
 
