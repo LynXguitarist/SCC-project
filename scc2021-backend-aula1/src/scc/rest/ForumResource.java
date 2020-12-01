@@ -156,25 +156,6 @@ public class ForumResource {
             } catch (CosmosException e) {
                 throw new WebApplicationException(Response.Status.CONFLICT);
             }
-
-            if (forumMessageExists(messageId)) {
-                String[] arr = forum.getMessageIds();
-
-                List<String> arrlist = new ArrayList<String>(Arrays.asList(arr));
-                arrlist.add(messageId);
-
-                arr = arrlist.toArray(arr);
-
-                forum.setMessages(arr);
-
-                CosmosDBLayer<?> dbLayerForum = CosmosDBLayer.getInstance(Forum.class);
-
-                try {
-                    dbLayerForum.putItem(forumId, forum, TableName.FORUM.getName());
-                } catch (CosmosException e) {
-                    throw new WebApplicationException(Response.Status.NOT_FOUND);
-                }
-            }
         } else {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -326,11 +307,6 @@ public class ForumResource {
             return false;
         else {
             return true;
-//            if (forumMessage.getReply() == null || !forumMessage.getReply().equals("")) {
-//                return true;
-//            } else {
-//                return false;
-//            }
         }
     }
 
