@@ -12,6 +12,7 @@ config:
   - duration: 30
     arrivalCount: 30
     name: "Entity does not exist"
+    
   - duration: 30
     arrivalCount: 30
     name: "Create forum"
@@ -30,24 +31,18 @@ scenarios:
         ownerId: "fake"
       expect:
       - statusCode: 409
-- name: Create forum
-  weight: 1
-  flow:
-    - post:
-        url: "/forum"
+  - post:
+        url: /forum
         headers:
             Accept: application/json
         json:
             ownerId: "c5f6213a-9198-4a9c-82df-40365f0ec797"
-        capture:
-          json: $.id
-          as: forumId
         expect:
         - statusCode: 204
-- name: Get forum
+- name: Get forums
   weight: 1
   flow:
     - get:
-        url: "/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2"
+        url: '/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2'
         expect:
           statusCode: 204
