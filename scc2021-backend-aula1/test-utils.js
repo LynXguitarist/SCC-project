@@ -154,8 +154,6 @@ function genNewMessage(context, events, done) {
 	loadData();
 	if( entityIds.length > 0) {
 		context.vars.entityId = entityIds.sample()
-		context.vars.fromWho = `${Faker.name.firstName()} ${Faker.name.lastName()}`
-		context.vars.msg = `${Faker.lorem.paragraph()}`
 		delete context.vars.replyToId
 	} else {
 		delete context.vars.entityId
