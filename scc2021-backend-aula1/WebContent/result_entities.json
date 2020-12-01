@@ -1,0 +1,622 @@
+{
+  "aggregate": {
+    "timestamp": "2020-12-01T20:33:02.645Z",
+    "scenariosCreated": 60,
+    "scenariosCompleted": 29,
+    "requestsCompleted": 91,
+    "latency": {
+      "min": 73.5,
+      "max": 984.8,
+      "median": 306.2,
+      "p95": 528.2,
+      "p99": 856.9
+    },
+    "rps": {
+      "count": 91,
+      "mean": 1.51
+    },
+    "scenarioDuration": {
+      "min": 295.2,
+      "max": 333,
+      "median": 314.3,
+      "p95": 332.7,
+      "p99": 333
+    },
+    "scenarioCounts": {
+      "Upload entity": 31,
+      "Getting entities": 29
+    },
+    "errors": {},
+    "codes": {
+      "404": 91
+    },
+    "matches": 0,
+    "customStats": {
+      "POST:/rest/media": {
+        "min": 370,
+        "max": 987,
+        "median": 467,
+        "p95": 716.7,
+        "p99": 987
+      },
+      "POST:/rest/entity": {
+        "min": 76,
+        "max": 108,
+        "median": 83,
+        "p95": 107.2,
+        "p99": 108
+      },
+      "GET:/rest/entity": {
+        "min": 288,
+        "max": 328,
+        "median": 308,
+        "p95": 328,
+        "p99": 328
+      }
+    },
+    "counters": {
+      "code 404 on POST:/rest/media": 31,
+      "code 404 on POST:/rest/entity": 31,
+      "code 404 on GET:/rest/entity": 29
+    },
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "name": "Creating",
+        "duration": 30,
+        "arrivalCount": 30
+      },
+      {
+        "name": "Getting",
+        "duration": 30,
+        "arrivalCount": 30
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2020-12-01T20:32:11.550Z",
+      "scenariosCreated": 9,
+      "scenariosCompleted": 6,
+      "requestsCompleted": 12,
+      "latency": {
+        "min": 75.9,
+        "max": 672.9,
+        "median": 300.6,
+        "p95": 653.4,
+        "p99": 672.9
+      },
+      "rps": {
+        "count": 12,
+        "mean": 1.34
+      },
+      "scenarioDuration": {
+        "min": 295.6,
+        "max": 330,
+        "median": 313.3,
+        "p95": 330,
+        "p99": 330
+      },
+      "scenarioCounts": {
+        "Upload entity": 3,
+        "Getting entities": 6
+      },
+      "errors": {},
+      "codes": {
+        "404": 12
+      },
+      "matches": 0,
+      "latencies": [
+        672873400,
+        86474400,
+        305905500,
+        367652700,
+        75926300,
+        320596200,
+        295111500,
+        295354000,
+        288424800,
+        478050300,
+        85762800,
+        319239500
+      ],
+      "customStats": {
+        "POST:/rest/media": {
+          "min": 370,
+          "max": 723,
+          "median": 480,
+          "p95": 723,
+          "p99": 723
+        },
+        "POST:/rest/entity": {
+          "min": 79,
+          "max": 91,
+          "median": 88,
+          "p95": 91,
+          "p99": 91
+        },
+        "GET:/rest/entity": {
+          "min": 290,
+          "max": 323,
+          "median": 304.5,
+          "p95": 323,
+          "p99": 323
+        }
+      },
+      "counters": {
+        "code 404 on POST:/rest/media": 3,
+        "code 404 on POST:/rest/entity": 3,
+        "code 404 on GET:/rest/entity": 6
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T20:32:21.538Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 2,
+      "requestsCompleted": 18,
+      "latency": {
+        "min": 74.2,
+        "max": 498.4,
+        "median": 318,
+        "p95": 492.7,
+        "p99": 498.4
+      },
+      "rps": {
+        "count": 18,
+        "mean": 1.81
+      },
+      "scenarioDuration": {
+        "min": 325.3,
+        "max": 327.7,
+        "median": 326.5,
+        "p95": 327.7,
+        "p99": 327.7
+      },
+      "scenarioCounts": {
+        "Upload entity": 8,
+        "Getting entities": 2
+      },
+      "errors": {},
+      "codes": {
+        "404": 18
+      },
+      "matches": 0,
+      "latencies": [
+        461301400,
+        79631800,
+        452240100,
+        75795200,
+        484125300,
+        84679100,
+        461908200,
+        106109500,
+        446293800,
+        76452000,
+        498432600,
+        74249000,
+        464416000,
+        85588400,
+        438504200,
+        76042900,
+        320515600,
+        315492400
+      ],
+      "customStats": {
+        "POST:/rest/media": {
+          "min": 440,
+          "max": 502,
+          "median": 465,
+          "p95": 502,
+          "p99": 502
+        },
+        "POST:/rest/entity": {
+          "min": 77,
+          "max": 108,
+          "median": 81,
+          "p95": 108,
+          "p99": 108
+        },
+        "GET:/rest/entity": {
+          "min": 318,
+          "max": 322,
+          "median": 320,
+          "p95": 322,
+          "p99": 322
+        }
+      },
+      "counters": {
+        "code 404 on POST:/rest/media": 8,
+        "code 404 on POST:/rest/entity": 8,
+        "code 404 on GET:/rest/entity": 2
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T20:32:31.541Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 5,
+      "requestsCompleted": 15,
+      "latency": {
+        "min": 74.2,
+        "max": 528.9,
+        "median": 299.3,
+        "p95": 516.4,
+        "p99": 528.9
+      },
+      "rps": {
+        "count": 15,
+        "mean": 1.5
+      },
+      "scenarioDuration": {
+        "min": 297.6,
+        "max": 317.8,
+        "median": 309.3,
+        "p95": 317.8,
+        "p99": 317.8
+      },
+      "scenarioCounts": {
+        "Getting entities": 5,
+        "Upload entity": 5
+      },
+      "errors": {},
+      "codes": {
+        "404": 15
+      },
+      "matches": 0,
+      "latencies": [
+        310368600,
+        296198700,
+        299344000,
+        528945700,
+        74199900,
+        303580900,
+        393782800,
+        75593400,
+        290669300,
+        478721800,
+        77198600,
+        408649900,
+        86249600,
+        467767800,
+        80245200
+      ],
+      "customStats": {
+        "GET:/rest/entity": {
+          "min": 292,
+          "max": 312,
+          "median": 301,
+          "p95": 312,
+          "p99": 312
+        },
+        "POST:/rest/media": {
+          "min": 397,
+          "max": 531,
+          "median": 471,
+          "p95": 531,
+          "p99": 531
+        },
+        "POST:/rest/entity": {
+          "min": 77,
+          "max": 89,
+          "median": 81,
+          "p95": 89,
+          "p99": 89
+        }
+      },
+      "counters": {
+        "code 404 on GET:/rest/entity": 5,
+        "code 404 on POST:/rest/media": 5,
+        "code 404 on POST:/rest/entity": 5
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T20:32:41.558Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 5,
+      "requestsCompleted": 15,
+      "latency": {
+        "min": 75.4,
+        "max": 984.8,
+        "median": 307.2,
+        "p95": 887.5,
+        "p99": 984.8
+      },
+      "rps": {
+        "count": 15,
+        "mean": 1.5
+      },
+      "scenarioDuration": {
+        "min": 303.8,
+        "max": 326.9,
+        "median": 314.3,
+        "p95": 326.9,
+        "p99": 326.9
+      },
+      "scenarioCounts": {
+        "Getting entities": 5,
+        "Upload entity": 5
+      },
+      "errors": {},
+      "codes": {
+        "404": 15
+      },
+      "matches": 0,
+      "latencies": [
+        316143100,
+        984831300,
+        76528400,
+        595546200,
+        75445100,
+        294680100,
+        409601100,
+        78598800,
+        307173200,
+        513141200,
+        87013100,
+        317652500,
+        476158100,
+        83400000,
+        305867400
+      ],
+      "customStats": {
+        "GET:/rest/entity": {
+          "min": 297,
+          "max": 319,
+          "median": 309,
+          "p95": 319,
+          "p99": 319
+        },
+        "POST:/rest/media": {
+          "min": 412,
+          "max": 987,
+          "median": 515,
+          "p95": 987,
+          "p99": 987
+        },
+        "POST:/rest/entity": {
+          "min": 78,
+          "max": 89,
+          "median": 82,
+          "p95": 89,
+          "p99": 89
+        }
+      },
+      "counters": {
+        "code 404 on GET:/rest/entity": 5,
+        "code 404 on POST:/rest/media": 5,
+        "code 404 on POST:/rest/entity": 5
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T20:32:51.552Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 5,
+      "requestsCompleted": 15,
+      "latency": {
+        "min": 73.5,
+        "max": 488.5,
+        "median": 306.2,
+        "p95": 479.6,
+        "p99": 488.5
+      },
+      "rps": {
+        "count": 15,
+        "mean": 1.5
+      },
+      "scenarioDuration": {
+        "min": 308.7,
+        "max": 332.7,
+        "median": 313.2,
+        "p95": 332.7,
+        "p99": 332.7
+      },
+      "scenarioCounts": {
+        "Upload entity": 5,
+        "Getting entities": 5
+      },
+      "errors": {},
+      "codes": {
+        "404": 15
+      },
+      "matches": 0,
+      "latencies": [
+        452986300,
+        73502500,
+        298437600,
+        316908100,
+        306239300,
+        425184800,
+        75515600,
+        437584300,
+        104944600,
+        400989300,
+        80570600,
+        305571600,
+        325788900,
+        488526400,
+        83180900
+      ],
+      "customStats": {
+        "POST:/rest/media": {
+          "min": 403,
+          "max": 490,
+          "median": 439,
+          "p95": 490,
+          "p99": 490
+        },
+        "POST:/rest/entity": {
+          "min": 76,
+          "max": 108,
+          "median": 83,
+          "p95": 108,
+          "p99": 108
+        },
+        "GET:/rest/entity": {
+          "min": 301,
+          "max": 328,
+          "median": 308,
+          "p95": 328,
+          "p99": 328
+        }
+      },
+      "counters": {
+        "code 404 on POST:/rest/media": 5,
+        "code 404 on POST:/rest/entity": 5,
+        "code 404 on GET:/rest/entity": 5
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T20:33:01.569Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 6,
+      "requestsCompleted": 14,
+      "latency": {
+        "min": 74.5,
+        "max": 532.2,
+        "median": 315.5,
+        "p95": 525.8,
+        "p99": 532.2
+      },
+      "rps": {
+        "count": 14,
+        "mean": 1.4
+      },
+      "scenarioDuration": {
+        "min": 295.2,
+        "max": 333,
+        "median": 322.4,
+        "p95": 333,
+        "p99": 333
+      },
+      "scenarioCounts": {
+        "Upload entity": 4,
+        "Getting entities": 6
+      },
+      "errors": {},
+      "codes": {
+        "404": 14
+      },
+      "matches": 0,
+      "latencies": [
+        486752000,
+        74453800,
+        315228800,
+        443282000,
+        80292800,
+        286006200,
+        319969300,
+        315754300,
+        500160200,
+        75312000,
+        532247800,
+        85841200,
+        325582600,
+        304971200
+      ],
+      "customStats": {
+        "POST:/rest/media": {
+          "min": 446,
+          "max": 534,
+          "median": 497,
+          "p95": 534,
+          "p99": 534
+        },
+        "POST:/rest/entity": {
+          "min": 77,
+          "max": 88,
+          "median": 80.5,
+          "p95": 88,
+          "p99": 88
+        },
+        "GET:/rest/entity": {
+          "min": 288,
+          "max": 328,
+          "median": 317.5,
+          "p95": 328,
+          "p99": 328
+        }
+      },
+      "counters": {
+        "code 404 on POST:/rest/media": 4,
+        "code 404 on POST:/rest/entity": 4,
+        "code 404 on GET:/rest/entity": 6
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T20:33:02.600Z",
+      "scenariosCreated": 1,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 2,
+      "latency": {
+        "min": 83,
+        "max": 423.9,
+        "median": 253.5,
+        "p95": 423.9,
+        "p99": 423.9
+      },
+      "rps": {
+        "count": 2,
+        "mean": 1.98
+      },
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
+      },
+      "scenarioCounts": {
+        "Upload entity": 1
+      },
+      "errors": {},
+      "codes": {
+        "404": 2
+      },
+      "matches": 0,
+      "latencies": [
+        423886400,
+        83031400
+      ],
+      "customStats": {
+        "POST:/rest/media": {
+          "min": 427,
+          "max": 427,
+          "median": 427,
+          "p95": 427,
+          "p99": 427
+        },
+        "POST:/rest/entity": {
+          "min": 85,
+          "max": 85,
+          "median": 85,
+          "p95": 85,
+          "p99": 85
+        }
+      },
+      "counters": {
+        "code 404 on POST:/rest/media": 1,
+        "code 404 on POST:/rest/entity": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}
