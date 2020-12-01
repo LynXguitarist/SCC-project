@@ -1,0 +1,776 @@
+{
+  "aggregate": {
+    "timestamp": "2020-12-01T22:54:39.230Z",
+    "scenariosCreated": 90,
+    "scenariosCompleted": 90,
+    "requestsCompleted": 90,
+    "latency": {
+      "min": 150.3,
+      "max": 5477.9,
+      "median": 263,
+      "p95": 1993.2,
+      "p99": 5156.3
+    },
+    "rps": {
+      "count": 90,
+      "mean": 1.01
+    },
+    "scenarioDuration": {
+      "min": 151.9,
+      "max": 5518.5,
+      "median": 265,
+      "p95": 2003.1,
+      "p99": 5183.2
+    },
+    "scenarioCounts": {
+      "Get forum": 35,
+      "Create forum": 24,
+      "Entity does not exist": 31
+    },
+    "errors": {},
+    "codes": {
+      "200": 35,
+      "204": 24,
+      "409": 31
+    },
+    "matches": 0,
+    "customStats": {
+      "POST:/rest/forum": {
+        "min": 151,
+        "max": 4679,
+        "median": 565,
+        "p95": 1773.8,
+        "p99": 4580.3
+      },
+      "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+        "min": 212,
+        "max": 5517,
+        "median": 244,
+        "p95": 3010.5,
+        "p99": 5517
+      }
+    },
+    "counters": {
+      "code 409 on POST:/rest/forum": 31,
+      "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 35,
+      "code 204 on POST:/rest/forum": 24
+    },
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Entity does not exist"
+      },
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Create forum"
+      },
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Get forum"
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2020-12-01T22:53:18.639Z",
+      "scenariosCreated": 9,
+      "scenariosCompleted": 9,
+      "requestsCompleted": 9,
+      "latency": {
+        "min": 168.3,
+        "max": 5477.9,
+        "median": 1993.2,
+        "p95": 5477.9,
+        "p99": 5477.9
+      },
+      "rps": {
+        "count": 9,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 172.6,
+        "max": 5518.5,
+        "median": 2003.1,
+        "p95": 5518.5,
+        "p99": 5518.5
+      },
+      "scenarioCounts": {
+        "Get forum": 2,
+        "Create forum": 4,
+        "Entity does not exist": 3
+      },
+      "errors": {},
+      "codes": {
+        "200": 2,
+        "204": 4,
+        "409": 3
+      },
+      "matches": 0,
+      "latencies": [
+        219806300,
+        5477885100,
+        4673885700,
+        2701412200,
+        3829425600,
+        1993183400,
+        1024280100,
+        553934900,
+        168307400
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 171,
+          "max": 4679,
+          "median": 1026,
+          "p95": 4679,
+          "p99": 4679
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 3833,
+          "max": 5517,
+          "median": 4675,
+          "p95": 5517,
+          "p99": 5517
+        }
+      },
+      "counters": {
+        "code 409 on POST:/rest/forum": 3,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 2,
+        "code 204 on POST:/rest/forum": 4
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:53:28.657Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 172.5,
+        "max": 660.1,
+        "median": 286.8,
+        "p95": 660.1,
+        "p99": 660.1
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 179.8,
+        "max": 662,
+        "median": 290.5,
+        "p95": 662,
+        "p99": 662
+      },
+      "scenarioCounts": {
+        "Entity does not exist": 3,
+        "Create forum": 2,
+        "Get forum": 5
+      },
+      "errors": {},
+      "codes": {
+        "200": 5,
+        "204": 2,
+        "409": 3
+      },
+      "matches": 0,
+      "latencies": [
+        172546800,
+        591696000,
+        563001700,
+        241885100,
+        178111000,
+        541705300,
+        660120000,
+        261261600,
+        308705500,
+        264815500
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 174,
+          "max": 662,
+          "median": 565,
+          "p95": 662,
+          "p99": 662
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 244,
+          "max": 543,
+          "median": 266,
+          "p95": 543,
+          "p99": 543
+        }
+      },
+      "counters": {
+        "code 409 on POST:/rest/forum": 3,
+        "code 204 on POST:/rest/forum": 2,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 5
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:53:38.656Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 232,
+        "max": 961.7,
+        "median": 248.3,
+        "p95": 961.7,
+        "p99": 961.7
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 233.7,
+        "max": 963.5,
+        "median": 254.1,
+        "p95": 963.5,
+        "p99": 963.5
+      },
+      "scenarioCounts": {
+        "Get forum": 7,
+        "Entity does not exist": 1,
+        "Create forum": 2
+      },
+      "errors": {},
+      "codes": {
+        "200": 7,
+        "204": 2,
+        "409": 1
+      },
+      "matches": 0,
+      "latencies": [
+        253872100,
+        242597100,
+        241667400,
+        236993000,
+        275815900,
+        593028400,
+        232041600,
+        242678800,
+        607602100,
+        961668900
+      ],
+      "customStats": {
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 233,
+          "max": 277,
+          "median": 244,
+          "p95": 277,
+          "p99": 277
+        },
+        "POST:/rest/forum": {
+          "min": 595,
+          "max": 963,
+          "median": 609,
+          "p95": 963,
+          "p99": 963
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 7,
+        "code 409 on POST:/rest/forum": 1,
+        "code 204 on POST:/rest/forum": 2
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:53:48.658Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 211.4,
+        "max": 1029.6,
+        "median": 241.6,
+        "p95": 1029.6,
+        "p99": 1029.6
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 213.3,
+        "max": 1031.3,
+        "median": 248.7,
+        "p95": 1031.3,
+        "p99": 1031.3
+      },
+      "scenarioCounts": {
+        "Get forum": 6,
+        "Entity does not exist": 1,
+        "Create forum": 3
+      },
+      "errors": {},
+      "codes": {
+        "200": 6,
+        "204": 3,
+        "409": 1
+      },
+      "matches": 0,
+      "latencies": [
+        241603200,
+        520310300,
+        229157900,
+        220217600,
+        211398400,
+        241525800,
+        219532800,
+        729077300,
+        1029627200,
+        960133300
+      ],
+      "customStats": {
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 212,
+          "max": 243,
+          "median": 225.5,
+          "p95": 243,
+          "p99": 243
+        },
+        "POST:/rest/forum": {
+          "min": 521,
+          "max": 1030,
+          "median": 845.5,
+          "p95": 1030,
+          "p99": 1030
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 6,
+        "code 409 on POST:/rest/forum": 1,
+        "code 204 on POST:/rest/forum": 3
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:53:58.677Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 150.3,
+        "max": 800.9,
+        "median": 239.8,
+        "p95": 800.9,
+        "p99": 800.9
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 151.9,
+        "max": 803.7,
+        "median": 241.4,
+        "p95": 803.7,
+        "p99": 803.7
+      },
+      "scenarioCounts": {
+        "Entity does not exist": 5,
+        "Get forum": 4,
+        "Create forum": 1
+      },
+      "errors": {},
+      "codes": {
+        "200": 4,
+        "204": 1,
+        "409": 5
+      },
+      "matches": 0,
+      "latencies": [
+        800942100,
+        409670400,
+        170439400,
+        150283200,
+        150560200,
+        591694400,
+        219218300,
+        239789900,
+        530807400,
+        239774600
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 151,
+          "max": 803,
+          "median": 351.5,
+          "p95": 803,
+          "p99": 803
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 220,
+          "max": 410,
+          "median": 240,
+          "p95": 410,
+          "p99": 410
+        }
+      },
+      "counters": {
+        "code 409 on POST:/rest/forum": 5,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 4,
+        "code 204 on POST:/rest/forum": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:54:08.661Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 170.8,
+        "max": 1006.2,
+        "median": 569.1,
+        "p95": 1006.2,
+        "p99": 1006.2
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 181.9,
+        "max": 1008.3,
+        "median": 571.5,
+        "p95": 1008.3,
+        "p99": 1008.3
+      },
+      "scenarioCounts": {
+        "Entity does not exist": 4,
+        "Create forum": 5,
+        "Get forum": 1
+      },
+      "errors": {},
+      "codes": {
+        "200": 1,
+        "204": 5,
+        "409": 4
+      },
+      "matches": 0,
+      "latencies": [
+        170785500,
+        611033800,
+        928414000,
+        548809500,
+        589327900,
+        1006175500,
+        530769600,
+        180250900,
+        599201000,
+        229376200
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 181,
+          "max": 1007,
+          "median": 590,
+          "p95": 1007,
+          "p99": 1007
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 230,
+          "max": 230,
+          "median": 230,
+          "p95": 230,
+          "p99": 230
+        }
+      },
+      "counters": {
+        "code 409 on POST:/rest/forum": 4,
+        "code 204 on POST:/rest/forum": 5,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:54:18.672Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 155.9,
+        "max": 1085.3,
+        "median": 385.7,
+        "p95": 1085.3,
+        "p99": 1085.3
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 157.4,
+        "max": 1086.9,
+        "median": 387.3,
+        "p95": 1086.9,
+        "p99": 1086.9
+      },
+      "scenarioCounts": {
+        "Create forum": 3,
+        "Entity does not exist": 4,
+        "Get forum": 3
+      },
+      "errors": {},
+      "codes": {
+        "200": 3,
+        "204": 3,
+        "409": 4
+      },
+      "matches": 0,
+      "latencies": [
+        975539100,
+        526215700,
+        155854100,
+        593887900,
+        245162400,
+        596750300,
+        234975800,
+        176433400,
+        1085280600,
+        245048200
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 157,
+          "max": 1086,
+          "median": 595,
+          "p95": 1086,
+          "p99": 1086
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 236,
+          "max": 246,
+          "median": 246,
+          "p95": 246,
+          "p99": 246
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/forum": 3,
+        "code 409 on POST:/rest/forum": 4,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 3
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:54:28.663Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 165.1,
+        "max": 896.1,
+        "median": 384.9,
+        "p95": 896.1,
+        "p99": 896.1
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 166.9,
+        "max": 897.7,
+        "median": 386.8,
+        "p95": 897.7,
+        "p99": 897.7
+      },
+      "scenarioCounts": {
+        "Create forum": 3,
+        "Entity does not exist": 5,
+        "Get forum": 2
+      },
+      "errors": {},
+      "codes": {
+        "200": 2,
+        "204": 3,
+        "409": 5
+      },
+      "matches": 0,
+      "latencies": [
+        896118500,
+        547596700,
+        254941600,
+        248457600,
+        165081600,
+        604364900,
+        514847800,
+        175314700,
+        165500700,
+        604740300
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 166,
+          "max": 897,
+          "median": 533,
+          "p95": 897,
+          "p99": 897
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 250,
+          "max": 256,
+          "median": 253,
+          "p95": 256,
+          "p99": 256
+        }
+      },
+      "counters": {
+        "code 204 on POST:/rest/forum": 3,
+        "code 409 on POST:/rest/forum": 5,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 2
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:54:38.678Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 155.9,
+        "max": 614.3,
+        "median": 240,
+        "p95": 614.3,
+        "p99": 614.3
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 157.5,
+        "max": 616,
+        "median": 242.2,
+        "p95": 616,
+        "p99": 616
+      },
+      "scenarioCounts": {
+        "Entity does not exist": 5,
+        "Get forum": 4,
+        "Create forum": 1
+      },
+      "errors": {},
+      "codes": {
+        "200": 4,
+        "204": 1,
+        "409": 5
+      },
+      "matches": 0,
+      "latencies": [
+        537676800,
+        207879000,
+        174659500,
+        236105600,
+        225384500,
+        245272700,
+        243979100,
+        614348400,
+        495339900,
+        155878000
+      ],
+      "customStats": {
+        "POST:/rest/forum": {
+          "min": 157,
+          "max": 616,
+          "median": 353,
+          "p95": 616,
+          "p99": 616
+        },
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 228,
+          "max": 246,
+          "median": 241.5,
+          "p95": 246,
+          "p99": 246
+        }
+      },
+      "counters": {
+        "code 409 on POST:/rest/forum": 5,
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 4,
+        "code 204 on POST:/rest/forum": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:54:39.204Z",
+      "scenariosCreated": 1,
+      "scenariosCompleted": 1,
+      "requestsCompleted": 1,
+      "latency": {
+        "min": 238.6,
+        "max": 238.6,
+        "median": 238.6,
+        "p95": 238.6,
+        "p99": 238.6
+      },
+      "rps": {
+        "count": 1,
+        "mean": 1.92
+      },
+      "scenarioDuration": {
+        "min": 240.7,
+        "max": 240.7,
+        "median": 240.7,
+        "p95": 240.7,
+        "p99": 240.7
+      },
+      "scenarioCounts": {
+        "Get forum": 1
+      },
+      "errors": {},
+      "codes": {
+        "200": 1
+      },
+      "matches": 0,
+      "latencies": [
+        238621400
+      ],
+      "customStats": {
+        "GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 240,
+          "max": 240,
+          "median": 240,
+          "p95": 240,
+          "p99": 240
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/forum/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}

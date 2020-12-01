@@ -1,0 +1,534 @@
+{
+  "aggregate": {
+    "timestamp": "2020-12-01T22:57:02.107Z",
+    "scenariosCreated": 60,
+    "scenariosCompleted": 60,
+    "requestsCompleted": 60,
+    "latency": {
+      "min": 190.5,
+      "max": 1765.2,
+      "median": 520.5,
+      "p95": 675.3,
+      "p99": 1686.5
+    },
+    "rps": {
+      "count": 60,
+      "mean": 1.01
+    },
+    "scenarioDuration": {
+      "min": 192.1,
+      "max": 1808.2,
+      "median": 522.2,
+      "p95": 677,
+      "p99": 1725.7
+    },
+    "scenarioCounts": {
+      "Add message": 28,
+      "Get message": 32
+    },
+    "errors": {},
+    "codes": {
+      "200": 32,
+      "500": 28
+    },
+    "matches": 0,
+    "customStats": {
+      "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+        "min": 521,
+        "max": 1806,
+        "median": 544,
+        "p95": 838.5,
+        "p99": 1806
+      },
+      "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+        "min": 191,
+        "max": 983,
+        "median": 212.5,
+        "p95": 613,
+        "p99": 983
+      }
+    },
+    "counters": {
+      "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 28,
+      "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 32
+    },
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Add message"
+      },
+      {
+        "duration": 30,
+        "arrivalCount": 30,
+        "name": "Get message"
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2020-12-01T22:56:11.548Z",
+      "scenariosCreated": 9,
+      "scenariosCompleted": 9,
+      "requestsCompleted": 9,
+      "latency": {
+        "min": 195.6,
+        "max": 1765.2,
+        "median": 574.7,
+        "p95": 1765.2,
+        "p99": 1765.2
+      },
+      "rps": {
+        "count": 9,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 197.6,
+        "max": 1808.2,
+        "median": 577,
+        "p95": 1808.2,
+        "p99": 1808.2
+      },
+      "scenarioCounts": {
+        "Add message": 5,
+        "Get message": 4
+      },
+      "errors": {},
+      "codes": {
+        "200": 4,
+        "500": 5
+      },
+      "matches": 0,
+      "latencies": [
+        1765236700,
+        977656500,
+        574711000,
+        574871400,
+        574995700,
+        224140600,
+        556431700,
+        195610100,
+        215199700
+      ],
+      "customStats": {
+        "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 558,
+          "max": 1806,
+          "median": 578,
+          "p95": 1806,
+          "p99": 1806
+        },
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 197,
+          "max": 983,
+          "median": 221.5,
+          "p95": 983,
+          "p99": 983
+        }
+      },
+      "counters": {
+        "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 5,
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 4
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:56:21.546Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 202.7,
+        "max": 584.7,
+        "median": 225.4,
+        "p95": 584.7,
+        "p99": 584.7
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 207.5,
+        "max": 586.9,
+        "median": 227.2,
+        "p95": 586.9,
+        "p99": 586.9
+      },
+      "scenarioCounts": {
+        "Get message": 6,
+        "Add message": 4
+      },
+      "errors": {},
+      "codes": {
+        "200": 6,
+        "500": 4
+      },
+      "matches": 0,
+      "latencies": [
+        202681300,
+        213252800,
+        225225500,
+        205691300,
+        225485800,
+        215940300,
+        535086100,
+        565493900,
+        565276800,
+        584742000
+      ],
+      "customStats": {
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 204,
+          "max": 226,
+          "median": 218,
+          "p95": 226,
+          "p99": 226
+        },
+        "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 538,
+          "max": 586,
+          "median": 566,
+          "p95": 586,
+          "p99": 586
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 6,
+        "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 4
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:56:31.546Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 195.5,
+        "max": 555.5,
+        "median": 530.6,
+        "p95": 555.5,
+        "p99": 555.5
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 197.1,
+        "max": 557.3,
+        "median": 532.3,
+        "p95": 557.3,
+        "p99": 557.3
+      },
+      "scenarioCounts": {
+        "Add message": 6,
+        "Get message": 4
+      },
+      "errors": {},
+      "codes": {
+        "200": 4,
+        "500": 6
+      },
+      "matches": 0,
+      "latencies": [
+        532868400,
+        196479100,
+        215263900,
+        225807700,
+        195471500,
+        545512400,
+        555513500,
+        528276000,
+        535250700,
+        535990300
+      ],
+      "customStats": {
+        "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 529,
+          "max": 556,
+          "median": 536.5,
+          "p95": 556,
+          "p99": 556
+        },
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 196,
+          "max": 227,
+          "median": 207.5,
+          "p95": 227,
+          "p99": 227
+        }
+      },
+      "counters": {
+        "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 6,
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 4
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:56:41.546Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 200.4,
+        "max": 570.7,
+        "median": 520.5,
+        "p95": 570.7,
+        "p99": 570.7
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 202.1,
+        "max": 574.1,
+        "median": 522.2,
+        "p95": 574.1,
+        "p99": 574.1
+      },
+      "scenarioCounts": {
+        "Add message": 6,
+        "Get message": 4
+      },
+      "errors": {},
+      "codes": {
+        "200": 4,
+        "500": 6
+      },
+      "matches": 0,
+      "latencies": [
+        570741900,
+        211761400,
+        520839400,
+        540694900,
+        550435100,
+        200425700,
+        212020700,
+        520158200,
+        210781700,
+        541065600
+      ],
+      "customStats": {
+        "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 521,
+          "max": 572,
+          "median": 542,
+          "p95": 572,
+          "p99": 572
+        },
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 201,
+          "max": 213,
+          "median": 212.5,
+          "p95": 213,
+          "p99": 213
+        }
+      },
+      "counters": {
+        "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 6,
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 4
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:56:51.546Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 200,
+        "max": 560.4,
+        "median": 380.2,
+        "p95": 560.4,
+        "p99": 560.4
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 201.7,
+        "max": 561.9,
+        "median": 381.9,
+        "p95": 561.9,
+        "p99": 561.9
+      },
+      "scenarioCounts": {
+        "Add message": 5,
+        "Get message": 5
+      },
+      "errors": {},
+      "codes": {
+        "200": 5,
+        "500": 5
+      },
+      "matches": 0,
+      "latencies": [
+        530251900,
+        230109400,
+        540112500,
+        540378800,
+        540990400,
+        211130000,
+        560356900,
+        200237900,
+        209762200,
+        200040600
+      ],
+      "customStats": {
+        "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 532,
+          "max": 561,
+          "median": 541,
+          "p95": 561,
+          "p99": 561
+        },
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 201,
+          "max": 231,
+          "median": 211,
+          "p95": 231,
+          "p99": 231
+        }
+      },
+      "counters": {
+        "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 5,
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 5
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:57:01.548Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 190.5,
+        "max": 730.6,
+        "median": 220.3,
+        "p95": 730.6,
+        "p99": 730.6
+      },
+      "rps": {
+        "count": 10,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 192.1,
+        "max": 732.2,
+        "median": 222.1,
+        "p95": 732.2,
+        "p99": 732.2
+      },
+      "scenarioCounts": {
+        "Get message": 8,
+        "Add message": 2
+      },
+      "errors": {},
+      "codes": {
+        "200": 8,
+        "500": 2
+      },
+      "matches": 0,
+      "latencies": [
+        199225800,
+        620119800,
+        539742000,
+        209434500,
+        730569200,
+        220739700,
+        190521900,
+        200670600,
+        219873800,
+        534992500
+      ],
+      "customStats": {
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 191,
+          "max": 621,
+          "median": 215.5,
+          "p95": 621,
+          "p99": 621
+        },
+        "PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": {
+          "min": 536,
+          "max": 731,
+          "median": 633.5,
+          "p95": 731,
+          "p99": 731
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 8,
+        "code 500 on PUT:/rest/forum/message/ceb56dc9-34dd-4a27-bd7b-6df88da977d2": 2
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2020-12-01T22:57:02.074Z",
+      "scenariosCreated": 1,
+      "scenariosCompleted": 1,
+      "requestsCompleted": 1,
+      "latency": {
+        "min": 200.3,
+        "max": 200.3,
+        "median": 200.3,
+        "p95": 200.3,
+        "p99": 200.3
+      },
+      "rps": {
+        "count": 1,
+        "mean": 1.89
+      },
+      "scenarioDuration": {
+        "min": 202.2,
+        "max": 202.2,
+        "median": 202.2,
+        "p95": 202.2,
+        "p99": 202.2
+      },
+      "scenarioCounts": {
+        "Get message": 1
+      },
+      "errors": {},
+      "codes": {
+        "200": 1
+      },
+      "matches": 0,
+      "latencies": [
+        200296300
+      ],
+      "customStats": {
+        "GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": {
+          "min": 201,
+          "max": 201,
+          "median": 201,
+          "p95": 201,
+          "p99": 201
+        }
+      },
+      "counters": {
+        "code 200 on GET:/rest/forum/message/9e8f3a15-109b-4a67-b99b-e9990e94fecd": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}
