@@ -19,7 +19,6 @@ scenarios:
 - name: Entity does not exist
   weight: 1
   flow:
-  - function: genNewMessage
   - post:
       url: /forum
       headers:
@@ -31,19 +30,26 @@ scenarios:
 - name: Create forum
   weight: 1
   flow:
+    - function: genNewEntity
     - post:
-        url: /media
+        url: /entity
         headers:
-          Content-Type: application/octet-stream
           Accept: application/json
-        beforeRequest: reqPostMedia
+        json:
+            name: "{{ name }}"
+            description: "{{ description }}"
+        afterResponse: replyPostEntity
         capture:
-          - regexp: .*
-            as: imageId
+          json: $.id
+          as: entityId
         expect:
-          - statusCode: 200
+            - statusCode: 204
     - post:
-        url: "/forum"
+        url: "/forum/"
+        headers:
+            Accept: application/json
+        json:
+            ownerId: "{{ entityId }}"
         capture:
           json: $.id
           as: forumId
