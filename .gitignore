@@ -14,3 +14,6 @@
 # Maven
 log/
 target/
+scc2021-backend-aula1/WebContent/node_modules/
+scc2021-backend-aula1/WebContent/yarn.lock
+scc2021-backend-aula1/WebContent/package.json
