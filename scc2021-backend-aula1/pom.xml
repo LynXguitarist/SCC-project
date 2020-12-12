@@ -19,7 +19,12 @@
     <functionResourceGroup>scc-group-afr</functionResourceGroup>  
     <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory> 
   </properties>  
-  <dependencies> 
+  <dependencies>
+  	<dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-sync</artifactId>
+        <version>4.1.1</version>
+    </dependency> 
     <dependency> 
       <groupId>com.google.code.gson</groupId>  
       <artifactId>gson</artifactId>  
