@@ -65,12 +65,7 @@
       <groupId>org.jboss.resteasy</groupId>  
       <artifactId>resteasy-servlet-initializer</artifactId>  
       <version>4.5.8.Final</version> 
-    </dependency>  
-    <dependency> 
-      <groupId>com.microsoft.azure</groupId>  
-      <artifactId>azure-storage</artifactId>  
-      <version>8.6.5</version> 
-    </dependency>  
+    </dependency>
     <dependency> 
       <groupId>com.microsoft.azure</groupId>  
       <artifactId>azure-storage</artifactId>  
@@ -168,35 +163,35 @@
           <target>11</target> 
         </configuration> 
       </plugin>  
-      <plugin> 
-        <groupId>com.microsoft.azure</groupId>  
-        <artifactId>azure-webapp-maven-plugin</artifactId>  
-        <version>1.11.0</version>  
-        <configuration> 
-          <schemaVersion>V2</schemaVersion>  
-          <authType>azure_cli</authType>  
-          <subscriptionId>ec453314-775d-4450-a70b-d7e56e38f9af</subscriptionId>  
-          <resourceGroup>scc-group-afr</resourceGroup>  
-          <appName>scc-app-afr</appName>  
-          <pricingTier>P1v2</pricingTier>  
-          <region>westeurope</region>  
-          <runtime> 
-            <os>windows</os>
-            <javaVersion>11</javaVersion>
-            <webContainer>java 11</webContainer>
-          </runtime>  
-          <deployment> 
-            <resources> 
-              <resource> 
-                <directory>${project.basedir}/target</directory>  
-                <includes> 
-                  <include>*.war</include> 
-                </includes> 
-              </resource> 
-            </resources> 
-          </deployment> 
-        </configuration> 
-      </plugin>  
+<!--      <plugin> -->
+<!--        <groupId>com.microsoft.azure</groupId>  -->
+<!--        <artifactId>azure-webapp-maven-plugin</artifactId>  -->
+<!--        <version>1.11.0</version>  -->
+<!--        <configuration> -->
+<!--          <schemaVersion>V2</schemaVersion>  -->
+<!--          <authType>azure_cli</authType>  -->
+<!--          <subscriptionId>ec453314-775d-4450-a70b-d7e56e38f9af</subscriptionId>  -->
+<!--          <resourceGroup>scc-group-afr</resourceGroup>  -->
+<!--          <appName>scc-app-afr</appName>  -->
+<!--          <pricingTier>P1v2</pricingTier>  -->
+<!--          <region>westeurope</region>  -->
+<!--          <runtime> -->
+<!--            <os>windows</os>-->
+<!--            <javaVersion>11</javaVersion>-->
+<!--            <webContainer>java 11</webContainer>-->
+<!--          </runtime>  -->
+<!--          <deployment> -->
+<!--            <resources> -->
+<!--              <resource> -->
+<!--                <directory>${project.basedir}/target</directory>  -->
+<!--                <includes> -->
+<!--                  <include>*.war</include> -->
+<!--                </includes> -->
+<!--              </resource> -->
+<!--            </resources> -->
+<!--          </deployment> -->
+<!--        </configuration> -->
+<!--      </plugin>  -->
       <plugin> 
         <groupId>com.microsoft.azure</groupId>  
         <artifactId>azure-functions-maven-plugin</artifactId>  
