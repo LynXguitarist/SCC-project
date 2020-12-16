@@ -1,0 +1,5 @@
+az login
+mvn azure-webapp:config
+mvn package azure-webapp:deploy
+
+// segue as aulas lab1 e 2
