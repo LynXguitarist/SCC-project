@@ -149,35 +149,35 @@
         <groupId>com.microsoft.azure</groupId>  
         <artifactId>azure-webapp-maven-plugin</artifactId>  
         <version>1.11.0</version>  
-        <configuration>
-          <schemaVersion>V2</schemaVersion>
-          <subscriptionId>ec453314-775d-4450-a70b-d7e56e38f9af</subscriptionId>
-          <resourceGroup>scc-app-afr-1608145398870-rg</resourceGroup>
-          <appName>scc-app-afr-1608145398870</appName>
-          <pricingTier>F1</pricingTier>
-          <region>westeurope</region>
-          <runtime>
+        <configuration> 
+          <schemaVersion>V2</schemaVersion>  
+          <subscriptionId>ec453314-775d-4450-a70b-d7e56e38f9af</subscriptionId>  
+          <resourceGroup>scc-app-afr-1608145398870-rg</resourceGroup>  
+          <appName>scc-app-afr-1608145398870</appName>  
+          <pricingTier>F1</pricingTier>  
+          <region>westeurope</region>  
+          <runtime> 
             <os>linux</os>
-            <javaVersion>jre8</javaVersion>
-            <webContainer>jre8</webContainer>
-          </runtime>
-          <deployment>
-            <resources>
-              <resource>
-                <directory>${project.basedir}/target</directory>
-                <includes>
-                  <include>*.jar</include>
-                </includes>
-              </resource>
-            </resources>
-          </deployment>
-        </configuration>
+            <javaVersion>java11</javaVersion>
+            <webContainer>java11</webContainer>
+          </runtime>  
+          <deployment> 
+            <resources> 
+              <resource> 
+                <directory>${project.basedir}\target</directory>  
+                <includes> 
+                  <include>*.jar</include> 
+                </includes> 
+              </resource> 
+            </resources> 
+          </deployment> 
+        </configuration> 
       </plugin>  
       <plugin> 
         <artifactId>maven-compiler-plugin</artifactId>  
         <version>3.8.0</version>  
         <configuration> 
-          <release>11</release>  
+          <release>11</release> 
         </configuration> 
       </plugin> 
     </plugins> 
