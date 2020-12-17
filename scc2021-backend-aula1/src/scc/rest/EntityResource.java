@@ -23,8 +23,11 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.bson.Document;
+
 import cosmos.CosmosDBLayer;
 import data.Entity;
+import mongoDB.MongoDBLayer;
 import scc.redis.CacheKeyNames;
 import scc.redis.RedisCache;
 import scc.utils.AdvanceFeatures;
@@ -37,13 +40,12 @@ public class EntityResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createEntity(Entity entity) {
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
-		try {
-			entity.setId(UUID.randomUUID().toString());
-			entity.setDeleted(false);
-			dbLayer.createItem(entity, TableName.ENTITY.getName());
-		} catch (CosmosException e) {
-			throw new WebApplicationException(Status.CONFLICT);
+		entity.setId(UUID.randomUUID().toString());
+		entity.setDeleted(false);
+		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+			createEntityMongo(entity);
+		} else {
+			createEntityCosmos(entity);
 		}
 	}
 
@@ -54,16 +56,15 @@ public class EntityResource {
 	public void updateEntity(@PathParam("id") String id, Entity entity) {
 		// This method handles the update to isDeleted too
 		// The remove of the entity is done via Timer Function
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
-		try {
-			// If isDeleted, deleteDate = currDate
-			if (entity.isDeleted())
-				entity.setDeletionDate(LocalDate.now(ZoneOffset.UTC).toString());
 
-			entity.setId(id);
-			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
-		} catch (CosmosException e) {
-			throw new WebApplicationException(Status.NOT_FOUND);
+		if (entity.isDeleted()) // If isDeleted, deleteDate = currDate
+			entity.setDeletionDate(LocalDate.now(ZoneOffset.UTC).toString());
+
+		entity.setId(id);
+		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+			updateEntityMongo(entity);
+		} else {
+			updateEntityCosmos(entity);
 		}
 	}
 
@@ -71,16 +72,12 @@ public class EntityResource {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Entity getEntity(@PathParam("id") String id) {
-		// METER CACHE
-		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
-		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.ENTITY.getName());
 		Entity entity = null;
-		for (Object item : items) {
-			entity = (Entity) item;
+		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+			entity = getEntityMongo(id);
+		} else {
+			entity = getEntityCosmos(id);
 		}
-		if (entity == null)
-			throw new WebApplicationException(Status.NOT_FOUND);
-
 		return entity;
 	}
 
@@ -98,16 +95,13 @@ public class EntityResource {
 			values = RedisCache.getCache().getListFromCache(key);
 		// Verifies if there is a value for the key in cache
 		if (values.isEmpty() || !hasCache) {
-			// Calls the Service(CosmosDB)
-			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
-			CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
-			for (Object item : items) {
-				Entity entity = (Entity) item;
-				entities.add(entity);
+			if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+				entities = getEntitiesMongo();
+			} else {
+				// Calls the Service(CosmosDB)
+				entities = getEntitiesCosmos();
 			}
-			if (entities.isEmpty())
-				throw new WebApplicationException(Status.NOT_FOUND);
-			else if (hasCache)
+			if (hasCache)
 				RedisCache.getCache().addListToCache(key, entities, 120);
 
 		} else {
@@ -131,17 +125,113 @@ public class EntityResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public void likeOrdislike(@PathParam("liked") boolean liked, @PathParam("id") String id, Entity entity) {
+		int inc = -1;
+		if (liked)
+			inc = 1;
+		entity.setId(id);
+		entity.setNumberOfLikes(inc);
+		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+			updateEntityMongo(entity);
+		} else {
+			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
+			try {
+				dbLayer.putItem(id, entity, TableName.ENTITY.getName());
+			} catch (CosmosException e) {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
+		}
+	}
+
+	/*-------------------------------------------------MongoDB------------------------------------------------ */
+	public void createEntityMongo(Entity entity) {
+		MongoDBLayer mongo = MongoDBLayer.getInstance();
+
+		Document document = new Document();
+		document.append("id", entity.getId());
+		document.append("name", entity.getName());
+		document.append("description", entity.getDescription());
+		document.append("mediaIds", entity.getMediaIds());
+		document.append("numberOfLikes", entity.getNumberOfLikes());
+		document.append("deleted", entity.isDeleted());
+		document.append("deletionDate", entity.getDeletionDate());
+
+		mongo.addItem(TableName.ENTITY.getName(), document);
+	}
+
+	public void updateEntityMongo(Entity entity) {
+		MongoDBLayer mongo = MongoDBLayer.getInstance();
+
+		Document document = new Document();
+		document.append("id", entity.getId());
+		document.append("name", entity.getName());
+		document.append("description", entity.getDescription());
+		document.append("mediaIds", entity.getMediaIds());
+		document.append("numberOfLikes", entity.getNumberOfLikes());
+		document.append("deleted", entity.isDeleted());
+		document.append("deletionDate", entity.getDeletionDate());
+
+		mongo.updateItem(TableName.ENTITY.getName(), entity.getId(), document);
+	}
+
+	public Entity getEntityMongo(String id) {
+		MongoDBLayer mongo = MongoDBLayer.getInstance();
+
+		return mongo.getEntityById(id);
+	}
+
+	public List<Entity> getEntitiesMongo() {
+		MongoDBLayer mongo = MongoDBLayer.getInstance();
+
+		return mongo.getEntities();
+	}
+
+	/*-------------------------------------------------CosmosDB------------------------------------------------ */
+
+	public void createEntityCosmos(Entity entity) {
 		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
 		try {
-			int inc = -1;
-			if (liked)
-				inc = 1;
-			entity.setId(id);
-			entity.setNumberOfLikes(inc);
-			dbLayer.putItem(id, entity, TableName.ENTITY.getName());
+			dbLayer.createItem(entity, TableName.ENTITY.getName());
+		} catch (CosmosException e) {
+			throw new WebApplicationException(Status.CONFLICT);
+		}
+	}
+
+	public void updateEntityCosmos(Entity entity) {
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
+		try {
+			dbLayer.putItem(entity.getId(), entity, TableName.ENTITY.getName());
 		} catch (CosmosException e) {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 	}
 
+	public Entity getEntityCosmos(String id) {
+		Entity entity = null;
+
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
+		CosmosPagedIterable<?> items = dbLayer.getItemById(id, TableName.ENTITY.getName());
+
+		for (Object item : items) {
+			entity = (Entity) item;
+		}
+		if (entity == null)
+			throw new WebApplicationException(Status.NOT_FOUND);
+
+		return entity;
+	}
+
+	public List<Entity> getEntitiesCosmos() {
+		List<Entity> entities = new LinkedList<>();
+
+		CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);
+		CosmosPagedIterable<?> items = dbLayer.getItems(TableName.ENTITY.getName());
+		for (Object item : items) {
+			Entity entity = (Entity) item;
+			entities.add(entity);
+		}
+		if (entities.isEmpty())
+			throw new WebApplicationException(Status.NOT_FOUND);
+
+		return entities;
+	}
 }

@@ -7,6 +7,7 @@ public class AdvanceFeatures {
 
 	public static final String REDIS = "REDIS";
 	public static final String FUNCTION = "FUNCTION";
+	public static final String MONGODB = "MONGODB";
 
 	public static final String PROPS_FILE = "AdvFeatures.props";
 	private static Properties props;

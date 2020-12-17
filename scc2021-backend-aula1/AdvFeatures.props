@@ -4,4 +4,6 @@ FUNCTIONS=true
 GEO-REPLICATED=true
 ###choose the regions, separate them with "," Example - EUROPE_WEST, EUROPE_NORTH 
 Regions=EUROPE_WEST
-#####ExpireTimes#########
+
+######Choose if you want to use MongoDB or CosmosDB
+MONGODB=false
