@@ -24,7 +24,8 @@ public class RedisCache {
 	}
 
 	RedisCache() {
-		String RedisHostname = AzureProperties.getProperties().getProperty(AzureProperties.REDIS_URL);
+		//String RedisHostname = AzureProperties.getProperties().getProperty(AzureProperties.REDIS_URL);
+		String RedisHostname = "scc-afr-redis";
 		String cacheKey = AzureProperties.getProperties().getProperty(AzureProperties.REDIS_KEY);
 		final JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxTotal(128);
@@ -37,7 +38,7 @@ public class RedisCache {
 		poolConfig.setTimeBetweenEvictionRunsMillis(Duration.ofSeconds(30).toMillis());
 		poolConfig.setNumTestsPerEvictionRun(3);
 		poolConfig.setBlockWhenExhausted(true);
-		jedisPool = new JedisPool(poolConfig, RedisHostname, 6380, 1000, cacheKey, true);
+		jedisPool = new JedisPool(poolConfig, RedisHostname, 6379, 1000, false);
 	}
 
 	public JedisPool getJedisPool() {
