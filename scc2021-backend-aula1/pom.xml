@@ -7,7 +7,7 @@
 	<groupId>scc-group-afr</groupId>
 	<artifactId>scc-app-afr</artifactId>
 	<version>1.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -149,13 +149,21 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
+				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<archive>
 						<manifest>
 							<mainClass>app.com.MainClass</mainClass>
 						</manifest>
 					</archive>
+					<attachClasses>true</attachClasses>
+					<webXml>WebContent/WEB-INF/web.xml</webXml>
+					<webResources>
+						<resource>
+							<directory>src/scc/srv</directory>
+							<filtering>true</filtering>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -179,7 +187,7 @@
 							<resource>
 								<directory>${project.basedir}\target</directory>
 								<includes>
-									<include>*.jar</include>
+									<include>*.war</include>
 								</includes>
 							</resource>
 						</resources>
