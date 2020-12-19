@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azure-vote-back
+  name: scc-afr-back
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: azure-vote-back
+      app: scc-afr-back
   template:
     metadata:
       labels:
-        app: azure-vote-back
+        app: scc-afr-back
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
       - name: azure-vote-back
-        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+        image: amtorrinha/scc2021-app
         env:
         - name: ALLOW_EMPTY_PASSWORD
           value: "yes"
@@ -34,32 +34,32 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-vote-back
+  name: scc-afr-back
 spec:
   ports:
   - port: 6379
   selector:
-    app: azure-vote-back
+    app: scc-afr-back
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azure-vote-front
+  name: scc-afr-front
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: azure-vote-front
+      app: scc-afr-front
   template:
     metadata:
       labels:
-        app: azure-vote-front
+        app: scc-afr-front
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: azure-vote-front
-        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+      - name: scc-afr-front
+        image: mcr.microsoft.com/azuredocs/scc-afr-front:v1
         resources:
           requests:
             cpu: 100m
@@ -71,15 +71,15 @@ spec:
         - containerPort: 80
         env:
         - name: REDIS
-          value: "azure-vote-back"
+          value: "scc-afr-back"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-vote-front
+  name: scc-afr-front
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: azure-vote-front
+    app: scc-afr-front

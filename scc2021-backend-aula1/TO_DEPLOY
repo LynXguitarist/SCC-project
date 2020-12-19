@@ -3,3 +3,17 @@ mvn azure-webapp:config
 mvn package azure-webapp:deploy
 
 // segue as aulas lab1 e 2
+
+// Docker lab 10
+docker build -t amtorrinha/scc2021-app .
+docker login
+docker push amtorrinha/scc2021-app
+docker run --rm -p 8080:8080 amtorrinha/scc2021-app      check availability locally at: http://localhost:8080/scc-app-afr-1.0
+
+// Azure Container
+az group create --name scc2021-cluster-afr --location westeurope
+az container create --resource-group scc2021-cluster-afr --name scc-app --image amtorrinha/scc2021-app --ports 8080 --dns-name-label scc-nmp-container-afr    check availability: http://scc-nmp-container-afr.westeurope.azurecontainer.io:8080/scc-app-afr-1.0/ctrl/version
+delete container: az container delete --resource-group scc2021-cluster-4204 --name scc-app
+
+
+
