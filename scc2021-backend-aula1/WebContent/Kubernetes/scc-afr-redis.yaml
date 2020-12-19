@@ -26,7 +26,7 @@ spec:
             memory: 128Mi
           limits:
             cpu: 250m
-            memory: 256Mi
+            memory: 1Gi
         ports:
         - containerPort: 6379
           name: redis
@@ -34,52 +34,52 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: scc-afr-back
+  name: scc-afr-redis
 spec:
   ports:
   - port: 6379
   selector:
-    app: scc-afr-back
+    app: scc-afr-redis
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scc-afr-front
+  name: scc-afr-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scc-afr-front
+      app: scc-afr-app
   template:
     metadata:
       labels:
-        app: scc-afr-front
+        app: scc-afr-app
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: scc-afr-front
-        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+      - name: scc-afr-app
+        image: amtorrinha/scc2021-app
         resources:
           requests:
             cpu: 100m
             memory: 128Mi
           limits:
             cpu: 250m
-            memory: 256Mi
+            memory: 1Gi
         ports:
         - containerPort: 80
         env:
         - name: REDIS
-          value: "scc-afr-back"
+          value: "scc-afr-redis"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: scc-afr-front
+  name: scc-afr-app
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: scc-afr-front
+    app: scc-afr-app
