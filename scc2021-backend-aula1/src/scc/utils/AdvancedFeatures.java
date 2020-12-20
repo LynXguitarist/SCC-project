@@ -3,15 +3,13 @@ package scc.utils;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-public class AzureProperties {
-	public static final String BLOB_KEY = "BlobStoreConnection";
-	public static final String COSMOSDB_KEY = "COSMOSDB_KEY";
-	public static final String COSMOSDB_URL = "COSMOSDB_URL";
-	public static final String COSMOSDB_DATABASE = "COSMOSDB_DATABASE";
-	public static final String REDIS_URL = "REDIS_URL";
-	public static final String REDIS_KEY = "REDIS_KEY";
+public class AdvancedFeatures {
 
-	public static final String PROPS_FILE = "WebContent/WEB_INF/classes/azurekeys-westeurope.props";
+	public static final String REDIS = "REDIS";
+	public static final String FUNCTION = "FUNCTION";
+	public static final String MONGODB = "MONGODB";
+
+	public static final String PROPS_FILE = "WebContent/WEB_INF/classes/AdvFeatures.props";
 	private static Properties props;
 
 	public static synchronized Properties getProperties() {

@@ -5,7 +5,7 @@ config:
   plugins:
     metrics-by-endpoint: {}
     expect: {}
-  processor: "../test-utils.js"
+  processor: "../WebContent/test-utils.js"
   variables:
      metricsProcessEndpoint : "myProcessEndpoint"  # function used to aggregate endpoints for statistics
   phases:

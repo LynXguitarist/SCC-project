@@ -1,9 +1,0 @@
-REDIS=true
-SEARCH=false
-FUNCTIONS=false
-GEO-REPLICATED=false
-###choose the regions, separate them with "," Example - EUROPE_WEST, EUROPE_NORTH 
-Regions=EUROPE_WEST
-
-######Choose if you want to use MongoDB or CosmosDB
-MONGODB=false

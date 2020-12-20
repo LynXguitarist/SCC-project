@@ -5,12 +5,11 @@ import com.azure.cosmos.util.CosmosPagedIterable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cosmos.CosmosDBLayer;
-import data.Calendar;
 import data.Entity;
 import data.Forum;
 import data.ForumMessage;
 import scc.redis.RedisCache;
-import scc.utils.AdvanceFeatures;
+import scc.utils.AdvancedFeatures;
 import scc.utils.TableName;
 
 import javax.ws.rs.*;
@@ -20,7 +19,6 @@ import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,7 +66,7 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Forum getForum(@PathParam("id") String id) {
-        boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+        boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
         String cacheItem = new String();
         String key = TableName.FORUM.getName() + id;
         Forum forum = null;
@@ -98,7 +96,7 @@ public class ForumResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public List<Forum> getEntityForums(@PathParam("id") String id) {
-        boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+        boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
         List<String> values = new ArrayList<>();
         String key = TableName.ENTITY.getName() + "-" + TableName.FORUM.getName() + id;
         List<Forum> list = new ArrayList<>();
@@ -168,7 +166,7 @@ public class ForumResource {
     public ForumMessage getForumMessage(@PathParam("id") String id) {
         ForumMessage message = null;
 
-        boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+        boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
         String cacheItem = new String();
         String key = TableName.FORUMMESSAGE.getName() + id;
 
@@ -201,7 +199,7 @@ public class ForumResource {
     public List<ForumMessage> getForumMessages(@PathParam("forumId") String forumId) {
         List<ForumMessage> list = new ArrayList<>();
 
-        boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+        boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
         List<String> values = new ArrayList<>();
         String key = TableName.FORUMMESSAGE.getName() + "-" + TableName.FORUM.getName() + forumId;
 

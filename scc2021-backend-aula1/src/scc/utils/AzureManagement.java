@@ -47,7 +47,7 @@ public class AzureManagement {
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 	// TODO: This file should be created by running in the console:
 	// az ad sp create-for-rbac --sdk-auth > azure.auth
-	static final String AZURE_AUTH_LOCATION = System.getProperty("user.dir") + "/azure.auth";
+	static final String AZURE_AUTH_LOCATION = System.getProperty("user.dir") + "/WebContent/WEB_INF/classes/azure.auth";
 
 	public static Azure createManagementClient(String authFile) throws CloudException, IOException {
 		File credFile = new File(authFile);
@@ -301,8 +301,8 @@ public class AzureManagement {
 			// TODO: These variable allow you to control what is being created
 			final boolean CREATE_STORAGE = true;
 			final boolean CREATE_COSMOSDB = true;
-			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
-			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.FUNCTION));
+			final boolean CREATE_REDIS = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
+			final boolean CREATE_FUNCTIONS = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.FUNCTION));
 
 			// TODO: change your suffix and other names if you want
 			final String MY_SUFFIX = "afr"; // Add your suffix here

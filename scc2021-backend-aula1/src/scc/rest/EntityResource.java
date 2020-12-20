@@ -30,7 +30,7 @@ import data.Entity;
 import mongoDB.MongoDBLayer;
 import scc.redis.CacheKeyNames;
 import scc.redis.RedisCache;
-import scc.utils.AdvanceFeatures;
+import scc.utils.AdvancedFeatures;
 import scc.utils.TableName;
 
 @Path("/entity")
@@ -42,7 +42,7 @@ public class EntityResource {
 	public void createEntity(Entity entity) {
 		entity.setId(UUID.randomUUID().toString());
 		entity.setDeleted(false);
-		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+		if (Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.MONGODB))) {
 			createEntityMongo(entity);
 		} else {
 			createEntityCosmos(entity);
@@ -61,7 +61,7 @@ public class EntityResource {
 			entity.setDeletionDate(LocalDate.now(ZoneOffset.UTC).toString());
 
 		entity.setId(id);
-		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+		if (Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.MONGODB))) {
 			updateEntityMongo(entity);
 		} else {
 			updateEntityCosmos(entity);
@@ -73,7 +73,7 @@ public class EntityResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Entity getEntity(@PathParam("id") String id) {
 		Entity entity = null;
-		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+		if (Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.MONGODB))) {
 			entity = getEntityMongo(id);
 		} else {
 			entity = getEntityCosmos(id);
@@ -89,13 +89,13 @@ public class EntityResource {
 		List<Entity> entities = new LinkedList<>();
 
 		String key = CacheKeyNames.MR_ENTITY.getName();
-		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
 		List<String> values = new ArrayList<>();
 		if (hasCache)
 			values = RedisCache.getCache().getListFromCache(key);
 		// Verifies if there is a value for the key in cache
 		if (values.isEmpty() || !hasCache) {
-			if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+			if (Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.MONGODB))) {
 				entities = getEntitiesMongo();
 			} else {
 				// Calls the Service(CosmosDB)
@@ -130,7 +130,7 @@ public class EntityResource {
 			inc = 1;
 		entity.setId(id);
 		entity.setNumberOfLikes(inc);
-		if (Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.MONGODB))) {
+		if (Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.MONGODB))) {
 			updateEntityMongo(entity);
 		} else {
 			CosmosDBLayer<?> dbLayer = CosmosDBLayer.getInstance(Entity.class);

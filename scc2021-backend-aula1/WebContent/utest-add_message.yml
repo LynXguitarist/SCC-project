@@ -5,7 +5,7 @@ config:
       }
     expect: {
       }
-  processor: ../test-utils.js
+  processor: ../WebContent/test-utils.js
   variables:
     metricsProcessEndpoint: myProcessEndpoint
   phases:

@@ -32,7 +32,7 @@ import data.Period;
 import data.Reservation;
 import scc.redis.CacheKeyNames;
 import scc.redis.RedisCache;
-import scc.utils.AdvanceFeatures;
+import scc.utils.AdvancedFeatures;
 import scc.utils.TableName;
 
 @Path("/calendar")
@@ -76,7 +76,7 @@ public class CalendarResource {
 	public Calendar getCalendar(@PathParam("id") String id) {
 		Calendar calendar = null;
 		String key = TableName.CALENDAR.getName() + id;
-		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
 		String cacheItem = new String();
 		if (hasCache)
 			cacheItem = RedisCache.getCache().getItemFromCache(key);
@@ -112,7 +112,7 @@ public class CalendarResource {
 		List<Calendar> calendars = new LinkedList<>();
 
 		String key = CacheKeyNames.MR_CALENDAR.getName();
-		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
 		List<String> values = new ArrayList<>();
 		if (hasCache)
 			values = RedisCache.getCache().getListFromCache(key);
@@ -190,7 +190,7 @@ public class CalendarResource {
 	public List<Period> getAvailablePeriodByCalendarId(@PathParam("id") String id) {
 		List<Period> periods = new ArrayList<>();
 		String key = TableName.PERIOD.getName() + id;
-		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
 		List<String> cacheItem = new ArrayList<>();
 
 		if (hasCache)
@@ -301,7 +301,7 @@ public class CalendarResource {
 	public List<Reservation> getReservationByPeriodId(@PathParam("id") String id) {
 		List<Reservation> reservations = new ArrayList<>();
 		String key = TableName.RESERVATION.getName() + id;
-		boolean hasCache = Boolean.parseBoolean(AdvanceFeatures.getProperty(AdvanceFeatures.REDIS));
+		boolean hasCache = Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.REDIS));
 		List<String> cacheItem = new ArrayList<>();
 
 		if (hasCache)
