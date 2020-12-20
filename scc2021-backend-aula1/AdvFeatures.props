@@ -1,7 +1,7 @@
 REDIS=true
-SEARCH=true
-FUNCTIONS=true
-GEO-REPLICATED=true
+SEARCH=false
+FUNCTIONS=false
+GEO-REPLICATED=false
 ###choose the regions, separate them with "," Example - EUROPE_WEST, EUROPE_NORTH 
 Regions=EUROPE_WEST
 
