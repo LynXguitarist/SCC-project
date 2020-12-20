@@ -25,3 +25,23 @@ hs_err_pid*
 # target directory
 target/
 /node_modules/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+scc2021-backend-aula1/WebContent/node_modules/
+scc2021-backend-aula1/WebContent/yarn.lock
+scc2021-backend-aula1/WebContent/package.json
