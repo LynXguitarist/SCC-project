@@ -9,7 +9,7 @@ public class AdvancedFeatures {
 	public static final String FUNCTION = "FUNCTION";
 	public static final String MONGODB = "MONGODB";
 
-	public static final String PROPS_FILE = "WebContent/WEB_INF/classes/AdvFeatures.props";
+	public static final String PROPS_FILE = "AdvFeatures.props";
 	private static Properties props;
 
 	public static synchronized Properties getProperties() {

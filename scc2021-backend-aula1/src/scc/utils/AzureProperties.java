@@ -11,7 +11,7 @@ public class AzureProperties {
 	public static final String REDIS_URL = "REDIS_URL";
 	public static final String REDIS_KEY = "REDIS_KEY";
 
-	public static final String PROPS_FILE = "WebContent/WEB_INF/classes/azurekeys-westeurope.props";
+	public static final String PROPS_FILE = "azurekeys-westeurope.props";
 	private static Properties props;
 
 	public static synchronized Properties getProperties() {
