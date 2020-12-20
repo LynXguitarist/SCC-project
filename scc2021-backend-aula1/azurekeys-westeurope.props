@@ -1,7 +1,7 @@
-# Date : 28/11/20, 22:35
-BlobStoreConnection=DefaultEndpointsProtocol=https;AccountName=sccstorewesteuropeafr;AccountKey=hDYLm900WuMsaNrecpq/N8BovXI2tmnU/70gXeR0NPWTtlOBDjBQFPHdiSEaN6rrRR54ohfszf12n4v8w+uCww==;EndpointSuffix=core.windows.net
-COSMOSDB_KEY=HjrxgHtfMlBqhqKxkrpNeJz8ZfmQUqpsOoftvjbToFyiewP5pr2m5DdDjGCm3jpgF2dCzSks5gBkS4BULnnu8A==
+# Date : 20/12/20, 15:41
+REDIS_KEY=ZPFcBYoPanFmV3c1NrIqobuOToN1zJXJ0BpS3r+tWf0=
+REDIS_URL=rediswesteuropeafr.redis.cache.windows.net
+BlobStoreConnection=DefaultEndpointsProtocol=https;AccountName=sccstorewesteuropeafr;AccountKey=zn8qvGs+0M00xujTw3Y+Bv3flbVqn3sSUxUU9TxZu9FmBlZMc0LAIZAPQcTniLEaJYAAPmsKRI7eWRGZKiMG0Q==;EndpointSuffix=core.windows.net
+COSMOSDB_KEY=HdAfkDjJ5xvjjAxATZjaIdOXVx2txjdT91tlEYHU2zK849QIpr6SvXf4wTlpNYU9vIbJr4v6fg9gC4UCvsTPQw==
 COSMOSDB_URL=https://scc-groupbdafr.documents.azure.com:443/
 COSMOSDB_DATABASE=sccBDafr
-REDIS_KEY=yoPFsKWSxXHUsHxdOVBxn8l5Y9PAEaxcrdvspqedJwk=
-REDIS_URL=rediswesteuropeafr.redis.cache.windows.net
