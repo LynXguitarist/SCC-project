@@ -15,10 +15,11 @@ import com.mongodb.client.model.Filters;
 import data.Calendar;
 import data.Entity;
 import data.Forum;
-import scc.utils.AzureProperties;
 import scc.utils.TableName;
 
 public class MongoDBLayer {
+
+	private static final String DB_NAME = "scc-afr-mongoDB";
 
 	private static MongoDBLayer instance;
 	private MongoClient mongoClient;
@@ -26,9 +27,7 @@ public class MongoDBLayer {
 
 	public MongoDBLayer() {
 		mongoClient = MongoClients.create();
-		// need to create db???
-		// change the name from AzureProperties to docker image???
-		db = mongoClient.getDatabase(AzureProperties.getProperty(AzureProperties.COSMOSDB_DATABASE));
+		db = mongoClient.getDatabase(DB_NAME);
 	}
 
 	public static synchronized MongoDBLayer getInstance() {
