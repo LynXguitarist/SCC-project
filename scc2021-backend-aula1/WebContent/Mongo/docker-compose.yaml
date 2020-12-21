@@ -13,6 +13,15 @@ services:
       MONGO_INITDB_DATABASE: scc-afr-mongoDB
     
     ports:
-            - 27017:27017
+            - 8080:8080
     volumes:
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+    mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: scc-afr
+      ME_CONFIG_MONGODB_ADMINPASSWORD: secret

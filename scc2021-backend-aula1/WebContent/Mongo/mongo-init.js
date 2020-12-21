@@ -1,3 +1,5 @@
+db = db.getSiblingDB('scc-afr-mongoDB')
+
 db.createUser(
         {
             user: "scc-afr",
