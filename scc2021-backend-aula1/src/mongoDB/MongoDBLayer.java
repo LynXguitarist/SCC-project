@@ -27,6 +27,7 @@ public class MongoDBLayer {
 	public MongoDBLayer() {
 		mongoClient = MongoClients.create();
 		// need to create db???
+		// change the name from AzureProperties to docker image???
 		db = mongoClient.getDatabase(AzureProperties.getProperty(AzureProperties.COSMOSDB_DATABASE));
 	}
 
@@ -38,9 +39,9 @@ public class MongoDBLayer {
 		instance = new MongoDBLayer();
 		return instance;
 	}
-	
+
 	/*-----------------------------------General------------------------*/
-	
+
 	public void addItem(String tableName, Document document) {
 		MongoCollection<Document> table = db.getCollection(TableName.valueOf(tableName).getName());
 		table.insertOne(document);
