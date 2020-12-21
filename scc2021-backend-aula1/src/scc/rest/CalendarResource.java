@@ -20,6 +20,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import org.bson.Document;
+
 import com.azure.cosmos.CosmosException;
 import com.azure.cosmos.util.CosmosPagedIterable;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,6 +32,7 @@ import data.Calendar;
 import data.Entity;
 import data.Period;
 import data.Reservation;
+import mongoDB.MongoDBLayer;
 import scc.redis.CacheKeyNames;
 import scc.redis.RedisCache;
 import scc.utils.AdvancedFeatures;
@@ -42,16 +45,20 @@ public class CalendarResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void createCalendar(Calendar calendar) {
-		if (ownerExists(calendar.getOwnerId())) {
-			CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
-			try {
-				calendar.setId(UUID.randomUUID().toString());
-				dbLayerCalendar.createItem(calendar, TableName.CALENDAR.getName());
-			} catch (CosmosException e) {
-				throw new WebApplicationException(Status.CONFLICT);
-			}
+		calendar.setId(UUID.randomUUID().toString());
+		if (Boolean.parseBoolean(AdvancedFeatures.getProperty(AdvancedFeatures.MONGODB))) {
+			createCalendarMongo(calendar);
 		} else {
-			throw new WebApplicationException(Status.NOT_FOUND);
+			if (ownerExists(calendar.getOwnerId())) {
+				CosmosDBLayer<?> dbLayerCalendar = CosmosDBLayer.getInstance(Calendar.class);
+				try {
+					dbLayerCalendar.createItem(calendar, TableName.CALENDAR.getName());
+				} catch (CosmosException e) {
+					throw new WebApplicationException(Status.CONFLICT);
+				}
+			} else {
+				throw new WebApplicationException(Status.NOT_FOUND);
+			}
 		}
 	}
 
@@ -394,5 +401,18 @@ public class CalendarResource {
 		else {
 			return true;
 		}
+	}
+
+	/*-------------------------------------------------MongoDB------------------------------------------------ */
+	public void createCalendarMongo(Calendar calendar) {
+		MongoDBLayer mongo = MongoDBLayer.getInstance();
+
+		Document document = new Document();
+		document.append("id", calendar.getId());
+		document.append("name", calendar.getName());
+		document.append("description", calendar.getDescription());
+		document.append("ownerId", calendar.getOwnerId());
+
+		mongo.addItem(TableName.CALENDAR.getName(), document);
 	}
 }
