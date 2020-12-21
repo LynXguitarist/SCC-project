@@ -83,3 +83,47 @@ spec:
   - port: 8080
   selector:
     app: scc-afr-app
+    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scc-afr-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scc-afr-mongo
+  template:
+    metadata:
+      labels:
+        app: scc-afr-mongo
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+        - name: scc-afr-mongo
+          image: amtorrinha/scc2021-app
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 1Gi
+          ports:
+            - containerPort: 80
+          env:
+            - name: REDIS
+              value: "scc-afr-mongo"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scc-afr-mongo
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8081
+  selector:
+    app: scc-afr-mongo
