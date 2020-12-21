@@ -13,7 +13,7 @@ services:
       MONGO_INITDB_DATABASE: scc-afr-mongoDB
     
     ports:
-            - 8080:8080
+            - 8081:8081
     volumes:
             - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 

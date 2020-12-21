@@ -6,4 +6,4 @@ GEO-REPLICATED=false
 Regions=EUROPE_WEST
 
 ######Choose if you want to use MongoDB or CosmosDB
-MONGODB=true
+MONGODB=false
